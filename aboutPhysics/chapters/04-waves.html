@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4. 파동과 소리 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html">3. 열역학</a></li>
+    <li><a href="04-waves.html" style="color:var(--accent);font-weight:600;">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>파동</em>과<br>소리의 세계</h1>
+  <p class="authors">Chapter 4 — Waves, Sound & Interference</p>
+  <p class="affiliation">3D 파동 중첩 시뮬레이터 포함</p>
+</header>
+
+<h2>파동의 기본</h2>
+<p>파동은 에너지가 매질을 통해 전파되는 현상입니다. 매질 자체는 이동하지 않고, 교란만 전달됩니다.</p>
+
+<div class="info-card wave">
+  <h4>횡파 (Transverse Wave)</h4>
+  <p>진동 방향이 진행 방향에 수직. 예: 기타 줄, 전자기파, 수면파</p>
+</div>
+
+<div class="info-card energy">
+  <h4>종파 (Longitudinal Wave)</h4>
+  <p>진동 방향이 진행 방향과 같음. 예: 소리, 스프링 파동</p>
+</div>
+
+<div class="formula">v = fλ &nbsp;&nbsp;&nbsp; T = 1/f &nbsp;&nbsp;&nbsp; y(x,t) = A sin(kx − ωt)</div>
+
+<h2>3D 파동 중첩 시뮬레이터</h2>
+<p>두 파동이 만나면 중첩됩니다. 주파수와 진폭을 조절하여 보강/상쇄 간섭을 관찰하세요.</p>
+
+<div class="scene-3d" id="wave-scene">
+  <div class="scene-controls">
+    <label>주파수1: <span id="f1-val">2</span>Hz</label>
+    <input type="range" id="f1-slider" min="1" max="5" value="2" step="0.5">
+    <label>주파수2: <span id="f2-val">3</span>Hz</label>
+    <input type="range" id="f2-slider" min="1" max="5" value="3" step="0.5">
+  </div>
+</div>
+<span class="interact-hint">🌊 주파수를 조절하여 간섭 패턴을 관찰하세요</span>
+
+<h2>소리</h2>
+<p>소리는 공기 중을 전파하는 종파입니다. 공기 중 소리의 속력은 약 343 m/s (20°C)입니다.</p>
+
+<h3>도플러 효과</h3>
+<p>음원이 관측자에게 접근하면 주파수가 높아지고(음이 높아짐), 멀어지면 주파수가 낮아집니다(음이 낮아짐).</p>
+<div class="formula">f' = f × (v ± v_관측자) / (v ∓ v_음원)</div>
+
+<h3>간섭과 맥놀이</h3>
+<p>비슷한 주파수의 두 파동이 만나면 맥놀이가 발생합니다:</p>
+<div class="formula">f_맥놀이 = |f₁ − f₂|</div>
+
+<div class="info-card quantum">
+  <h4>💡 탐구 과제</h4>
+  <p>시뮬레이터에서 두 주파수를 같게 설정하면 완전한 보강 간섭이 됩니다. 차이가 클수록 복잡한 패턴이 나타나요!</p>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('wave-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 6, 10);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Wave mesh
+  const segments = 100;
+  const geometry = new THREE.PlaneGeometry(16, 8, segments, segments);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x00d4ff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.6
+  });
+  const waveMesh = new THREE.Mesh(geometry, material);
+  waveMesh.rotation.x = -Math.PI / 2;
+  scene.add(waveMesh);
+
+  let f1 = 2, f2 = 3;
+
+  const f1Slider = document.getElementById('f1-slider');
+  const f2Slider = document.getElementById('f2-slider');
+  const f1Val = document.getElementById('f1-val');
+  const f2Val = document.getElementById('f2-val');
+
+  f1Slider.addEventListener('input', () => { f1 = parseFloat(f1Slider.value); f1Val.textContent = f1; });
+  f2Slider.addEventListener('input', () => { f2 = parseFloat(f2Slider.value); f2Val.textContent = f2; });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    const positions = geometry.attributes.position;
+
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const dist1 = Math.sqrt((x + 4) * (x + 4) + y * y);
+      const dist2 = Math.sqrt((x - 4) * (x - 4) + y * y);
+      const wave1 = Math.sin(dist1 * f1 - t * 4) / (1 + dist1 * 0.2);
+      const wave2 = Math.sin(dist2 * f2 - t * 4) / (1 + dist2 * 0.2);
+      positions.setZ(i, (wave1 + wave2) * 0.8);
+    }
+    positions.needsUpdate = true;
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

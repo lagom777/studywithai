@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9. 핵물리와 입자 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html">3. 열역학</a></li>
+    <li><a href="04-waves.html">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html" style="color:var(--accent);font-weight:600;">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>핵물리</em>와<br>입자의 세계</h1>
+  <p class="authors">Chapter 9 — Nuclear Physics & Particle Physics</p>
+  <p class="affiliation">핵분열 체인 반응 시뮬레이터 포함</p>
+</header>
+
+<h2>원자핵의 구조</h2>
+<p>원자핵은 양성자와 중성자(핵자)로 구성됩니다. 핵자를 묶어주는 강한 핵력은 자연에서 가장 강력한 힘이지만, 아주 짧은 거리(~10⁻¹⁵m)에서만 작용합니다.</p>
+
+<div class="info-card">
+  <h4>질량수와 원자번호</h4>
+  <p>A = Z + N (질량수 = 양성자수 + 중성자수). 같은 원소의 동위원소는 Z는 같지만 N이 다릅니다.</p>
+</div>
+
+<h2>핵반응</h2>
+
+<div class="info-card energy">
+  <h4>핵분열 (Fission)</h4>
+  <p>무거운 원자핵(예: U-235)이 중성자를 흡수하여 둘로 쪼개짐. 막대한 에너지 방출 + 추가 중성자 → 연쇄 반응</p>
+</div>
+
+<div class="info-card wave">
+  <h4>핵융합 (Fusion)</h4>
+  <p>가벼운 원자핵(예: 수소)이 합쳐져 더 무거운 핵을 형성. 태양의 에너지원. 핵분열보다 더 큰 에너지를 방출합니다.</p>
+</div>
+
+<div class="formula">E = Δm × c² &nbsp;&nbsp;(질량 결손 → 에너지)</div>
+
+<h2>핵분열 체인 반응 시뮬레이터</h2>
+<p>중성자가 우라늄 원자핵에 충돌하면 분열하며 새 중성자를 방출합니다. 임계질량에 따른 연쇄반응을 관찰하세요.</p>
+
+<div class="scene-3d" id="fission-scene">
+  <div class="scene-controls">
+    <label>연료 밀도: <span id="density-val">중간</span></label>
+    <input type="range" id="density-slider" min="1" max="3" value="2">
+    <button id="start-fission">☢️ 중성자 발사</button>
+  </div>
+</div>
+<span class="interact-hint">☢️ 중성자를 발사하여 연쇄반응을 시작하세요</span>
+
+<h2>표준 모형</h2>
+<p>입자물리의 표준 모형은 자연의 기본 입자와 힘을 기술하는 이론입니다:</p>
+
+<div class="info-card quantum">
+  <h4>기본 입자</h4>
+  <p>쿼크 6종 (up, down, charm, strange, top, bottom) + 렙톤 6종 (전자, 뮤온, 타우 + 각 중성미자) + 게이지 보손 (광자, W±, Z⁰, 글루온) + 힉스 보손</p>
+</div>
+
+<h3>네 가지 기본 힘</h3>
+<div class="formula">
+강력 > 전자기력 > 약력 > 중력
+</div>
+<p>강력은 쿼크를 묶고, 전자기력은 전하 사이에, 약력은 베타 붕괴에, 중력은 질량 사이에 작용합니다. 대통일 이론(GUT)은 이들을 하나로 통합하려는 시도입니다.</p>
+
+<h3>방사성 붕괴</h3>
+<div class="formula">N(t) = N₀ × e^(−λt) &nbsp;&nbsp;&nbsp; t₁/₂ = ln2 / λ</div>
+<p>불안정한 원자핵은 α, β, γ 붕괴를 통해 안정 상태로 변합니다. 반감기는 물질마다 고유합니다.</p>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('fission-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 8, 12);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  let density = 2;
+  let nuclei = [];
+  let neutrons = [];
+  let fragments = [];
+
+  function createNuclei() {
+    nuclei.forEach(n => scene.remove(n.mesh));
+    nuclei = [];
+    const count = density * 12;
+    for (let i = 0; i < count; i++) {
+      const mesh = new THREE.Mesh(
+        new THREE.SphereGeometry(0.4, 16, 16),
+        new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.7 })
+      );
+      mesh.position.set(
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 6,
+        (Math.random() - 0.5) * 6
+      );
+      scene.add(mesh);
+      nuclei.push({ mesh, alive: true });
+    }
+  }
+  createNuclei();
+
+  function addNeutron(pos, vel) {
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(0.12, 8, 8),
+      new THREE.MeshBasicMaterial({ color: 0xff6b35 })
+    );
+    mesh.position.copy(pos);
+    scene.add(mesh);
+    neutrons.push({ mesh, vel: vel.clone(), life: 200 });
+  }
+
+  function fission(nucleus) {
+    nucleus.alive = false;
+    nucleus.mesh.material.color.set(0xff6b35);
+    nucleus.mesh.material.opacity = 0.3;
+
+    // Spawn 2-3 neutrons
+    const numNew = 2 + Math.floor(Math.random() * 2);
+    for (let i = 0; i < numNew; i++) {
+      const vel = new THREE.Vector3(
+        (Math.random() - 0.5) * 0.3,
+        (Math.random() - 0.5) * 0.3,
+        (Math.random() - 0.5) * 0.3
+      );
+      addNeutron(nucleus.mesh.position.clone(), vel);
+    }
+
+    // Fragments
+    for (let i = 0; i < 4; i++) {
+      const frag = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.8 })
+      );
+      frag.position.copy(nucleus.mesh.position);
+      scene.add(frag);
+      fragments.push({
+        mesh: frag,
+        vel: new THREE.Vector3((Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2, (Math.random()-0.5)*0.2),
+        life: 60
+      });
+    }
+  }
+
+  const densitySlider = document.getElementById('density-slider');
+  const densityVal = document.getElementById('density-val');
+  const startBtn = document.getElementById('start-fission');
+
+  densitySlider.addEventListener('input', () => {
+    density = parseInt(densitySlider.value);
+    densityVal.textContent = ['낮음', '중간', '높음'][density - 1];
+    createNuclei();
+    neutrons.forEach(n => scene.remove(n.mesh));
+    neutrons = [];
+    fragments.forEach(f => scene.remove(f.mesh));
+    fragments = [];
+  });
+
+  startBtn.addEventListener('click', () => {
+    createNuclei();
+    neutrons.forEach(n => scene.remove(n.mesh));
+    neutrons = [];
+    fragments.forEach(f => scene.remove(f.mesh));
+    fragments = [];
+    addNeutron(new THREE.Vector3(-7, 0, 0), new THREE.Vector3(0.2, 0, 0));
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Move neutrons
+    for (let i = neutrons.length - 1; i >= 0; i--) {
+      const n = neutrons[i];
+      n.mesh.position.add(n.vel);
+      n.life--;
+
+      // Check collision with nuclei
+      for (const nuc of nuclei) {
+        if (!nuc.alive) continue;
+        if (n.mesh.position.distanceTo(nuc.mesh.position) < 0.6) {
+          fission(nuc);
+          scene.remove(n.mesh);
+          neutrons.splice(i, 1);
+          break;
+        }
+      }
+
+      if (n.life <= 0 || n.mesh.position.length() > 15) {
+        scene.remove(n.mesh);
+        neutrons.splice(i, 1);
+      }
+    }
+
+    // Move fragments
+    for (let i = fragments.length - 1; i >= 0; i--) {
+      const f = fragments[i];
+      f.mesh.position.add(f.vel);
+      f.life--;
+      f.mesh.material.opacity = f.life / 60;
+      if (f.life <= 0) {
+        scene.remove(f.mesh);
+        fragments.splice(i, 1);
+      }
+    }
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

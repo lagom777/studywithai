@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5. 빛과 광학 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html">3. 열역학</a></li>
+    <li><a href="04-waves.html">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html" style="color:var(--accent);font-weight:600;">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>빛</em>과<br>광학의 세계</h1>
+  <p class="authors">Chapter 5 — Light, Optics & Electromagnetic Spectrum</p>
+  <p class="affiliation">렌즈 굴절 시뮬레이터 포함</p>
+</header>
+
+<h2>빛의 본질</h2>
+<p>빛은 전자기파의 일종으로, 진공에서 약 3×10⁸ m/s의 속도로 이동합니다. 파동과 입자(광자)의 이중성을 가집니다.</p>
+
+<div class="formula">c = 3 × 10⁸ m/s &nbsp;&nbsp;&nbsp; E = hf = hc/λ</div>
+
+<h2>반사와 굴절</h2>
+
+<div class="info-card">
+  <h4>반사의 법칙</h4>
+  <p>입사각 = 반사각. 모든 매끄러운 표면에서 성립합니다.</p>
+</div>
+
+<div class="info-card wave">
+  <h4>스넬의 법칙 (굴절)</h4>
+  <p>빛이 매질의 경계를 지날 때 방향이 변합니다.</p>
+</div>
+<div class="formula">n₁ sin θ₁ = n₂ sin θ₂</div>
+
+<h2>렌즈 시뮬레이터</h2>
+<p>물체 거리를 조절하여 볼록 렌즈의 상 형성을 관찰하세요. 실상과 허상이 어떻게 만들어지는지 확인합니다.</p>
+
+<div class="scene-3d" id="lens-scene">
+  <div class="scene-controls">
+    <label>물체 거리: <span id="obj-val">30</span>cm</label>
+    <input type="range" id="obj-slider" min="5" max="60" value="30">
+    <label>초점 거리: <span id="focal-val">15</span>cm</label>
+    <input type="range" id="focal-slider" min="5" max="25" value="15">
+  </div>
+</div>
+<span class="interact-hint">🔍 물체 거리를 초점 안팎으로 이동시켜 보세요</span>
+
+<h2>렌즈 공식</h2>
+<div class="formula">1/f = 1/d_o + 1/d_i &nbsp;&nbsp;&nbsp; 배율 M = −d_i/d_o</div>
+
+<h3>전반사</h3>
+<p>밀한 매질에서 소한 매질로 갈 때, 입사각이 임계각을 넘으면 빛이 전부 반사됩니다. 광섬유의 원리입니다.</p>
+<div class="formula">θ_c = arcsin(n₂/n₁)</div>
+
+<h2>전자기 스펙트럼</h2>
+<div class="info-card energy">
+  <h4>파장에 따른 분류</h4>
+  <p>전파 → 마이크로파 → 적외선 → 가시광선 → 자외선 → X선 → 감마선. 모두 같은 속도(c)로 이동합니다.</p>
+</div>
+
+<div class="info-card quantum">
+  <h4>💡 탐구 과제</h4>
+  <p>물체를 초점 거리 안에 놓으면 허상(확대된 정립상)이 됩니다. 돋보기의 원리예요!</p>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('lens-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 3, 14);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Optical axis
+  scene.add(new THREE.Line(
+    new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-8,0,0), new THREE.Vector3(8,0,0)]),
+    new THREE.LineBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.2 })
+  ));
+
+  // Lens
+  const lensGeo = new THREE.CylinderGeometry(2.5, 2.5, 0.1, 32);
+  const lensMat = new THREE.MeshBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.3 });
+  const lens = new THREE.Mesh(lensGeo, lensMat);
+  lens.rotation.z = Math.PI / 2;
+  scene.add(lens);
+
+  // Object (arrow)
+  let objDist = 30;
+  let focalLen = 15;
+  const scale = 0.12;
+
+  const objArrow = new THREE.Group();
+  const shaft = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2, 8), new THREE.MeshBasicMaterial({ color: 0xff6b35 }));
+  shaft.position.y = 1;
+  const tip = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.4, 8), new THREE.MeshBasicMaterial({ color: 0xff6b35 }));
+  tip.position.y = 2.1;
+  objArrow.add(shaft, tip);
+  scene.add(objArrow);
+
+  // Image (arrow)
+  const imgArrow = new THREE.Group();
+  const iShaft = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 2, 8), new THREE.MeshBasicMaterial({ color: 0xa855f7 }));
+  iShaft.position.y = 1;
+  const iTip = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.4, 8), new THREE.MeshBasicMaterial({ color: 0xa855f7 }));
+  iTip.position.y = 2.1;
+  imgArrow.add(iShaft, iTip);
+  scene.add(imgArrow);
+
+  // Rays
+  let rays = [];
+  function clearRays() { rays.forEach(r => scene.remove(r)); rays = []; }
+  function addRay(points, color) {
+    const line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(points),
+      new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 })
+    );
+    scene.add(line);
+    rays.push(line);
+  }
+
+  function update() {
+    clearRays();
+    const do_scaled = objDist * scale;
+    const f = focalLen * scale;
+
+    objArrow.position.x = -do_scaled;
+
+    // Lens equation: 1/f = 1/do + 1/di
+    const di = 1 / (1/f - 1/do_scaled);
+    const mag = -di / do_scaled;
+
+    imgArrow.position.x = di;
+    imgArrow.scale.y = Math.abs(mag);
+    if (mag > 0) {
+      imgArrow.rotation.z = Math.PI; // inverted
+      imgArrow.position.y = Math.abs(mag) * 2;
+    } else {
+      imgArrow.rotation.z = 0;
+      imgArrow.position.y = 0;
+    }
+
+    // Draw rays
+    const objTop = new THREE.Vector3(-do_scaled, 2, 0);
+    // Ray parallel to axis -> through focal point
+    addRay([objTop, new THREE.Vector3(0, 2, 0), new THREE.Vector3(di, 2 * mag, 0)], 0xff6b35);
+    // Ray through center of lens
+    addRay([objTop, new THREE.Vector3(0, 0, 0).lerp(objTop, 0).set(di, 2*mag, 0)], 0x10b981);
+    addRay([objTop, new THREE.Vector3(di, 2*mag, 0)], 0x10b981);
+
+    // Focal points
+  }
+
+  const objSlider = document.getElementById('obj-slider');
+  const focalSlider = document.getElementById('focal-slider');
+  const objVal = document.getElementById('obj-val');
+  const focalVal = document.getElementById('focal-val');
+
+  objSlider.addEventListener('input', () => { objDist = parseInt(objSlider.value); objVal.textContent = objDist; update(); });
+  focalSlider.addEventListener('input', () => { focalLen = parseInt(focalSlider.value); focalVal.textContent = focalLen; update(); });
+
+  update();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

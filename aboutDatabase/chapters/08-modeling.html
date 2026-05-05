@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8장. 데이터 모델링</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html">1. 관계형 DB 기초</a></li>
+    <li><a href="02-sql.html">2. SQL 핵심</a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+<h1>8장. 데이터 모델링</h1>
+
+<section class="content-section">
+<h2>1. 데이터 모델링이란?</h2>
+
+<div class="easy-version">
+<h4>쉬운 설명</h4>
+<p>건축가가 건물을 짓기 전에 설계도를 그리듯이, 데이터베이스를 만들기 전에 먼저 구조를 그리는 과정입니다.</p>
+<p><strong>순서:</strong> 생각 → 종이에 그리기 → 테이블 생성 → 데이터 입력</p>
+<p><strong>왜 필요한가?</strong> 설계도 없이 지으면 나중에 고치기 비쌉니다. DB도 마찬가지입니다.</p>
+<p><strong>예:</strong> 온라인 쇼핑몰을 만들려면, 고객 정보, 상품, 주문, 배송 정보 등을 어떻게 저장할지 미리 정합니다.</p>
+</div>
+
+<div class="paper-version">
+<h4>학술 설명</h4>
+<p><strong>데이터 모델링의 3단계:</strong></p>
+<ul>
+  <li><strong>개념적 모델링:</strong> 비즈니스 요구사항 분석. 엔티티, 속성, 관계 추출.</li>
+  <li><strong>논리적 모델링:</strong> DBMS 독립적인 구조 설계. ER 다이어그램, 정규화 적용.</li>
+  <li><strong>물리적 모델링:</strong> 실제 DBMS에 맞게 구현. 인덱스, 파티셔닝, 저장 공간 고려.</li>
+</ul>
+<p><strong>핵심 산출물:</strong> ER 다이어그램, 정규화된 스키마, 물리적 설계 문서</p>
+<p><strong>표준:</strong> IDEF1X, UML, Crow's Foot 표기법</p>
+</div>
+</section>
+
+<section class="content-section">
+<h2>2. ER 다이어그램</h2>
+
+<div class="easy-version">
+<h4>쉬운 설명</h4>
+<p>데이터의 구조를 그림으로 표현하는 방법입니다.</p>
+<p><strong>기본 요소:</strong></p>
+<ul>
+  <li><strong>네모(엔티티):</strong> 사람, 상품, 주문 등 데이터의 대상</li>
+  <li><strong>다이아몬드(관계):</strong> 두 엔티티 간의 관계. "구매한다", "소속된다" 등</li>
+  <li><strong>선:</strong> 엔티티와 관계를 연결</li>
+</ul>
+<p><strong>예:</strong> 고객이 상품을 구매하면, 고객 엔티티에서 구매라는 다이아몬드를 거쳐 상품 엔티티로 연결됩니다.</p>
+<p><strong>카디널리티:</strong> 1명의 고객이 여러 상품을 살 수 있다. (1:N 관계)</p>
+</div>
+
+<div class="paper-version">
+<h4>학술 설명</h4>
+<p><strong>ER 모델의 구성요소:</strong></p>
+<ul>
+  <li><strong>엔티티(Entity):</strong> 데이터의 단위. 약한 엔티티(Weak Entity)는 부모 엔티티에 존재 의존.</li>
+  <li><strong>속성(Attribute):</strong> 엔티티의 특성. 단순/복합, 저장/유도 속성.</li>
+  <li><strong>관계(Relationship):</strong> 엔티티 간의 연관. 재귀 관계, 다항 관계 가능.</li>
+</ul>
+<p><strong>표기법:</strong></p>
+<ul>
+  <li><strong>Chen 표기법:</strong> 원, 다이아몬드, 선으로 표현. 학술용.</li>
+  <li><strong>Crow's Foot:</strong> 까마귀 발처럼 그림. 실무 표준.</li>
+</ul>
+<p><strong>카디널리티(Cardinality):</strong> 1:1, 1:N, M:N. 최소/최대 카디널리티 지정.</p>
+<p><strong>참여 제약(Participation Constraint):</strong> 전체 vs 부분 참여</p>
+</div>
+</section>
+
+<section class="content-section">
+<h2>3. 스키마 설계 원칙</h2>
+
+<div class="easy-version">
+<h4>쉬운 설명</h4>
+<p>좋은 테이블을 만들기 위한 5가지 규칙:</p>
+<ol>
+  <li><strong>중복 최소화:</strong> 같은 데이터를 여러 곳에 저장하지 않기</li>
+  <li><strong>명확한 이름:</strong> "name"보다 "customer_name", "product_name" 처럼 구체적으로</li>
+  <li><strong>적절한 타입:</strong> 나이는 INTEGER, 설명은 TEXT, 가격은 DECIMAL</li>
+  <li><strong>NULL 관리:</strong> NULL이 꼭 필요한 경우에만 허용. 기본값 설정</li>
+  <li><strong>관계 명시:</strong> 어떤 테이블이 어떤 테이블과 관련되는지 FK로 명시</li>
+</ol>
+<p><strong>효과:</strong> 이 규칙을 따르면 데이터 오류가 줄고, 쿼리가 빨라집니다.</p>
+</div>
+
+<div class="paper-version">
+<h4>학술 설명</h4>
+<p><strong>정규화 기반 설계:</strong> 1NF → 2NF → 3NF → BCNF로 단계적 정규화</p>
+<p><strong>반정규화(Denormalization):</strong> 성능을 위해 의도적으로 정규화 규칙 완화</p>
+<ul>
+  <li>계산된 속성 저장 (합, 평균)</li>
+  <li>중복된 속성 추가 (빈번한 조인 회피)</li>
+  <li>컬럼 분할/통합</li>
+</ul>
+<p><strong>물리 설계 고려사항:</strong></p>
+<ul>
+  <li>인덱스 전략: 조회가 많은 컬럼에 인덱스</li>
+  <li>파티셔닝: 대용량 테이블을 범위/해시로 분할</li>
+  <li>저장 포맷: ROW vs COLUMN 스토리지</li>
+</ul>
+</div>
+</section>
+
+<section class="content-section">
+<h2>4. 실무 모델링 프로세스</h2>
+
+<div class="easy-version">
+<h4>쉬운 설명</h4>
+<p><strong>4단계 프로세스:</strong></p>
+<ol>
+  <li><strong>요구사항 수집:</strong> "우리는 뭘 저장해야 할까?" 고객, 상품, 주문...</li>
+  <li><strong>ER 다이어그램 작성:</strong> 위의 2번 섹션처럼 그리기</li>
+  <li><strong>테이블 생성:</strong> CREATE TABLE 쿼리로 실제 테이블 만들기</li>
+  <li><strong>검증:</strong> 정말 필요한 데이터를 모두 저장할 수 있는가? 테스트.</li>
+</ol>
+<p><strong>팁:</strong> 처음엔 최대한 정규화하고, 나중에 성능 이유로 반정규화합니다.</p>
+</div>
+
+<div class="paper-version">
+<h4>학술 설명</h4>
+<p><strong>상세 모델링 프로세스:</strong></p>
+<ol>
+  <li><strong>요구사항 분석:</strong> 비즈니스 프로세스 이해, 데이터 플로우 분석</li>
+  <li><strong>도메인 분석:</strong> 각 도메인(고객, 상품 등)의 속성, 제약 조건 파악</li>
+  <li><strong>개념 모델링:</strong> 고수준 ER 다이어그램</li>
+  <li><strong>비즈니스 규칙 매핑:</strong> "고객은 최대 1명의 판매 담당자를 가진다" 등</li>
+  <li><strong>논리 모델링:</strong> 정규화, 테이블 추출, 속성 정의</li>
+  <li><strong>물리 설계:</strong> 인덱스, 파티셔닝, 뷰, 저장 프로시저</li>
+</ol>
+<p><strong>검증 방법:</strong> 데이터 업데이트 이상(Anomaly) 검사, 쿼리 성능 테스트</p>
+</div>
+</section>
+
+<section class="content-section">
+<h2>ER 다이어그램 예시: E-Commerce</h2>
+
+<div class="interactive-demo">
+  <h4>📐 E-Commerce ER 다이어그램</h4>
+  <div class="schema-diagram">
+    <div class="db-table-card" style="left: 20px; top: 20px;">
+      <div class="table-name">Users</div>
+      <div class="table-cols">
+        <span class="pk">🔑 user_id</span>
+        <span>email</span>
+        <span>name</span>
+        <span>created_at</span>
+      </div>
+    </div>
+
+    <div class="db-table-card" style="left: 220px; top: 20px;">
+      <div class="table-name">Categories</div>
+      <div class="table-cols">
+        <span class="pk">🔑 cat_id</span>
+        <span>name</span>
+        <span>description</span>
+      </div>
+    </div>
+
+    <div class="db-table-card" style="left: 420px; top: 20px;">
+      <div class="table-name">Products</div>
+      <div class="table-cols">
+        <span class="pk">🔑 product_id</span>
+        <span class="fk">📌 cat_id</span>
+        <span>name</span>
+        <span>price</span>
+        <span>stock</span>
+      </div>
+    </div>
+
+    <div class="db-table-card" style="left: 20px; top: 200px;">
+      <div class="table-name">Orders</div>
+      <div class="table-cols">
+        <span class="pk">🔑 order_id</span>
+        <span class="fk">📌 user_id</span>
+        <span>order_date</span>
+        <span>total_price</span>
+        <span>status</span>
+      </div>
+    </div>
+
+    <div class="db-table-card" style="left: 220px; top: 200px;">
+      <div class="table-name">OrderItems</div>
+      <div class="table-cols">
+        <span class="pk">🔑 item_id</span>
+        <span class="fk">📌 order_id</span>
+        <span class="fk">📌 product_id</span>
+        <span>quantity</span>
+        <span>unit_price</span>
+      </div>
+    </div>
+
+    <!-- Connection lines visualization -->
+    <svg style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1;">
+      <line x1="120" y1="80" x2="220" y2="80" stroke="#7b5cff" stroke-width="2" stroke-dasharray="5,5"/>
+      <line x1="270" y1="80" x2="420" y2="80" stroke="#7b5cff" stroke-width="2" stroke-dasharray="5,5"/>
+      <line x1="70" y1="120" x2="70" y2="200" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,5"/>
+      <line x1="270" y1="200" x2="420" y2="120" stroke="#00d4ff" stroke-width="2" stroke-dasharray="5,5"/>
+      <text x="140" y="65" font-size="11" fill="#7b5cff">1:N</text>
+      <text x="300" y="110" font-size="11" fill="#00d4ff">N:M</text>
+    </svg>
+  </div>
+
+  <div style="margin-top: 280px; padding: 20px; background: rgba(123,92,255,0.1); border-radius: 8px; border-left: 4px solid #7b5cff;">
+    <h5>관계 설명</h5>
+    <ul>
+      <li><strong>Categories → Products:</strong> 1:N (한 카테고리는 여러 상품을 가짐)</li>
+      <li><strong>Users → Orders:</strong> 1:N (한 고객은 여러 주문을 할 수 있음)</li>
+      <li><strong>Orders → Products:</strong> M:N (주문과 상품의 다대다 관계는 OrderItems 중간 테이블로 해결)</li>
+    </ul>
+  </div>
+</div>
+
+<style>
+.schema-diagram {
+  position: relative;
+  width: 100%;
+  height: 400px;
+  background: rgba(10,14,39,0.5);
+  border: 1px solid #7b5cff;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.db-table-card {
+  position: absolute;
+  background: linear-gradient(135deg, rgba(123,92,255,0.2), rgba(0,212,255,0.1));
+  border: 2px solid #7b5cff;
+  border-radius: 8px;
+  padding: 12px;
+  width: 160px;
+  box-shadow: 0 4px 12px rgba(123,92,255,0.3);
+  transition: transform 0.2s;
+}
+
+.db-table-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(123,92,255,0.5);
+}
+
+.table-name {
+  font-weight: 700;
+  color: #00d4ff;
+  font-size: 14px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid #7b5cff;
+  padding-bottom: 6px;
+}
+
+.table-cols {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.table-cols span {
+  color: #ccc;
+  padding: 2px 4px;
+}
+
+.pk {
+  color: #ffff00;
+  font-weight: 600;
+}
+
+.fk {
+  color: #ff9900;
+  font-weight: 600;
+}
+</style>
+</section>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="07-distributed.html" style="text-decoration:none;">← 분산 DB</a>
+  <a href="09-patterns.html" style="text-decoration:none;">실전 설계 패턴 →</a>
+</div>
+</main>
+</div>
+</body>
+</html>

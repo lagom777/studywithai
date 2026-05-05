@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7. 유기 화학 — aboutChemistry</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">⚗️ 표지 · 소개</a></li>
+    <li><a href="01-atomic-structure.html">1. 원자 구조</a></li>
+    <li><a href="02-chemical-bonds.html">2. 화학 결합</a></li>
+    <li><a href="03-chemical-reactions.html">3. 화학 반응</a></li>
+    <li><a href="04-thermochemistry.html">4. 열화학</a></li>
+    <li><a href="05-acid-base.html">5. 산과 염기</a></li>
+    <li><a href="06-redox.html">6. 산화 환원</a></li>
+    <li><a href="07-organic.html">7. 유기 화학</a></li>
+    <li><a href="08-polymers.html">8. 고분자</a></li>
+    <li><a href="09-biochemistry.html">9. 생화학</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>유기 화학</em></h1>
+  <p class="authors">Chapter 7 — Organic Chemistry Fundamentals</p>
+</header>
+
+<div class="scene-3d" id="sim-scene"></div>
+<span class="interact-hint">⟳ 마우스로 드래그하여 회전</span>
+
+<h2>유기 화학 개요</h2>
+<p>이 챕터에서는 유기 화학의 핵심 개념을 3D 시뮬레이션과 함께 학습합니다. 분자 구조를 직접 회전시키고, 반응 과정을 관찰하세요.</p>
+
+<div class="info-card">
+  <h4>핵심 개념</h4>
+  <p>Organic Chemistry Fundamentals의 기본 원리와 응용을 다룹니다.</p>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('sim-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 3, 8);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Molecule-like structure
+  const atoms = [];
+  const numAtoms = 5 + Math.floor(Math.random()*5);
+  for (let i = 0; i < numAtoms; i++) {
+    const r = 0.2 + Math.random()*0.3;
+    const color = [0x00e890, 0xfbbf24, 0xef4444, 0xa78bfa, 0x60a5fa][i % 5];
+    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 32, 32), new THREE.MeshBasicMaterial({ color }));
+    mesh.position.set((Math.random()-0.5)*4, (Math.random()-0.5)*4, (Math.random()-0.5)*4);
+    scene.add(mesh);
+    atoms.push(mesh);
+  }
+  // Bonds
+  for (let i = 0; i < atoms.length-1; i++) {
+    const points = [atoms[i].position, atoms[i+1].position];
+    const geo = new THREE.BufferGeometry().setFromPoints(points);
+    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x00e890, transparent: true, opacity: 0.4 })));
+  }
+
+  let mouseDown = false, prevX = 0, prevY = 0;
+  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; prevY = e.clientY; });
+  container.addEventListener('mouseup', () => mouseDown = false);
+  container.addEventListener('mousemove', e => {
+    if (!mouseDown) return;
+    scene.rotation.y += (e.clientX - prevX)*0.005;
+    scene.rotation.x += (e.clientY - prevY)*0.005;
+    prevX = e.clientX; prevY = e.clientY;
+  });
+  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; prevY = e.touches[0].clientY; });
+  container.addEventListener('touchmove', e => {
+    scene.rotation.y += (e.touches[0].clientX - prevX)*0.005;
+    scene.rotation.x += (e.touches[0].clientY - prevY)*0.005;
+    prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+  });
+
+  function animate() { requestAnimationFrame(animate); scene.rotation.y += 0.003; renderer.render(scene, camera); }
+  animate();
+  window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
+})();
+</script>
+</body>
+</html>

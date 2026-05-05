@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>9장. 빌드도구와 배포 | 프론트엔드 학습 사이트</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .chapter-title {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .chapter-subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #00d4ff;
+    }
+
+    .section-content {
+      font-size: 1em;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+    }
+
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    /* Interactive Components */
+    .interactive-container {
+      background: linear-gradient(135deg, #f5f7fa 0%, #eff4f9 100%);
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .interactive-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Three.js Canvas */
+    #buildCanvas {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      display: block;
+    }
+
+    /* Pipeline Configurator */
+    .pipeline-configurator {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .config-section {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #e0e7ff;
+    }
+
+    .config-title {
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .config-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .config-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .config-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+
+    .config-label {
+      font-size: 0.95em;
+      color: #555;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .config-description {
+      font-size: 0.85em;
+      color: #999;
+      margin-left: 28px;
+      margin-top: -5px;
+    }
+
+    .generated-config {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      line-height: 1.5;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+
+    /* Package.json Builder */
+    .package-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .package-input-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .input-field {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .input-label {
+      font-weight: bold;
+      color: #333;
+      font-size: 0.9em;
+    }
+
+    .input-box {
+      padding: 10px 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 0.95em;
+    }
+
+    .input-box:focus {
+      outline: none;
+      border-color: #7b5cff;
+      box-shadow: 0 0 0 3px rgba(123, 92, 255, 0.1);
+    }
+
+    .generated-json {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      line-height: 1.5;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 10px;
+    }
+
+    /* Deployment Checklist */
+    .deployment-checklist {
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e0e7ff;
+      padding: 20px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid #f0f4f8;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .checklist-item:last-child {
+      border-bottom: none;
+    }
+
+    .checklist-item:hover {
+      background: #f8fafc;
+    }
+
+    .checklist-item input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .checklist-item input[type="checkbox"]:checked + .checklist-label {
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    .checklist-label {
+      font-size: 0.95em;
+      color: #555;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .checklist-progress {
+      height: 8px;
+      background: #e0e7ff;
+      border-radius: 4px;
+      margin-top: 15px;
+      overflow: hidden;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #7b5cff, #00d4ff);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Comparison Tables */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .comparison-table th {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      padding: 15px;
+      text-align: left;
+      font-weight: bold;
+    }
+
+    .comparison-table td {
+      padding: 12px 15px;
+      border-bottom: 1px solid #e0e7ff;
+    }
+
+    .comparison-table tr:hover {
+      background: #f8fafc;
+    }
+
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .comparison-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .badge-vite {
+      background: #64e881;
+      color: #1a5c1a;
+    }
+
+    .badge-webpack {
+      background: #8dd6f1;
+      color: #0c4a6e;
+    }
+
+    /* Tip and Note boxes */
+    .tip-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .tip-box strong {
+      color: #b45309;
+    }
+
+    .note-box {
+      background: #e0e7ff;
+      border-left: 4px solid #7b5cff;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .note-box strong {
+      color: #7b5cff;
+    }
+
+    /* Navigation */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 2px solid #e0e7ff;
+    }
+
+    .nav-button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: 2px solid #7b5cff;
+      color: #7b5cff;
+    }
+
+    .nav-button:hover {
+      background: #7b5cff;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav-button.next {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      border: none;
+    }
+
+    .nav-button.next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(123, 92, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .package-input-group {
+        grid-template-columns: 1fr;
+      }
+
+      .comparison-table {
+        font-size: 0.9em;
+      }
+
+      .comparison-table td,
+      .comparison-table th {
+        padding: 8px 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-wrapper">
+    <aside>
+      <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+      <h3>전체 목차</h3>
+      <ol>
+        <li><a href="../index.html">📖 표지 · 소개</a></li>
+        <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+        <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+        <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+        <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+        <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+        <li><a href="06-state-management.html">6. 상태관리</a></li>
+        <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+        <li><a href="08-performance.html">8. 성능 최적화</a></li>
+        <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1 class="chapter-title">9장. 빌드도구와 배포</h1>
+      <p class="chapter-subtitle">개발 코드를 프로덕션 애플리케이션으로 만들기</p>
+
+      <!-- Section 9.1 -->
+      <section>
+        <h2 class="section-title">9.1 빌드 도구의 필요성</h2>
+        <div class="section-content">
+          <p>현대적인 웹 개발에서 빌드 도구는 필수 요소입니다. 빌드 도구는 다음 작업을 자동화합니다:</p>
+
+          <p style="margin-top: 15px;"><strong>1. 번들링 (Bundling)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>여러 파일을 하나 또는 소수의 번들로 묶기</li>
+            <li>모듈 간 의존성 해결</li>
+            <li>파일 크기 최소화</li>
+          </ul>
+
+          <p style="margin-top: 15px;"><strong>2. 트랜스파일링 (Transpiling)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>최신 JavaScript를 구형 브라우저가 이해할 수 있는 코드로 변환</li>
+            <li>TypeScript를 JavaScript로 컴파일</li>
+            <li>JSX를 JavaScript로 변환</li>
+          </ul>
+
+          <p style="margin-top: 15px;"><strong>3. 최적화 (Optimization)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>코드 최소화(minification)</li>
+            <li>미사용 코드 제거(tree shaking)</li>
+            <li>이미지 최적화</li>
+            <li>소스맵 생성</li>
+          </ul>
+        </div>
+
+        <div class="note-box">
+          <strong>역사:</strong> 초기에는 Grunt, Gulp 등의 Task Runner가 주류였으나, 현재는 Webpack, Vite, esbuild 같은 번들러가 표준입니다.
+        </div>
+      </section>
+
+      <!-- Section 9.2 -->
+      <section>
+        <h2 class="section-title">9.2 Vite vs Webpack: 현대 번들러 비교</h2>
+        <div class="section-content">
+          <p>프론트엔드 개발 환경에서 가장 인기 있는 두 가지 번들러를 비교합니다.</p>
+        </div>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>항목</th>
+              <th><span class="comparison-badge badge-webpack">Webpack</span></th>
+              <th><span class="comparison-badge badge-vite">Vite</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>출시</strong></td>
+              <td>2014년 (역사 깊음)</td>
+              <td>2020년 (최신 기술)</td>
+            </tr>
+            <tr>
+              <td><strong>개발 서버 속도</strong></td>
+              <td>느림 (전체 번들 필요)</td>
+              <td>매우 빠름 (ES 모듈 사용)</td>
+            </tr>
+            <tr>
+              <td><strong>HMR (Hot Module Replacement)</strong></td>
+              <td>느림</td>
+              <td>즉시 반영</td>
+            </tr>
+            <tr>
+              <td><strong>빌드 속도</strong></td>
+              <td>중간</td>
+              <td>매우 빠름</td>
+            </tr>
+            <tr>
+              <td><strong>커스터마이제이션</strong></td>
+              <td>뛰어남</td>
+              <td>간단함</td>
+            </tr>
+            <tr>
+              <td><strong>플러그인 생태계</strong></td>
+              <td>매우 풍부</td>
+              <td>성장 중</td>
+            </tr>
+            <tr>
+              <td><strong>학습 곡선</strong></td>
+              <td>가파름</td>
+              <td>완만함</td>
+            </tr>
+            <tr>
+              <td><strong>추천 용도</strong></td>
+              <td>복잡한 프로젝트</td>
+              <td>신규 프로젝트</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">/* Vite 설정 - 간단함 */
+// vite.config.js
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+    port: 3000,
+    hmr: true
+  }
+})
+
+/* Webpack 설정 - 복잡함 */
+// webpack.config.js
+const path = require('path');
+
+module.exports = {
+  mode: 'production',
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: '[name].[contenthash].js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }
+    ]
+  }
+};
+</div>
+      </section>
+
+      <!-- Section 9.3 -->
+      <section>
+        <h2 class="section-title">9.3 Babel과 TypeScript</h2>
+        <div class="section-content">
+          <p><strong>Babel:</strong> 최신 JavaScript 코드를 이전 표준으로 변환합니다.</p>
+        </div>
+
+        <div class="code-block">// .babelrc 설정
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browsers": ["> 1%", "last 2 versions", "not dead"]
+      }
+    }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-proposal-class-properties"
+  ]
+}
+
+// 변환 전: ES2020 화살표 함수 + optional chaining
+const user = users?.find(u => u.id === 1);
+const email = user?.email ?? 'no-email';
+
+// Babel 변환 후: ES5 호환 코드
+var user = users != null ? users.find(function(u) { return u.id === 1; }) : null;
+var email = user != null && user.email != null ? user.email : 'no-email';
+</div>
+
+        <p style="margin-top: 20px;"><strong>TypeScript:</strong> JavaScript에 정적 타입 시스템을 추가합니다.</p>
+
+        <div class="code-block">// TypeScript 코드
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+function getUser(id: number): User | null {
+  const user = users.find(u => u.id === id);
+  return user || null;
+}
+
+// 컴파일 후 JavaScript
+function getUser(id) {
+  var user = users.find(function(u) { return u.id === id; });
+  return user || null;
+}
+</div>
+
+        <div class="note-box">
+          <strong>TypeScript의 장점:</strong> 개발 중 타입 오류를 미리 발견하고, IDE의 자동완성과 리팩토링이 뛰어납니다.
+        </div>
+      </section>
+
+      <!-- Section 9.4 -->
+      <section>
+        <h2 class="section-title">9.4 패키지 관리자: npm vs yarn vs pnpm</h2>
+        <div class="section-content">
+          <p>JavaScript 패키지(라이브러리)를 설치하고 관리하는 도구입니다. 모두 동일한 npm 레지스트리를 사용하지만 성능과 전략이 다릅니다.</p>
+
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>항목</th>
+                <th>npm</th>
+                <th>yarn</th>
+                <th>pnpm</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>출시</strong></td>
+                <td>2010년 (기본값)</td>
+                <td>2016년 (Facebook)</td>
+                <td>2016년 (경량)</td>
+              </tr>
+              <tr>
+                <td><strong>설치 속도</strong></td>
+                <td>중간</td>
+                <td>빠름</td>
+                <td>매우 빠름</td>
+              </tr>
+              <tr>
+                <td><strong>디스크 사용량</strong></td>
+                <td>높음</td>
+                <td>높음</td>
+                <td>낮음 (심링크 사용)</td>
+              </tr>
+              <tr>
+                <td><strong>Lock 파일</strong></td>
+                <td>package-lock.json</td>
+                <td>yarn.lock</td>
+                <td>pnpm-lock.yaml</td>
+              </tr>
+              <tr>
+                <td><strong>의존성 관리</strong></td>
+                <td>플랫</td>
+                <td>엄격함</td>
+                <td>가장 엄격함</td>
+              </tr>
+              <tr>
+                <td><strong>권장 용도</strong></td>
+                <td>일반적 프로젝트</td>
+                <td>대규모 프로젝트</td>
+                <td>모노레포</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="code-block">// 설치 명령어 비교
+npm install lodash
+yarn add lodash
+pnpm add lodash
+
+// 개발용 의존성 추가
+npm install --save-dev webpack
+yarn add --dev webpack
+pnpm add -D webpack
+</div>
+      </section>
+
+      <!-- Section 9.5 -->
+      <section>
+        <h2 class="section-title">9.5 CI/CD 파이프라인</h2>
+        <div class="section-content">
+          <p><strong>CI (Continuous Integration):</strong> 코드 변경을 자동으로 테스트하고 빌드합니다.</p>
+          <p style="margin-top: 15px;"><strong>CD (Continuous Deployment/Delivery):</strong> 테스트를 통과한 코드를 자동으로 배포합니다.</p>
+
+          <p style="margin-top: 15px;">가장 인기 있는 CI/CD 도구는 <strong>GitHub Actions</strong>입니다.</p>
+        </div>
+
+        <div class="code-block">// .github/workflows/deploy.yml
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        run: npm run deploy
+</div>
+      </section>
+
+      <!-- Section 9.6 -->
+      <section>
+        <h2 class="section-title">9.6 배포 플랫폼</h2>
+        <div class="section-content">
+          <p>현대적인 웹 애플리케이션은 다양한 플랫폼에 배포할 수 있습니다. 각각의 장단점을 비교해봅시다.</p>
+
+          <p style="margin-top: 15px;"><strong>Vercel (Next.js 제작사):</strong> 가장 편리한 배포 경험. GitHub 연동으로 자동 배포.</p>
+          <p style="margin-top: 10px;"><strong>Netlify:</strong> JAMstack 전문. 빌드와 배포가 매우 간단.</p>
+          <p style="margin-top: 10px;"><strong>Cloudflare Pages:</strong> 전 세계 CDN 기반. 매우 빠른 속도.</p>
+          <p style="margin-top: 10px;"><strong>AWS / Google Cloud / Azure:</strong> 강력하고 유연하지만 설정이 복잡.</p>
+        </div>
+
+        <div class="code-block">/* Vercel 배포 (vercel.json) */
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "env": {
+    "REACT_APP_API_URL": "@api-url"
+  }
+}
+
+/* 환경변수 설정 */
+// Vercel Dashboard에서 설정하거나:
+// .env.production
+REACT_APP_API_URL=https://api.example.com
+REACT_APP_VERSION=1.0.0
+</div>
+      </section>
+
+      <!-- Three.js Visualization: Build Pipeline -->
+      <section>
+        <h2 class="section-title">🎨 3D 시각화: 빌드 파이프라인 팩토리</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">🏭 빌드 프로세스 3D 애니메이션</div>
+          <canvas id="buildCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Pipeline Configurator -->
+      <section>
+        <h2 class="section-title">⚙️ 빌드 파이프라인 구성 도구</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">🎛️ 옵션을 선택하여 설정 생성</div>
+          <div class="pipeline-configurator">
+            <div class="config-section">
+              <div class="config-title">📚 프리셋</div>
+              <div class="config-items">
+                <div class="config-item">
+                  <input type="radio" id="preset-react" name="preset" value="react" class="config-checkbox" checked>
+                  <label for="preset-react" class="config-label">⚛️ React 프로젝트</label>
+                </div>
+                <div class="config-item">
+                  <input type="radio" id="preset-vanilla" name="preset" value="vanilla" class="config-checkbox">
+                  <label for="preset-vanilla" class="config-label">🍦 Vanilla JS 프로젝트</label>
+                </div>
+                <div class="config-item">
+                  <input type="radio" id="preset-vue" name="preset" value="vue" class="config-checkbox">
+                  <label for="preset-vue" class="config-label">💚 Vue 프로젝트</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <div class="config-title">🛠️ 번들러</div>
+              <div class="config-items">
+                <div class="config-item">
+                  <input type="checkbox" id="bundler-vite" class="config-checkbox bundler-check" checked>
+                  <label for="bundler-vite" class="config-label">Vite (권장)</label>
+                </div>
+                <div class="config-description">빠른 개발 서버와 빌드</div>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <div class="config-title">🔧 개발 도구</div>
+              <div class="config-items">
+                <div class="config-item">
+                  <input type="checkbox" id="tool-typescript" class="config-checkbox tool-check">
+                  <label for="tool-typescript" class="config-label">TypeScript</label>
+                </div>
+                <div class="config-item">
+                  <input type="checkbox" id="tool-eslint" class="config-checkbox tool-check" checked>
+                  <label for="tool-eslint" class="config-label">ESLint</label>
+                </div>
+                <div class="config-item">
+                  <input type="checkbox" id="tool-prettier" class="config-checkbox tool-check" checked>
+                  <label for="tool-prettier" class="config-label">Prettier</label>
+                </div>
+                <div class="config-item">
+                  <input type="checkbox" id="tool-jest" class="config-checkbox tool-check">
+                  <label for="tool-jest" class="config-label">Jest (테스트)</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="config-section">
+              <div class="config-title">🚀 배포</div>
+              <div class="config-items">
+                <div class="config-item">
+                  <input type="radio" id="deploy-vercel" name="deploy" value="vercel" class="config-checkbox" checked>
+                  <label for="deploy-vercel" class="config-label">Vercel</label>
+                </div>
+                <div class="config-item">
+                  <input type="radio" id="deploy-netlify" name="deploy" value="netlify" class="config-checkbox">
+                  <label for="deploy-netlify" class="config-label">Netlify</label>
+                </div>
+                <div class="config-item">
+                  <input type="radio" id="deploy-github" name="deploy" value="github-pages" class="config-checkbox">
+                  <label for="deploy-github" class="config-label">GitHub Pages</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="generated-config" id="generatedConfig">
+{
+  "name": "my-app",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  }
+}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Package.json Builder -->
+      <section>
+        <h2 class="section-title">📦 package.json 빌더</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">🔨 프로젝트 메타데이터 작성</div>
+          <div class="package-builder">
+            <div class="package-input-group">
+              <div class="input-field">
+                <label class="input-label">프로젝트 이름</label>
+                <input type="text" class="input-box" id="pkgName" value="my-awesome-app" placeholder="프로젝트 이름">
+              </div>
+              <div class="input-field">
+                <label class="input-label">버전</label>
+                <input type="text" class="input-box" id="pkgVersion" value="1.0.0" placeholder="1.0.0">
+              </div>
+              <div class="input-field">
+                <label class="input-label">설명</label>
+                <input type="text" class="input-box" id="pkgDesc" value="A modern web application" placeholder="설명">
+              </div>
+              <div class="input-field">
+                <label class="input-label">저자</label>
+                <input type="text" class="input-box" id="pkgAuthor" value="Your Name" placeholder="저자">
+              </div>
+            </div>
+
+            <div class="generated-json" id="generatedJson">{
+  "name": "my-awesome-app",
+  "version": "1.0.0",
+  "description": "A modern web application",
+  "author": "Your Name",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  }
+}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Deployment Checklist -->
+      <section>
+        <h2 class="section-title">✅ 배포 체크리스트</h2>
+        <div class="interactive-container">
+          <div class="deployment-checklist">
+            <div class="checklist-item">
+              <input type="checkbox" id="check-1" class="checklist-item-check">
+              <label for="check-1" class="checklist-label">모든 테스트 통과 확인</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-2" class="checklist-item-check">
+              <label for="check-2" class="checklist-label">프로덕션 환경변수 설정</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-3" class="checklist-item-check">
+              <label for="check-3" class="checklist-label">번들 크기 최적화 확인</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-4" class="checklist-item-check">
+              <label for="check-4" class="checklist-label">SEO 메타 태그 추가</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-5" class="checklist-item-check">
+              <label for="check-5" class="checklist-label">성능 측정 (Lighthouse)</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-6" class="checklist-item-check">
+              <label for="check-6" class="checklist-label">에러 로깅 설정</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-7" class="checklist-item-check">
+              <label for="check-7" class="checklist-label">보안 헤더 설정</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-8" class="checklist-item-check">
+              <label for="check-8" class="checklist-label">캐싱 전략 구성</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-9" class="checklist-item-check">
+              <label for="check-9" class="checklist-label">모바일 반응형 테스트</label>
+            </div>
+            <div class="checklist-item">
+              <input type="checkbox" id="check-10" class="checklist-item-check">
+              <label for="check-10" class="checklist-label">라이브 환경 모니터링 시작</label>
+            </div>
+
+            <div class="checklist-progress">
+              <div class="checklist-progress-bar" id="progressBar" style="width: 0%;"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="chapter-nav">
+        <a href="08-performance.html" class="nav-button">← 이전: 성능 최적화</a>
+        <span style="color: #999; font-weight: bold;">9 / 10</span>
+        <a href="../index.html" class="nav-button next">표지로 돌아가기 →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Three.js visualization for Build Pipeline (Conveyor Belt)
+    const canvas = document.getElementById('buildCanvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setClearColor(0x0f3460, 1);
+    camera.position.z = 10;
+    camera.position.y = 2;
+
+    // Build stages
+    const stages = [
+      { name: 'Source', color: 0x7b5cff, x: -8 },
+      { name: 'Bundler', color: 0x00d4ff, x: -4 },
+      { name: 'Transpiler', color: 0x4facfe, x: 0 },
+      { name: 'Minifier', color: 0xf093fb, x: 4 },
+      { name: 'Output', color: 0x51cf66, x: 8 }
+    ];
+
+    // Create stage boxes
+    const stageMeshes = [];
+    stages.forEach((stage) => {
+      const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
+      const material = new THREE.MeshPhongMaterial({ color: stage.color });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = stage.x;
+      mesh.position.y = 1;
+      mesh.userData = { name: stage.name };
+      scene.add(mesh);
+      stageMeshes.push(mesh);
+    });
+
+    // Create conveyor belt
+    const beltGeometry = new THREE.PlaneGeometry(20, 1);
+    const beltMaterial = new THREE.MeshPhongMaterial({ color: 0x444444 });
+    const belt = new THREE.Mesh(beltGeometry, beltMaterial);
+    belt.position.y = 0.2;
+    belt.rotation.x = -Math.PI / 4;
+    scene.add(belt);
+
+    // Create files (cubes) on conveyor
+    const files = [];
+    const fileColors = [0xff6b6b, 0xffd43b, 0x51cf66, 0x4ecdc4, 0x1f77b4];
+
+    for (let i = 0; i < 5; i++) {
+      const fileGeometry = new THREE.BoxGeometry(0.4, 0.4, 0.4);
+      const fileMaterial = new THREE.MeshPhongMaterial({ color: fileColors[i] });
+      const fileMesh = new THREE.Mesh(fileGeometry, fileMaterial);
+      fileMesh.position.y = 0.8;
+      fileMesh.userData = { progress: (i / 5) % 1 };
+      scene.add(fileMesh);
+      files.push(fileMesh);
+    }
+
+    // Lighting
+    const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    light1.position.set(5, 10, 7);
+    scene.add(light1);
+
+    const light2 = new THREE.PointLight(0x00d4ff, 0.5);
+    light2.position.set(-10, -10, 10);
+    scene.add(light2);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    // Animation
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+
+      // Rotate stage boxes
+      stageMeshes.forEach((mesh, idx) => {
+        mesh.rotation.x += 0.01;
+        mesh.rotation.y += 0.015;
+      });
+
+      // Move files along pipeline
+      files.forEach((file, idx) => {
+        const progress = (time * 0.15 + idx * 0.2) % 1;
+        const stageIndex = Math.floor(progress * stages.length);
+        const nextStageIndex = (stageIndex + 1) % stages.length;
+
+        const currentStage = stages[stageIndex];
+        const nextStage = stages[nextStageIndex];
+
+        const alpha = (progress * stages.length) % 1;
+        file.position.x = currentStage.x + (nextStage.x - currentStage.x) * alpha;
+
+        // Color transformation as file moves through pipeline
+        const hue = (progress + idx * 0.2) % 1;
+        file.material.color.setHSL(hue, 0.8, 0.5);
+
+        file.rotation.x += 0.05;
+        file.rotation.y += 0.03;
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+
+    // Pipeline Configurator
+    const presetRadios = document.querySelectorAll('input[name="preset"]');
+    const toolChecks = document.querySelectorAll('.tool-check');
+    const deployRadios = document.querySelectorAll('input[name="deploy"]');
+    const generatedConfig = document.getElementById('generatedConfig');
+
+    function updateConfig() {
+      const preset = document.querySelector('input[name="preset"]:checked').value;
+      const hasTypeScript = document.getElementById('tool-typescript').checked;
+      const hasESLint = document.getElementById('tool-eslint').checked;
+      const hasPrettier = document.getElementById('tool-prettier').checked;
+      const hasJest = document.getElementById('tool-jest').checked;
+      const deploy = document.querySelector('input[name="deploy"]:checked').value;
+
+      let scripts = {
+        dev: 'vite',
+        build: 'vite build',
+        preview: 'vite preview'
+      };
+
+      if (hasJest) {
+        scripts.test = 'jest';
+      }
+
+      let devDeps = {
+        'vite': '^5.0.0'
+      };
+
+      if (preset === 'react') {
+        devDeps['@vitejs/plugin-react'] = '^4.0.0';
+      } else if (preset === 'vue') {
+        devDeps['@vitejs/plugin-vue'] = '^4.0.0';
+      }
+
+      if (hasTypeScript) {
+        devDeps['typescript'] = '^5.0.0';
+      }
+      if (hasESLint) {
+        devDeps['eslint'] = '^8.0.0';
+      }
+      if (hasPrettier) {
+        devDeps['prettier'] = '^3.0.0';
+      }
+      if (hasJest) {
+        devDeps['jest'] = '^29.0.0';
+      }
+
+      const config = {
+        name: 'my-app',
+        version: '1.0.0',
+        type: 'module',
+        scripts: scripts,
+        devDependencies: devDeps
+      };
+
+      generatedConfig.textContent = JSON.stringify(config, null, 2);
+    }
+
+    presetRadios.forEach(radio => radio.addEventListener('change', updateConfig));
+    toolChecks.forEach(check => check.addEventListener('change', updateConfig));
+    deployRadios.forEach(radio => radio.addEventListener('change', updateConfig));
+
+    // Package.json Builder
+    const pkgNameInput = document.getElementById('pkgName');
+    const pkgVersionInput = document.getElementById('pkgVersion');
+    const pkgDescInput = document.getElementById('pkgDesc');
+    const pkgAuthorInput = document.getElementById('pkgAuthor');
+    const generatedJson = document.getElementById('generatedJson');
+
+    function updatePackageJson() {
+      const pkg = {
+        name: pkgNameInput.value || 'my-app',
+        version: pkgVersionInput.value || '1.0.0',
+        description: pkgDescInput.value || 'A modern web application',
+        author: pkgAuthorInput.value || 'Your Name',
+        type: 'module',
+        scripts: {
+          dev: 'vite',
+          build: 'vite build',
+          preview: 'vite preview'
+        },
+        devDependencies: {
+          'vite': '^5.0.0'
+        }
+      };
+
+      generatedJson.textContent = JSON.stringify(pkg, null, 2);
+    }
+
+    pkgNameInput.addEventListener('input', updatePackageJson);
+    pkgVersionInput.addEventListener('input', updatePackageJson);
+    pkgDescInput.addEventListener('input', updatePackageJson);
+    pkgAuthorInput.addEventListener('input', updatePackageJson);
+
+    // Deployment Checklist
+    const checklistItems = document.querySelectorAll('.checklist-item-check');
+    const progressBar = document.getElementById('progressBar');
+
+    function updateProgress() {
+      const checked = document.querySelectorAll('.checklist-item-check:checked').length;
+      const total = checklistItems.length;
+      const percentage = (checked / total) * 100;
+      progressBar.style.width = percentage + '%';
+    }
+
+    checklistItems.forEach(item => {
+      item.addEventListener('change', updateProgress);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2장. CSS와 레이아웃</title>
+    <link rel="stylesheet" href="../styles.css">
+    <style>
+        main {
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 32px;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #555;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            line-height: 1.8;
+            color: #666;
+            margin: 1rem 0;
+        }
+
+        li {
+            line-height: 1.8;
+            color: #666;
+            margin: 0.5rem 0;
+        }
+
+        .container {
+            display: flex;
+            gap: 2rem;
+        }
+
+        aside {
+            flex: 0 0 220px;
+            background: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        aside h3 {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        aside ol {
+            list-style: none;
+            padding: 0;
+        }
+
+        aside li {
+            margin: 0.5rem 0;
+        }
+
+        aside a {
+            color: #7b5cff;
+            text-decoration: none;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+
+        aside a:hover {
+            color: #00d4ff;
+        }
+
+        .hub-back-link {
+            display: block;
+            padding: 10px 14px;
+            margin-bottom: 18px;
+            background: linear-gradient(120deg, #7b5cff, #00d4ff);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            text-align: center;
+            box-shadow: 0 6px 18px -6px rgba(123, 92, 255, 0.5);
+            transition: transform 0.2s ease;
+        }
+
+        .hub-back-link:hover {
+            transform: translateY(-2px);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #7b5cff;
+        }
+
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        /* Box Model Visualizer */
+        .box-model-demo {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .slider-group {
+            margin: 1.5rem 0;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .slider-group label {
+            min-width: 120px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .slider-group input[type="range"] {
+            flex: 1;
+            min-width: 150px;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .slider-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #7b5cff;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(123, 92, 255, 0.3);
+        }
+
+        .slider-group input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #7b5cff;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(123, 92, 255, 0.3);
+        }
+
+        .slider-value {
+            min-width: 50px;
+            text-align: right;
+            color: #7b5cff;
+            font-weight: 600;
+        }
+
+        .box-model-visual {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-top: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 300px;
+        }
+
+        .box-model-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+        }
+
+        .box-margin {
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+
+        .box-border {
+            position: absolute;
+            background: rgba(255, 107, 107, 0.3);
+            border: 2px solid #ff6b6b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+
+        .box-padding {
+            position: absolute;
+            background: rgba(255, 205, 86, 0.3);
+            border: 2px solid #ffcd56;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #ffcd56;
+            font-weight: 600;
+        }
+
+        .box-content {
+            position: absolute;
+            background: rgba(52, 211, 153, 0.6);
+            border: 2px solid #34d399;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .box-model-legend {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 2rem;
+            font-size: 12px;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 2px;
+        }
+
+        /* Flexbox Playground */
+        .flexbox-demo {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .flexbox-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .flex-control {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .flex-control label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .flex-control select {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .flex-control select:focus {
+            outline: none;
+            border-color: #7b5cff;
+        }
+
+        .flexbox-container {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            min-height: 300px;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .flex-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Grid Layout */
+        .grid-demo {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .grid-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid-container {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 2rem;
+            border-radius: 8px;
+            gap: 1rem;
+            display: grid;
+        }
+
+        .grid-item {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Animation Demo */
+        .animation-demo {
+            background: #f9f9f9;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .animation-box {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(120deg, #7b5cff, #00d4ff);
+            border-radius: 8px;
+            margin: 2rem 0;
+            animation: slideIn 1s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .animation-controls {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .anim-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #7b5cff;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .anim-btn:hover {
+            background: #6a4ecc;
+            transform: translateY(-2px);
+        }
+
+        .pulse {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .bounce {
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 2px solid #eee;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .nav-btn.prev {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .nav-btn.prev:hover {
+            background: #e0e0e0;
+            transform: translateX(-2px);
+        }
+
+        .nav-btn.next {
+            background: linear-gradient(120deg, #7b5cff, #00d4ff);
+            color: white;
+        }
+
+        .nav-btn.next:hover {
+            transform: translateX(2px);
+            box-shadow: 0 6px 18px -6px rgba(123, 92, 255, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <aside>
+            <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+            <h3>전체 목차</h3>
+            <ol>
+                <li><a href="../index.html">📖 표지 · 소개</a></li>
+                <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+                <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+                <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+                <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+                <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+                <li><a href="06-state-management.html">6. 상태관리</a></li>
+                <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+                <li><a href="08-performance.html">8. 성능 최적화</a></li>
+                <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+            </ol>
+        </aside>
+
+        <main>
+            <h1>2장. CSS와 레이아웃</h1>
+
+            <h2 class="section-title">2.1 CSS 기초</h2>
+            <p>
+                CSS(Cascading Style Sheets)는 HTML 요소의 모양, 레이아웃, 애니메이션을 정의합니다.
+                "캐스케이딩"이란 여러 스타일 규칙이 우선순위에 따라 적용되는 것을 의미합니다.
+            </p>
+
+            <h3 style="color: #555; margin-top: 1.5rem;">선택자(Selectors)</h3>
+            <div class="code-block">
+/* 요소 선택자 */
+p { color: blue; }
+
+/* 클래스 선택자 */
+.highlight { background: yellow; }
+
+/* ID 선택자 */
+#header { font-size: 24px; }
+
+/* 조합 선택자 */
+div > p { margin: 10px; }
+div p { padding: 5px; }
+
+/* 속성 선택자 */
+input[type="email"] { border: 2px solid blue; }
+
+/* 의사 클래스 */
+a:hover { color: red; }
+li:first-child { font-weight: bold; }
+            </div>
+
+            <h3 style="color: #555; margin-top: 1.5rem;">특이성(Specificity)</h3>
+            <p>
+                특이성은 어떤 CSS 규칙이 적용될지 결정합니다.
+                점수가 높을수록 높은 우선순위를 가집니다:
+            </p>
+            <ul style="margin-left: 1.5rem;">
+                <li>ID 선택자: 100점</li>
+                <li>클래스, 속성, 의사 클래스: 10점</li>
+                <li>요소 선택자: 1점</li>
+            </ul>
+
+            <h2 class="section-title">2.2 박스 모델 (Box Model)</h2>
+            <p>
+                모든 HTML 요소는 박스 모델로 구성됩니다: content → padding → border → margin
+            </p>
+
+            <div class="box-model-demo">
+                <h3>박스 모델 시각화</h3>
+                <p>아래 슬라이더를 조정하여 박스 모델의 각 부분을 변경해보세요.</p>
+
+                <div class="slider-group">
+                    <label for="margin-slider">Margin:</label>
+                    <input type="range" id="margin-slider" min="0" max="40" value="20">
+                    <span class="slider-value" id="margin-value">20px</span>
+                </div>
+
+                <div class="slider-group">
+                    <label for="border-slider">Border:</label>
+                    <input type="range" id="border-slider" min="0" max="15" value="5">
+                    <span class="slider-value" id="border-value">5px</span>
+                </div>
+
+                <div class="slider-group">
+                    <label for="padding-slider">Padding:</label>
+                    <input type="range" id="padding-slider" min="0" max="30" value="15">
+                    <span class="slider-value" id="padding-value">15px</span>
+                </div>
+
+                <div class="box-model-visual">
+                    <div class="box-model-container">
+                        <div class="box-margin" id="margin-box">
+                            <span>margin</span>
+                            <div class="box-border" id="border-box">
+                                <span>border</span>
+                                <div class="box-padding" id="padding-box">
+                                    <span>padding</span>
+                                    <div class="box-content">content</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="section-title">2.3 Flexbox</h2>
+            <p>
+                Flexbox는 일차원 레이아웃을 위한 강력한 CSS 기능입니다.
+                컨테이너 내의 아이템들을 유연하게 배치할 수 있습니다.
+            </p>
+
+            <div class="flexbox-demo">
+                <h3>Flexbox 플레이그라운드</h3>
+                <p>아래 선택지를 변경하여 Flexbox 속성의 효과를 즉시 확인해보세요.</p>
+
+                <div class="flexbox-controls">
+                    <div class="flex-control">
+                        <label for="flex-direction">flex-direction:</label>
+                        <select id="flex-direction">
+                            <option value="row">row</option>
+                            <option value="row-reverse">row-reverse</option>
+                            <option value="column">column</option>
+                            <option value="column-reverse">column-reverse</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-control">
+                        <label for="justify-content">justify-content:</label>
+                        <select id="justify-content">
+                            <option value="flex-start">flex-start</option>
+                            <option value="flex-end">flex-end</option>
+                            <option value="center">center</option>
+                            <option value="space-between">space-between</option>
+                            <option value="space-around">space-around</option>
+                            <option value="space-evenly">space-evenly</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-control">
+                        <label for="align-items">align-items:</label>
+                        <select id="align-items">
+                            <option value="stretch">stretch</option>
+                            <option value="flex-start">flex-start</option>
+                            <option value="flex-end">flex-end</option>
+                            <option value="center">center</option>
+                            <option value="baseline">baseline</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-control">
+                        <label for="flex-wrap">flex-wrap:</label>
+                        <select id="flex-wrap">
+                            <option value="nowrap">nowrap</option>
+                            <option value="wrap">wrap</option>
+                            <option value="wrap-reverse">wrap-reverse</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flexbox-container" id="flexbox-container">
+                    <div class="flex-item">Item 1</div>
+                    <div class="flex-item">Item 2</div>
+                    <div class="flex-item">Item 3</div>
+                    <div class="flex-item">Item 4</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">2.4 Grid 레이아웃</h2>
+            <p>
+                CSS Grid는 이차원(행과 열) 레이아웃을 위한 강력한 시스템입니다.
+                복잡한 웹 페이지 구조를 쉽게 만들 수 있습니다.
+            </p>
+
+            <div class="grid-demo">
+                <h3>Grid 시각화</h3>
+
+                <div class="grid-controls">
+                    <div class="flex-control">
+                        <label for="grid-cols">Columns:</label>
+                        <select id="grid-cols">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3" selected>3</option>
+                            <option value="4">4</option>
+                        </select>
+                    </div>
+
+                    <div class="flex-control">
+                        <label for="grid-gap">Gap:</label>
+                        <select id="grid-gap">
+                            <option value="10">10px</option>
+                            <option value="15">15px</option>
+                            <option value="20" selected>20px</option>
+                            <option value="30">30px</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid-container" id="grid-container">
+                    <div class="grid-item">1</div>
+                    <div class="grid-item">2</div>
+                    <div class="grid-item">3</div>
+                    <div class="grid-item">4</div>
+                    <div class="grid-item">5</div>
+                    <div class="grid-item">6</div>
+                    <div class="grid-item">7</div>
+                    <div class="grid-item">8</div>
+                    <div class="grid-item">9</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">2.5 애니메이션과 트랜지션</h2>
+            <p>
+                CSS 애니메이션과 트랜지션으로 부드러운 시각 효과를 만들 수 있습니다.
+                @keyframes를 사용하여 복잡한 애니메이션을 정의합니다.
+            </p>
+
+            <div class="animation-demo">
+                <div class="animation-controls">
+                    <button class="anim-btn" onclick="toggleAnimation(event, 'pulse')">Pulse</button>
+                    <button class="anim-btn" onclick="toggleAnimation(event, 'bounce')">Bounce</button>
+                    <button class="anim-btn" onclick="resetAnimation()">Reset</button>
+                </div>
+
+                <div class="animation-box" id="animation-box"></div>
+
+                <div class="code-block">
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.element {
+  animation: slideIn 1s ease-out forwards;
+}
+                </div>
+            </div>
+
+            <div class="nav-buttons">
+                <a href="01-html-basics.html" class="nav-btn prev">← 이전: HTML 기초</a>
+                <a href="03-javascript-core.html" class="nav-btn next">다음: JavaScript 핵심 →</a>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Box Model Sliders
+        const marginSlider = document.getElementById('margin-slider');
+        const borderSlider = document.getElementById('border-slider');
+        const paddingSlider = document.getElementById('padding-slider');
+
+        const marginValue = document.getElementById('margin-value');
+        const borderValue = document.getElementById('border-value');
+        const paddingValue = document.getElementById('padding-value');
+
+        const marginBox = document.getElementById('margin-box');
+        const borderBox = document.getElementById('border-box');
+        const paddingBox = document.getElementById('padding-box');
+
+        function updateBoxModel() {
+            const margin = marginSlider.value;
+            const border = borderSlider.value;
+            const padding = paddingSlider.value;
+
+            marginValue.textContent = margin + 'px';
+            borderValue.textContent = border + 'px';
+            paddingValue.textContent = padding + 'px';
+
+            marginBox.style.inset = margin + 'px';
+            borderBox.style.inset = border + 'px';
+            borderBox.style.borderWidth = border + 'px';
+            paddingBox.style.inset = padding + 'px';
+            paddingBox.style.borderWidth = padding + 'px';
+        }
+
+        marginSlider.addEventListener('input', updateBoxModel);
+        borderSlider.addEventListener('input', updateBoxModel);
+        paddingSlider.addEventListener('input', updateBoxModel);
+        updateBoxModel();
+
+        // Flexbox Controls
+        const flexDirection = document.getElementById('flex-direction');
+        const justifyContent = document.getElementById('justify-content');
+        const alignItems = document.getElementById('align-items');
+        const flexWrap = document.getElementById('flex-wrap');
+        const flexboxContainer = document.getElementById('flexbox-container');
+
+        function updateFlexbox() {
+            flexboxContainer.style.flexDirection = flexDirection.value;
+            flexboxContainer.style.justifyContent = justifyContent.value;
+            flexboxContainer.style.alignItems = alignItems.value;
+            flexboxContainer.style.flexWrap = flexWrap.value;
+        }
+
+        flexDirection.addEventListener('change', updateFlexbox);
+        justifyContent.addEventListener('change', updateFlexbox);
+        alignItems.addEventListener('change', updateFlexbox);
+        flexWrap.addEventListener('change', updateFlexbox);
+
+        // Grid Controls
+        const gridCols = document.getElementById('grid-cols');
+        const gridGap = document.getElementById('grid-gap');
+        const gridContainer = document.getElementById('grid-container');
+
+        function updateGrid() {
+            gridContainer.style.gridTemplateColumns = 'repeat(' + gridCols.value + ', 1fr)';
+            gridContainer.style.gap = gridGap.value + 'px';
+        }
+
+        gridCols.addEventListener('change', updateGrid);
+        gridGap.addEventListener('change', updateGrid);
+        updateGrid();
+
+        // Animation Controls
+        const animationBox = document.getElementById('animation-box');
+
+        function toggleAnimation(event, animClass) {
+            animationBox.classList.toggle(animClass);
+            event.target.textContent = animationBox.classList.contains(animClass) ?
+                animClass.charAt(0).toUpperCase() + animClass.slice(1) + ' (Stop)' :
+                animClass.charAt(0).toUpperCase() + animClass.slice(1);
+        }
+
+        function resetAnimation() {
+            animationBox.classList.remove('pulse', 'bounce');
+            animationBox.style.animation = 'none';
+            setTimeout(() => {
+                animationBox.style.animation = '';
+                animationBox.classList.add('slideIn');
+            }, 10);
+            document.querySelectorAll('.anim-btn').forEach(btn => {
+                btn.textContent = btn.textContent.replace(' (Stop)', '');
+            });
+        }
+    </script>
+</body>
+</html>

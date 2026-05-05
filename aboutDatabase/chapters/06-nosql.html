@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6장. NoSQL</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html">1. 관계형 DB 기초</a></li>
+    <li><a href="02-sql.html">2. SQL 핵심</a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+
+<h1>6장. NoSQL</h1>
+
+<section id="section-1">
+  <h2>1. NoSQL이란?</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>관계형 DB는 모든 데이터를 테이블(행과 열)에 넣으려고 합니다. 하지만 모든 데이터가 표 형식에 맞지는 않습니다:</p>
+    <ul>
+      <li><strong>SNS 게시글:</strong> 작성자, 내용, 사진 여러 장, 댓글(개수 미정)...</li>
+      <li><strong>쇼핑몰 상품:</strong> 가구는 "가로×세로×높이", 의류는 "사이즈 옵션", 음식은 "유통기한"...</li>
+      <li><strong>사용자 프로필:</strong> 누군가는 25개의 취미, 누군가는 1개...</li>
+    </ul>
+    <p><strong>NoSQL:</strong> "Not Only SQL". 표 형식 대신 더 자유로운 형태로 저장하는 데이터베이스입니다.</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>NoSQL의 등장:</strong> 2000년대 웹 서비스 확산으로 빅데이터 처리 필요성 증가. 기존 RDBMS의 확장성(Scalability) 한계 극복을 위해 등장.</p>
+    <p><strong>특징:</strong></p>
+    <ul>
+      <li>스키마리스(Schema-less): 사전에 구조 정의 불필요</li>
+      <li>수평 확장(Horizontal Scaling): 여러 서버에 분산 저장 용이</li>
+      <li>높은 처리량(High Throughput)</li>
+      <li>느슨한 일관성(Eventual Consistency)</li>
+    </ul>
+    <p><strong>CAP 정리 예고:</strong> Consistency, Availability, Partition tolerance 중 2개만 선택 가능</p>
+  </div>
+</section>
+
+<section id="section-2">
+  <h2>2. Document DB (MongoDB)</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>서류 봉투를 생각해봅시다. 봉투 안에는 여권, 사진, 메모, 뭐든 들어갈 수 있습니다.</p>
+    <p>Document DB는 JSON 형태로 다양한 데이터를 한곳에 담을 수 있습니다:</p>
+    <pre style="background:#f5f5f5;padding:10px;border-radius:6px;overflow-x:auto;"><code>{
+  "이름": "김철수",
+  "나이": 30,
+  "취미": ["축구", "영화"],
+  "주소": {
+    "시": "서울",
+    "구": "강남구"
+  }
+}</code></pre>
+    <p>모든 필드가 필수일 필요 없음. 어떤 사람은 "직업" 필드가 있고, 어떤 사람은 없을 수 있습니다.</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>BSON (Binary JSON):</strong> MongoDB의 저장 형식. JSON과 호환되지만 바이너리 인코딩으로 더 효율적.</p>
+    <p><strong>스키마리스의 장단점:</strong></p>
+    <ul>
+      <li><strong>장점:</strong> 유연성, 빠른 개발 속도</li>
+      <li><strong>단점:</strong> 데이터 무결성 보장 어려움, 쿼리 복잡성 증가</li>
+    </ul>
+    <p><strong>내장(Embedding) vs 참조(Referencing):</strong></p>
+    <ul>
+      <li>내장: 관련 데이터를 한 문서 안에 포함 (중복 가능, 한 번에 조회)</li>
+      <li>참조: 다른 문서의 ID를 참조 (정규화, 여러 번 조회 필요)</li>
+    </ul>
+    <p><strong>트랜잭션:</strong> MongoDB 4.0+에서 멀티 문서 트랜잭션 지원 (다만 RDBMS보다 제한적)</p>
+  </div>
+</section>
+
+<section id="section-3">
+  <h2>3. Key-Value & Column-Family</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p><strong>Key-Value DB:</strong> 사물함처럼 번호(키)로 물건(값)을 꺼냅니다. "123번 사물함에 뭐가 있지?" → 바로 꺼냄.</p>
+    <ul>
+      <li>예: Redis, Memcached</li>
+      <li>용도: 캐시, 세션 저장, 실시간 순위판</li>
+    </ul>
+    <p><strong>Column-Family DB:</strong> 거대한 스프레드시트. 수억 개의 행을 빠르게 처리합니다.</p>
+    <ul>
+      <li>예: Cassandra, HBase</li>
+      <li>용도: 시계열 데이터(시간에 따른 센서 값), 로그 저장</li>
+    </ul>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>Redis 데이터 구조:</strong> String, List, Set, Sorted Set, Hash, Stream 등을 지원하는 In-Memory 저장소.</p>
+    <p><strong>Cassandra의 파티션 전략:</strong> 일관된 해싱(Consistent Hashing)을 사용하여 데이터를 여러 노드에 분산. 한 노드 장애 시 다른 노드로 빠르게 재조정.</p>
+    <p><strong>LSM-Tree (Log-Structured Merge-Tree):</strong></p>
+    <ul>
+      <li>쓰기 연산 최적화</li>
+      <li>메모리의 정렬된 맵(MemTable) → 디스크의 정렬된 문자열 테이블(SSTable)로 쓰기</li>
+      <li>읽기 시 여러 SSTable을 병합 검색</li>
+    </ul>
+    <p><strong>Cassandra의 일관성 모델:</strong> Eventual Consistency. 쓰기 후 일부 레플리카는 즉시 최신값 보장 불가.</p>
+  </div>
+</section>
+
+<section id="section-4">
+  <h2>4. Graph DB</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>인맥 지도를 그려봅시다:</p>
+    <ul>
+      <li><strong>노드:</strong> 사람 (김철수, 이영희...)</li>
+      <li><strong>간선:</strong> 관계 (친구, 직장 동료, 친척...)</li>
+    </ul>
+    <p>이 구조에서 "김철수와 가장 가까운 사람은?" 또는 "친구의 친구 중 같은 취미를 가진 사람은?"을 빠르게 찾을 수 있습니다.</p>
+    <p>예: Facebook의 친구 추천, Netflix의 콘텐츠 추천, Google Maps의 경로 검색</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>속성 그래프 모델(Property Graph Model):</strong></p>
+    <ul>
+      <li>노드: 엔티티. name, age 등의 속성 가짐</li>
+      <li>간선: 관계. relation_type, weight 등의 속성 가짐</li>
+    </ul>
+    <p><strong>Cypher 쿼리 언어:</strong> Neo4j의 표준 쿼리 언어. SQL과 유사하지만 그래프 패턴 매칭에 최적화.</p>
+    <pre style="background:#f5f5f5;padding:10px;border-radius:6px;overflow-x:auto;"><code>MATCH (a:Person)-[:FRIEND]-(b:Person)
+WHERE a.name = '김철수'
+RETURN b.name</code></pre>
+    <p><strong>그래프 순회 알고리즘:</strong> BFS (Breadth-First Search), DFS (Depth-First Search), Dijkstra (최단 경로), PageRank 등</p>
+  </div>
+</section>
+
+<div class="threejs-container" id="nosql-3d" style="margin:40px 0;">
+  <div class="threejs-label">3D · NOSQL 데이터 모델 시각화</div>
+  <div id="nosql-canvas" style="width:100%;height:600px;background:#f5f5f5;border-radius:8px;position:relative;"></div>
+  <div class="threejs-controls" style="margin-top:12px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+    <button onclick="focusModel('document')" style="padding:8px 12px;background:#7b5cff;color:#fff;border:none;border-radius:6px;cursor:pointer;">Document</button>
+    <button onclick="focusModel('keyvalue')" style="padding:8px 12px;background:#00d4ff;color:#fff;border:none;border-radius:6px;cursor:pointer;">Key-Value</button>
+    <button onclick="focusModel('column')" style="padding:8px 12px;background:#ff6b9d;color:#fff;border:none;border-radius:6px;cursor:pointer;">Column</button>
+    <button onclick="focusModel('graph')" style="padding:8px 12px;background:#ffa502;color:#fff;border:none;border-radius:6px;cursor:pointer;">Graph</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  let scene, camera, renderer, models = {};
+
+  function initNoSQLScene() {
+    const container = document.getElementById('nosql-canvas');
+    if (!container) return;
+
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf5f5f5);
+
+    camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.set(0, 0, 25);
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    // Lighting
+    const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    light1.position.set(15, 15, 15);
+    light1.castShadow = true;
+    scene.add(light1);
+
+    const light2 = new THREE.AmbientLight(0xffffff, 0.6);
+    scene.add(light2);
+
+    createNoSQLModels();
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  }
+
+  function createNoSQLModels() {
+    // Document Model
+    models.document = createDocumentModel();
+    models.document.position.set(-12, 0, 0);
+    scene.add(models.document);
+
+    // Key-Value Model
+    models.keyvalue = createKeyValueModel();
+    models.keyvalue.position.set(-4, 0, 0);
+    scene.add(models.keyvalue);
+
+    // Column Family Model
+    models.column = createColumnModel();
+    models.column.position.set(4, 0, 0);
+    scene.add(models.column);
+
+    // Graph Model
+    models.graph = createGraphModel();
+    models.graph.position.set(12, 0, 0);
+    scene.add(models.graph);
+  }
+
+  function createDocumentModel() {
+    const group = new THREE.Group();
+    const geometry = new THREE.BoxGeometry(3, 4, 0.5);
+    const material = new THREE.MeshPhongMaterial({ color: 0x7b5cff });
+    const box = new THREE.Mesh(geometry, material);
+    box.castShadow = true;
+    group.add(box);
+
+    const canvas = createTextCanvas('Document\n{...JSON...}', 0x7b5cff);
+    const texture = new THREE.CanvasTexture(canvas);
+    const labelMat = new THREE.MeshBasicMaterial({ map: texture });
+    const label = new THREE.Mesh(new THREE.PlaneGeometry(2.9, 3.9), labelMat);
+    label.position.z = 0.3;
+    group.add(label);
+
+    return group;
+  }
+
+  function createKeyValueModel() {
+    const group = new THREE.Group();
+
+    for (let i = 0; i < 3; i++) {
+      const geometry = new THREE.BoxGeometry(1.5, 0.6, 0.3);
+      const material = new THREE.MeshPhongMaterial({ color: 0x00d4ff });
+      const box = new THREE.Mesh(geometry, material);
+      box.position.y = 1 - i * 0.8;
+      box.castShadow = true;
+      group.add(box);
+
+      const canvas = createTextCanvas(`key${i}`, 0x00d4ff, 12);
+      const texture = new THREE.CanvasTexture(canvas);
+      const label = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.5), new THREE.MeshBasicMaterial({ map: texture }));
+      label.position.z = 0.2;
+      label.position.y = 1 - i * 0.8;
+      group.add(label);
+    }
+
+    return group;
+  }
+
+  function createColumnModel() {
+    const group = new THREE.Group();
+
+    for (let x = 0; x < 3; x++) {
+      for (let y = 0; y < 3; y++) {
+        const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.3);
+        const material = new THREE.MeshPhongMaterial({ color: 0xff6b9d });
+        const box = new THREE.Mesh(geometry, material);
+        box.position.x = (x - 1) * 0.8;
+        box.position.y = (y - 1) * 0.8;
+        box.castShadow = true;
+        group.add(box);
+      }
+    }
+
+    return group;
+  }
+
+  function createGraphModel() {
+    const group = new THREE.Group();
+
+    // Create nodes
+    const nodePositions = [
+      [0, 1.5, 0],
+      [-1.2, -0.5, 0],
+      [1.2, -0.5, 0],
+      [0, -2, 0]
+    ];
+
+    const nodes = [];
+    nodePositions.forEach((pos, i) => {
+      const geometry = new THREE.SphereGeometry(0.4, 32, 32);
+      const material = new THREE.MeshPhongMaterial({ color: 0xffa502 });
+      const sphere = new THREE.Mesh(geometry, material);
+      sphere.position.set(...pos);
+      sphere.castShadow = true;
+      group.add(sphere);
+      nodes.push(sphere);
+    });
+
+    // Create edges
+    const edges = [[0, 1], [0, 2], [1, 2], [1, 3], [2, 3]];
+    edges.forEach(([i, j]) => {
+      const geometry = new THREE.BufferGeometry();
+      const positions = new Float32Array([
+        ...nodePositions[i],
+        ...nodePositions[j]
+      ]);
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const line = new THREE.Line(geometry, new THREE.LineBasicMaterial({ color: 0xffa502, linewidth: 2 }));
+      group.add(line);
+    });
+
+    return group;
+  }
+
+  function createTextCanvas(text, color, size = 16) {
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `bold ${size}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    text.split('\n').forEach((line, i) => {
+      ctx.fillText(line, 128, 128 - 20 + i * 40);
+    });
+    return canvas;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Gentle rotation
+    Object.values(models).forEach(model => {
+      if (model) {
+        model.rotation.y += 0.005;
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  window.focusModel = function(modelType) {
+    const targetPos = {
+      'document': -12,
+      'keyvalue': -4,
+      'column': 4,
+      'graph': 12
+    };
+
+    const target = targetPos[modelType];
+    const duration = 800;
+    const startZ = camera.position.z;
+    const startX = camera.position.x;
+    const startTime = Date.now();
+
+    function animateCamera() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      camera.position.x = startX + (target - startX) * progress;
+      camera.position.z = startZ + (20 - startZ) * progress;
+      camera.lookAt(target, 0, 0);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateCamera);
+      }
+    }
+
+    animateCamera();
+  };
+
+  window.addEventListener('load', initNoSQLScene);
+})();
+</script>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="05-transaction.html" style="text-decoration:none;">← 트랜잭션과 동시성</a>
+  <a href="07-distributed.html" style="text-decoration:none;">분산 DB →</a>
+</div>
+
+</main>
+</div>
+</body>
+</html>

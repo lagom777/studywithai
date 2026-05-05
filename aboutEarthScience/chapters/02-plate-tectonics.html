@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2장. 판구조론</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;border:none;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌍 표지 · 소개</a></li>
+    <li><a href="01-structure.html">1. 지구의 구조</a></li>
+    <li><a href="02-plate-tectonics.html">2. 판구조론</a></li>
+    <li><a href="03-minerals-rocks.html">3. 광물과 암석</a></li>
+    <li><a href="04-atmosphere.html">4. 대기과학</a></li>
+    <li><a href="05-oceanography.html">5. 해양학</a></li>
+    <li><a href="06-climate-change.html">6. 기후변화</a></li>
+    <li><a href="07-geological-time.html">7. 지질시대</a></li>
+    <li><a href="08-natural-disasters.html">8. 자연재해</a></li>
+    <li><a href="09-resources-environment.html">9. 자원과 환경</a></li>
+  </ol>
+</aside>
+<main>
+<h2>2. 판구조론</h2>
+
+<div class="info-box">
+<p><strong>판구조론은 지구 표면이 여러 개의 거대한 판(plate)으로 나뉘어 있으며, 이 판들이 맨틀 대류에 의해 움직인다는 이론입니다.</strong></p>
+<p>아래 시뮬레이션에서 판의 경계 유형을 선택하고, 판이 어떻게 상호작용하는지 관찰해보세요.</p>
+</div>
+
+<div class="threejs-container" data-label="판 경계 시뮬레이션" id="plate-sim" style="height:500px;">
+  <div class="threejs-controls">
+    <button id="btn-divergent" class="active">발산 경계</button>
+    <button id="btn-convergent">수렴 경계</button>
+    <button id="btn-transform">변환 경계</button>
+    <button id="btn-speed">속도 ×2</button>
+  </div>
+  <div class="threejs-info" id="plate-info">발산 경계: 두 판이 서로 멀어짐</div>
+</div>
+<p class="fig-title">그림 2.1. 판 경계 유형 시뮬레이션. 버튼으로 경계 유형을 전환하세요.</p>
+
+<h3>2.1 판구조론의 발전</h3>
+<p>판구조론은 1960년대에 확립된 지구과학의 통합 이론입니다. 그 기원은 1912년 알프레드 베게너(Alfred Wegener)의 <strong>대륙이동설</strong>까지 거슬러 올라갑니다.</p>
+<p>베게너는 남아메리카와 아프리카 해안선의 일치, 양 대륙에서 발견되는 동일한 화석(메소사우르스, 글로소프테리스 등), 빙하 흔적의 분포를 근거로 과거에 모든 대륙이 하나(판게아, Pangaea)였다고 주장했습니다.</p>
+
+<h3>2.2 판의 경계 유형</h3>
+<p>지구의 암석권은 약 15개의 주요 판으로 나뉘며, 판의 경계에서 지진과 화산활동이 집중됩니다.</p>
+
+<h4>발산 경계 (Divergent Boundary)</h4>
+<p>두 판이 서로 멀어지는 경계입니다. 맨틀 물질이 올라와 새로운 해양 지각을 형성합니다. 대표 사례: <strong>대서양 중앙해령</strong>, 동아프리카 열곡대.</p>
+
+<h4>수렴 경계 (Convergent Boundary)</h4>
+<p>두 판이 서로 다가가는 경계입니다. 세 가지 하위 유형이 있습니다:</p>
+<ul>
+<li><strong>해양-대륙 수렴</strong>: 해양판이 대륙판 아래로 섭입 → 해구 + 화산호 (안데스 산맥)</li>
+<li><strong>해양-해양 수렴</strong>: 오래된 해양판이 섭입 → 해구 + 호상열도 (일본, 필리핀)</li>
+<li><strong>대륙-대륙 수렴</strong>: 양쪽 모두 가벼워 섭입 불가 → 습곡산맥 (히말라야)</li>
+</ul>
+
+<h4>변환 경계 (Transform Boundary)</h4>
+<p>두 판이 서로 수평으로 스쳐 지나가는 경계입니다. 대표 사례: <strong>산안드레아스 단층</strong>(태평양판과 북아메리카판).</p>
+
+<h3>2.3 판을 움직이는 힘</h3>
+<p>판 이동의 구동력은 여러 메커니즘이 복합적으로 작용합니다:</p>
+<ul>
+<li><strong>맨틀 대류(Mantle Convection)</strong>: 핵에서 가열된 맨틀 물질의 순환</li>
+<li><strong>해령 밀기(Ridge Push)</strong>: 해령에서 새로 생성된 뜨거운 암석권이 미끄러져 내려감</li>
+<li><strong>섭입대 끌기(Slab Pull)</strong>: 차갑고 밀도 높은 섭입판이 중력에 의해 당겨짐 (가장 큰 기여)</li>
+</ul>
+
+<h3>2.4 증거</h3>
+<p>판구조론을 뒷받침하는 주요 증거:</p>
+<ul>
+<li><strong>해저 확장</strong>: 해령에서 멀어질수록 해저 암석의 나이가 증가</li>
+<li><strong>고지자기 줄무늬</strong>: 해령 양쪽으로 대칭적인 자기 이상 패턴</li>
+<li><strong>GPS 측정</strong>: 현재 판 이동을 직접 관측 (연간 1-10 cm)</li>
+<li><strong>지진 분포</strong>: 판 경계를 따라 집중된 지진 분포</li>
+<li><strong>열점(Hot Spot)</strong>: 하와이 제도처럼 판 위를 이동한 화산 흔적</li>
+</ul>
+
+<div class="quiz-box">
+<h4>🧪 확인 문제</h4>
+<p>히말라야 산맥이 형성된 판 경계 유형은?</p>
+<div class="quiz-option" onclick="this.classList.add('wrong')">① 발산 경계</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">② 해양-대륙 수렴 경계</div>
+<div class="quiz-option" onclick="this.classList.add('correct')">③ 대륙-대륙 수렴 경계</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">④ 변환 경계</div>
+</div>
+
+<div class="chapter-nav">
+  <a href="01-structure.html">← 지구의 구조</a>
+  <a href="03-minerals-rocks.html">광물과 암석 →</a>
+</div>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  const container = document.getElementById('plate-sim');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050d18);
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(0, 3, 5);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0x404060, 0.6));
+  const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(3, 5, 3);
+  scene.add(dirLight);
+
+  let mode = 'divergent';
+  let speed = 1;
+  let time = 0;
+
+  // Plate materials
+  const plateMat1 = new THREE.MeshPhongMaterial({ color: 0x5d4037, flatShading: true });
+  const plateMat2 = new THREE.MeshPhongMaterial({ color: 0x4e342e, flatShading: true });
+  const magmaMat = new THREE.MeshPhongMaterial({ color: 0xff6d00, emissive: 0xff3d00, emissiveIntensity: 0.5 });
+  const oceanMat = new THREE.MeshPhongMaterial({ color: 0x0d47a1, transparent: true, opacity: 0.4 });
+
+  // Create plates
+  const plate1 = new THREE.Mesh(new THREE.BoxGeometry(3, 0.4, 4), plateMat1);
+  const plate2 = new THREE.Mesh(new THREE.BoxGeometry(3, 0.4, 4), plateMat2);
+  const magma = new THREE.Mesh(new THREE.PlaneGeometry(0.5, 4), magmaMat);
+  magma.rotation.x = -Math.PI / 2;
+  magma.position.y = -0.1;
+
+  // Mantle arrows (particles)
+  const arrowGroup = new THREE.Group();
+  for (let i = 0; i < 20; i++) {
+    const arrowGeo = new THREE.ConeGeometry(0.05, 0.2, 8);
+    const arrowMat = new THREE.MeshPhongMaterial({ color: 0xff6d00, emissive: 0xff3d00, emissiveIntensity: 0.3 });
+    const arrow = new THREE.Mesh(arrowGeo, arrowMat);
+    arrow.position.set((Math.random() - 0.5) * 2, -0.5 - Math.random() * 1.5, (Math.random() - 0.5) * 3);
+    arrowGroup.add(arrow);
+  }
+
+  scene.add(plate1, plate2, magma, arrowGroup);
+
+  function setupDivergent() {
+    mode = 'divergent';
+    plate1.scale.set(1, 1, 1);
+    plate2.scale.set(1, 1, 1);
+    plate1.position.set(-1.5, 0, 0);
+    plate2.position.set(1.5, 0, 0);
+    plate1.rotation.set(0, 0, 0);
+    plate2.rotation.set(0, 0, 0);
+    magma.visible = true;
+    magma.position.set(0, -0.1, 0);
+    document.getElementById('plate-info').textContent = '발산 경계: 두 판이 서로 멀어지며 새 지각 생성';
+  }
+
+  function setupConvergent() {
+    mode = 'convergent';
+    plate1.position.set(-1.2, 0, 0);
+    plate2.position.set(1.2, -0.3, 0);
+    plate1.rotation.set(0, 0, 0);
+    plate2.rotation.set(0, 0, 0.15);
+    magma.visible = true;
+    magma.position.set(-0.5, 0.3, 0);
+    document.getElementById('plate-info').textContent = '수렴 경계: 해양판이 대륙판 아래로 섭입';
+  }
+
+  function setupTransform() {
+    mode = 'transform';
+    plate1.position.set(0, 0, -1);
+    plate2.position.set(0, 0, 1);
+    plate1.rotation.set(0, 0, 0);
+    plate2.rotation.set(0, 0, 0);
+    magma.visible = false;
+    document.getElementById('plate-info').textContent = '변환 경계: 두 판이 수평으로 스쳐 지나감';
+  }
+
+  setupDivergent();
+
+  document.getElementById('btn-divergent').addEventListener('click', setupDivergent);
+  document.getElementById('btn-convergent').addEventListener('click', setupConvergent);
+  document.getElementById('btn-transform').addEventListener('click', setupTransform);
+  document.getElementById('btn-speed').addEventListener('click', function() {
+    speed = speed === 1 ? 2 : 1;
+    this.textContent = speed === 1 ? '속도 ×2' : '속도 ×1';
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.01 * speed;
+
+    if (mode === 'divergent') {
+      const offset = Math.sin(time) * 0.3 + 1.5;
+      plate1.position.x = -offset;
+      plate2.position.x = offset;
+    } else if (mode === 'convergent') {
+      const offset = Math.sin(time) * 0.2;
+      plate1.position.x = -1.2 + offset;
+      plate2.position.x = 1.2 - offset;
+      plate2.rotation.z = 0.15 + Math.sin(time) * 0.05;
+    } else if (mode === 'transform') {
+      plate1.position.x = Math.sin(time) * 0.3;
+      plate2.position.x = -Math.sin(time) * 0.3;
+    }
+
+    // Animate mantle arrows
+    arrowGroup.children.forEach((arrow, i) => {
+      arrow.position.y += 0.005 * speed;
+      if (arrow.position.y > -0.2) {
+        arrow.position.y = -2;
+        arrow.position.x = (Math.random() - 0.5) * 2;
+      }
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

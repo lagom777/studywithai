@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2장. SQL 핵심</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+<style>
+  .sql-editor {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 16px;
+    border-radius: 8px;
+    margin: 15px 0;
+    font-family: 'Courier New', monospace;
+  }
+  .sql-editor textarea {
+    width: 100%;
+    height: 120px;
+    background: #252526;
+    color: #d4d4d4;
+    border: 1px solid #3e3e42;
+    padding: 12px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    resize: vertical;
+  }
+  .sql-editor textarea:focus {
+    outline: none;
+    border-color: #007acc;
+    box-shadow: 0 0 8px rgba(0, 122, 204, 0.3);
+  }
+  .run-btn {
+    background: linear-gradient(120deg, #00d4ff, #7b5cff);
+    color: white;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    margin-top: 12px;
+    transition: transform 0.2s;
+  }
+  .run-btn:hover {
+    transform: translateY(-2px);
+  }
+  .run-btn:active {
+    transform: translateY(0);
+  }
+  .sql-result {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  .result-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .result-table th {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #90caf9;
+    font-weight: 600;
+  }
+  .result-table td {
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+  }
+  .result-table tr:nth-child(even) {
+    background: #fafafa;
+  }
+  .error-msg {
+    color: #d32f2f;
+    padding: 12px;
+    background: #ffebee;
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    margin-top: 12px;
+  }
+  .result-count {
+    color: #666;
+    font-size: 13px;
+    margin-top: 10px;
+  }
+  .interactive-demo {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid #00d4ff;
+    margin: 20px 0;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html">1. 관계형 DB 기초</a></li>
+    <li><a href="02-sql.html"><strong>2. SQL 핵심</strong></a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+
+<h1>2장. SQL 핵심</h1>
+
+<section id="section-1">
+<h2>2.1 SQL이란?</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+<strong>SQL(Structured Query Language)</strong>은 데이터베이스와 대화하는 언어입니다.
+마치 우리가 한국어로 대화하듯이, SQL로 데이터베이스에게 명령을 내릴 수 있어요.
+</p>
+<p style="margin-top:15px;"><strong>예시:</strong></p>
+<p style="background:#f0f7ff; padding:12px; border-left:4px solid #1976d2; border-radius:4px; font-family:monospace;">
+SELECT name FROM students WHERE grade = 2;
+</p>
+<p style="margin-top:10px;">위 명령은 "students 테이블에서 grade가 2인 학생의 name을 보여줘"라는 뜻입니다.</p>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 학술 정의</h3>
+<p>
+SQL은 1974년 Donald Chamberlin과 Raymond Boyce가 IBM에서 SEQUEL(Structured English Query Language)로 처음 개발했으며,
+이후 SQL(Structured Query Language)로 표준화되었습니다. 1986년에 ANSI(American National Standards Institute)에서 표준을 공식화했고,
+1987년에 ISO(International Organization for Standardization)에 채택되었습니다.
+</p>
+<p><strong>SQL의 특징:</strong></p>
+<ul>
+  <li><strong>선언적(Declarative):</strong> "무엇을" 할지 명시하지만, "어떻게" 할지는 DBMS가 결정</li>
+  <li><strong>절차적이 아님(Non-procedural):</strong> 단계별 알고리즘을 지정하지 않음</li>
+  <li><strong>집합 지향(Set-oriented):</strong> 한 번에 여러 행을 처리</li>
+</ul>
+<p><strong>SQL의 세 가지 부분(Three Sub-languages):</strong></p>
+<ul>
+  <li><strong>DDL(Data Definition Language):</strong> CREATE, ALTER, DROP. 구조 정의</li>
+  <li><strong>DML(Data Manipulation Language):</strong> SELECT, INSERT, UPDATE, DELETE. 데이터 조작</li>
+  <li><strong>DCL(Data Control Language):</strong> GRANT, REVOKE. 권한 관리</li>
+</ul>
+</div>
+</section>
+
+<section id="section-2">
+<h2>2.2 데이터 정의(DDL)</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+DDL은 데이터베이스의 <strong>구조를 만들고 수정하는</strong> 명령어들입니다.
+</p>
+<ul>
+  <li><strong>CREATE TABLE:</strong> 새로운 테이블 만들기</li>
+  <li><strong>ALTER TABLE:</strong> 기존 테이블 수정하기 (열 추가, 삭제, 타입 변경 등)</li>
+  <li><strong>DROP TABLE:</strong> 테이블 삭제하기</li>
+</ul>
+<p style="margin-top:15px;"><strong>CREATE TABLE 예시:</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:13px;">
+CREATE TABLE students (
+  student_id INT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  grade INT,
+  department VARCHAR(30)
+);
+</pre>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 형식적 정의</h3>
+<p>
+<strong>CREATE TABLE 구문:</strong>
+</p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+CREATE TABLE TableName (
+  ColName1 DataType Constraint,
+  ColName2 DataType Constraint,
+  ...
+  TableConstraint
+);
+</pre>
+<p><strong>데이터 타입(주요):</strong></p>
+<ul>
+  <li><strong>INT, BIGINT:</strong> 정수</li>
+  <li><strong>FLOAT, DECIMAL(p,s):</strong> 실수 (p=전체자리수, s=소수자리수)</li>
+  <li><strong>VARCHAR(n), CHAR(n):</strong> 문자열 (n=최대 길이)</li>
+  <li><strong>DATE, TIMESTAMP:</strong> 날짜/시간</li>
+  <li><strong>BOOLEAN:</strong> TRUE/FALSE</li>
+</ul>
+<p><strong>제약조건(Constraints):</strong></p>
+<ul>
+  <li><strong>NOT NULL:</strong> 반드시 값이 있어야 함</li>
+  <li><strong>UNIQUE:</strong> 같은 값이 중복되지 않음</li>
+  <li><strong>PRIMARY KEY:</strong> NOT NULL + UNIQUE + 기본 식별자</li>
+  <li><strong>FOREIGN KEY:</strong> 다른 테이블의 PRIMARY KEY 참조</li>
+  <li><strong>CHECK:</strong> 조건식이 참인 값만 허용</li>
+  <li><strong>DEFAULT:</strong> 지정되지 않으면 기본값 사용</li>
+</ul>
+<p><strong>ALTER TABLE 예시:</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+ALTER TABLE students ADD COLUMN email VARCHAR(100);
+ALTER TABLE students MODIFY COLUMN grade INT NOT NULL;
+ALTER TABLE students DROP COLUMN email;
+</pre>
+</div>
+</section>
+
+<section id="section-3">
+<h2>2.3 데이터 조작(DML)</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+DML은 테이블의 <strong>데이터를 추가, 조회, 수정, 삭제하는</strong> 명령어들입니다. CRUD라고도 부릅니다:
+</p>
+<ul>
+  <li><strong>Create = INSERT:</strong> 새로운 데이터 추가</li>
+  <li><strong>Read = SELECT:</strong> 데이터 조회</li>
+  <li><strong>Update = UPDATE:</strong> 기존 데이터 수정</li>
+  <li><strong>Delete = DELETE:</strong> 데이터 삭제</li>
+</ul>
+<p style="margin-top:15px;"><strong>SELECT 기본 구조:</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:13px;">
+SELECT 열1, 열2
+FROM 테이블
+WHERE 조건
+ORDER BY 열 ASC|DESC;
+</pre>
+<p style="margin-top:15px;"><strong>JOIN으로 두 테이블 연결하기:</strong></p>
+<p>학생의 정보와 그들이 수강하는 과목 정보를 함께 보고 싶을 때 JOIN을 사용합니다.</p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+SELECT s.name, c.course_name
+FROM students s
+INNER JOIN enrollments e ON s.student_id = e.student_id
+INNER JOIN courses c ON e.course_id = c.course_id;
+</pre>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 형식적 정의</h3>
+<p>
+<strong>SELECT 쿼리 처리 순서(Execution Order):</strong>
+</p>
+<ol>
+  <li><strong>FROM:</strong> 데이터 소스 결정</li>
+  <li><strong>WHERE:</strong> 행 필터링 (T ⊆ R)</li>
+  <li><strong>GROUP BY:</strong> 그룹 분할</li>
+  <li><strong>HAVING:</strong> 그룹 필터링</li>
+  <li><strong>SELECT:</strong> 열 선택 및 계산</li>
+  <li><strong>DISTINCT:</strong> 중복 제거</li>
+  <li><strong>ORDER BY:</strong> 정렬</li>
+  <li><strong>LIMIT/OFFSET:</strong> 페이징</li>
+</ol>
+<p><strong>JOIN의 유형:</strong></p>
+<ul>
+  <li><strong>INNER JOIN:</strong> R₁ ⋈ R₂ = {(t₁,t₂) | t₁ ∈ R₁ ∧ t₂ ∈ R₂ ∧ 조건}. 공통 부분만</li>
+  <li><strong>LEFT OUTER JOIN:</strong> R₁의 모든 행 + 매치되는 R₂ 행들</li>
+  <li><strong>RIGHT OUTER JOIN:</strong> R₂의 모든 행 + 매치되는 R₁ 행들</li>
+  <li><strong>FULL OUTER JOIN:</strong> R₁과 R₂의 모든 행</li>
+  <li><strong>CROSS JOIN:</strong> R₁ × R₂ (카티션 곱)</li>
+</ul>
+<p><strong>집계 함수(Aggregate Functions):</strong></p>
+<ul>
+  <li><strong>COUNT(expr):</strong> NULL이 아닌 행 개수. COUNT(*) = 전체 행 개수</li>
+  <li><strong>SUM(expr):</strong> ∑ expr</li>
+  <li><strong>AVG(expr):</strong> (∑ expr) / COUNT(expr)</li>
+  <li><strong>MIN(expr), MAX(expr):</strong> 최소값, 최대값</li>
+  <li><strong>GROUP_CONCAT(expr):</strong> 문자열 연결</li>
+</ul>
+<p><strong>윈도우 함수(Window Functions):</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+SELECT
+  name,
+  salary,
+  ROW_NUMBER() OVER (ORDER BY salary DESC) AS rank,
+  LAG(salary) OVER (ORDER BY salary DESC) AS prev_salary,
+  LEAD(salary) OVER (ORDER BY salary DESC) AS next_salary
+FROM employees;
+</pre>
+</div>
+</section>
+
+<section id="section-4">
+<h2>2.4 서브쿼리와 집계</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+<strong>서브쿼리</strong> = "질문 안에 질문" 넣기
+</p>
+<p style="margin-top:10px;">예를 들어, "평균 학점 이상인 학생을 찾아줘"라는 요청은:</p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+SELECT name
+FROM students
+WHERE grade >= (SELECT AVG(grade) FROM students);
+</pre>
+<p style="margin-top:15px;"><strong>집계 함수</strong> = 많은 데이터를 요약하는 것</p>
+<ul>
+  <li><strong>COUNT:</strong> 몇 명인가? → 50명</li>
+  <li><strong>SUM:</strong> 총합은? → 총점 4500점</li>
+  <li><strong>AVG:</strong> 평균은? → 평균 학점 3.5</li>
+  <li><strong>MAX/MIN:</strong> 최고/최저는? → 최고 학점 4.5</li>
+</ul>
+<p style="margin-top:15px;"><strong>GROUP BY로 그룹 나누기:</strong></p>
+<p>"전공별로 학생 수를 세어줘"</p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+SELECT department, COUNT(*) as student_count
+FROM students
+GROUP BY department;
+</pre>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 형식적 정의</h3>
+<p>
+<strong>서브쿼리(Subquery, Inner Query):</strong>
+다른 쿼리 내에 포함된 SELECT 문.
+</p>
+<p><strong>상관 서브쿼리(Correlated Subquery):</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+SELECT e1.name, e1.salary
+FROM employees e1
+WHERE e1.salary > (
+  SELECT AVG(e2.salary)
+  FROM employees e2
+  WHERE e2.department = e1.department
+);
+</pre>
+<p>외부 쿼리의 각 행에 대해 서브쿼리가 실행됨. 성능이 낮을 수 있음.</p>
+<p><strong>IN/EXISTS 연산자:</strong></p>
+<ul>
+  <li><strong>IN:</strong> WHERE col IN (SELECT ...)</li>
+  <li><strong>EXISTS:</strong> WHERE EXISTS (SELECT ... FROM ... WHERE ...)</li>
+  <li><strong>NOT IN, NOT EXISTS:</strong> 반대 조건</li>
+</ul>
+<p><strong>윈도우 함수의 구조:</strong></p>
+<pre style="background:#f0f7ff; padding:12px; border-radius:4px; overflow-x:auto; font-family:monospace; font-size:12px;">
+function_name(expr) OVER (
+  [PARTITION BY col1, col2, ...]
+  [ORDER BY col3 [ASC|DESC]]
+  [ROWS|RANGE BETWEEN ...]
+)
+</pre>
+<ul>
+  <li><strong>ROW_NUMBER():</strong> 순위 (중복 허용 안 함)</li>
+  <li><strong>RANK():</strong> 순위 (중복 허용)</li>
+  <li><strong>DENSE_RANK():</strong> 순위 (밀집)</li>
+  <li><strong>LAG(col, offset):</strong> 이전 행의 값</li>
+  <li><strong>LEAD(col, offset):</strong> 다음 행의 값</li>
+  <li><strong>FIRST_VALUE(), LAST_VALUE():</strong> 첫/마지막 값</li>
+</ul>
+</div>
+</section>
+
+<section id="interactive">
+<h2>2.5 SQL 실습 시뮬레이터</h2>
+<p>아래에서 직접 SQL 쿼리를 작성하고 실행해 보세요. 데이터는 메모리에서 처리됩니다.</p>
+
+<div class="interactive-demo">
+  <h3>🔍 SQL 실습 시뮬레이터</h3>
+  <p style="font-size:14px; color:#666;">기본 SELECT, WHERE, JOIN, GROUP BY 등을 지원합니다.</p>
+
+  <div class="sql-editor">
+    <textarea id="sql-input" placeholder="예시: SELECT * FROM students WHERE grade > 2;">SELECT * FROM students;</textarea>
+    <button class="run-btn" onclick="runSQL()">▶ 실행</button>
+  </div>
+
+  <div class="sql-result" id="sql-output">
+    <p style="color:#999;">쿼리를 실행하면 결과가 표시됩니다.</p>
+  </div>
+</div>
+
+<script>
+// In-memory database
+const tables = {
+  students: [
+    { student_id: 1, name: '김철수', grade: 4, department: '컴퓨터공학' },
+    { student_id: 2, name: '이영희', grade: 3, department: '경영학' },
+    { student_id: 3, name: '박민준', grade: 4, department: '컴퓨터공학' },
+    { student_id: 4, name: '최수진', grade: 2, department: '경영학' },
+    { student_id: 5, name: '정재훈', grade: 3, department: '수학' }
+  ],
+  courses: [
+    { course_id: 101, course_name: '데이터베이스', instructor: '김교수' },
+    { course_id: 102, course_name: '알고리즘', instructor: '이교수' },
+    { course_id: 103, course_name: '경제학개론', instructor: '박교수' }
+  ],
+  enrollments: [
+    { enrollment_id: 1, student_id: 1, course_id: 101, grade: 'A' },
+    { enrollment_id: 2, student_id: 1, course_id: 102, grade: 'A+' },
+    { enrollment_id: 3, student_id: 2, course_id: 101, grade: 'B' },
+    { enrollment_id: 4, student_id: 3, course_id: 102, grade: 'A' },
+    { enrollment_id: 5, student_id: 2, course_id: 103, grade: 'B+' }
+  ]
+};
+
+function runSQL() {
+  const sqlInput = document.getElementById('sql-input').value.trim();
+  const output = document.getElementById('sql-output');
+
+  if (!sqlInput) {
+    output.innerHTML = '<div class="error-msg">쿼리를 입력해주세요.</div>';
+    return;
+  }
+
+  try {
+    const result = executeSQLQuery(sqlInput);
+
+    if (Array.isArray(result) && result.length > 0) {
+      const headers = Object.keys(result[0]);
+      let html = '<table class="result-table"><thead><tr>';
+
+      headers.forEach(h => {
+        html += `<th>${h}</th>`;
+      });
+      html += '</tr></thead><tbody>';
+
+      result.forEach(row => {
+        html += '<tr>';
+        headers.forEach(h => {
+          html += `<td>${row[h]}</td>`;
+        });
+        html += '</tr>';
+      });
+
+      html += '</tbody></table>';
+      html += `<div class="result-count">결과: ${result.length}개 행</div>`;
+      output.innerHTML = html;
+    } else if (Array.isArray(result) && result.length === 0) {
+      output.innerHTML = '<p style="color:#999;">결과가 없습니다.</p>';
+    } else {
+      output.innerHTML = `<p style="color:#666;">${result}</p>`;
+    }
+  } catch (e) {
+    output.innerHTML = `<div class="error-msg">오류: ${e.message}</div>`;
+  }
+}
+
+function executeSQLQuery(sql) {
+  const upperSql = sql.toUpperCase().trim();
+
+  // Simple SELECT parser
+  if (upperSql.startsWith('SELECT')) {
+    const selectMatch = sql.match(/SELECT\s+(.*?)\s+FROM\s+(\w+)/i);
+    if (!selectMatch) throw new Error('올바른 SELECT 문법이 아닙니다.');
+
+    const columns = selectMatch[1].split(',').map(c => c.trim());
+    const tableName = selectMatch[2];
+
+    if (!tables[tableName]) {
+      throw new Error(`테이블 '${tableName}'을(를) 찾을 수 없습니다.`);
+    }
+
+    let result = tables[tableName].map(row => ({ ...row }));
+
+    // WHERE clause
+    const whereMatch = sql.match(/WHERE\s+(.*?)(?:ORDER\s+BY|GROUP\s+BY|$)/i);
+    if (whereMatch) {
+      const whereCondition = whereMatch[1].trim();
+      result = result.filter(row => evaluateCondition(row, whereCondition));
+    }
+
+    // GROUP BY clause (simple)
+    const groupMatch = sql.match(/GROUP\s+BY\s+(\w+)/i);
+    if (groupMatch) {
+      const groupCol = groupMatch[1];
+      const grouped = {};
+      result.forEach(row => {
+        const key = row[groupCol];
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(row);
+      });
+      result = Object.entries(grouped).map(([key, rows]) => ({
+        [groupCol]: key,
+        count: rows.length
+      }));
+    }
+
+    // ORDER BY clause
+    const orderMatch = sql.match(/ORDER\s+BY\s+(\w+)(?:\s+(ASC|DESC))?/i);
+    if (orderMatch) {
+      const orderCol = orderMatch[1];
+      const orderDir = (orderMatch[2] || 'ASC').toUpperCase();
+      result.sort((a, b) => {
+        if (typeof a[orderCol] === 'string') {
+          return orderDir === 'ASC'
+            ? a[orderCol].localeCompare(b[orderCol])
+            : b[orderCol].localeCompare(a[orderCol]);
+        }
+        return orderDir === 'ASC'
+          ? a[orderCol] - b[orderCol]
+          : b[orderCol] - a[orderCol];
+      });
+    }
+
+    // SELECT columns
+    if (columns[0] !== '*') {
+      result = result.map(row => {
+        const newRow = {};
+        columns.forEach(col => {
+          const trimCol = col.trim();
+          newRow[trimCol] = row[trimCol];
+        });
+        return newRow;
+      });
+    }
+
+    return result;
+  }
+
+  throw new Error('SELECT 쿼리만 지원합니다.');
+}
+
+function evaluateCondition(row, condition) {
+  // Simple condition evaluator (very basic)
+  const match = condition.match(/(\w+)\s*([><=!]+)\s*(.+)/);
+  if (!match) return true;
+
+  const [, col, op, value] = match;
+  const rowValue = row[col];
+  let compareValue = value.trim();
+
+  if (compareValue.startsWith("'") && compareValue.endsWith("'")) {
+    compareValue = compareValue.slice(1, -1);
+  } else {
+    compareValue = isNaN(compareValue) ? compareValue : Number(compareValue);
+  }
+
+  switch (op) {
+    case '>': return rowValue > compareValue;
+    case '<': return rowValue < compareValue;
+    case '>=': return rowValue >= compareValue;
+    case '<=': return rowValue <= compareValue;
+    case '=': return rowValue == compareValue;
+    case '!=':
+    case '<>': return rowValue != compareValue;
+    default: return true;
+  }
+}
+</script>
+
+</section>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="01-relational.html" style="text-decoration:none;">← 관계형 DB</a>
+  <a href="03-normalization.html" style="text-decoration:none;">정규화 →</a>
+</div>
+
+</main>
+</div>
+</body>
+</html>

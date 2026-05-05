@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8장. 자연재해</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;border:none;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌍 표지 · 소개</a></li>
+    <li><a href="01-structure.html">1. 지구의 구조</a></li>
+    <li><a href="02-plate-tectonics.html">2. 판구조론</a></li>
+    <li><a href="03-minerals-rocks.html">3. 광물과 암석</a></li>
+    <li><a href="04-atmosphere.html">4. 대기과학</a></li>
+    <li><a href="05-oceanography.html">5. 해양학</a></li>
+    <li><a href="06-climate-change.html">6. 기후변화</a></li>
+    <li><a href="07-geological-time.html">7. 지질시대</a></li>
+    <li><a href="08-natural-disasters.html">8. 자연재해</a></li>
+    <li><a href="09-resources-environment.html">9. 자원과 환경</a></li>
+  </ol>
+</aside>
+<main>
+<h2>8. 자연재해</h2>
+
+<div class="info-box">
+<p><strong>자연재해는 자연 현상이 인간에게 피해를 주는 사건입니다.</strong> 지진, 화산, 쓰나미, 태풍 등 다양한 유형이 있으며, 대부분 판구조론적 활동이나 기상 현상과 관련됩니다.</p>
+<p>아래 시뮬레이션에서 지진파가 지구 내부를 전파하는 모습을 관찰해보세요.</p>
+</div>
+
+<div class="threejs-container" data-label="지진파 전파 시뮬레이션" id="seismic-sim" style="height:500px;">
+  <div class="threejs-controls">
+    <button id="btn-trigger">지진 발생!</button>
+    <button id="btn-pwave">P파만</button>
+    <button id="btn-swave">S파만</button>
+    <button id="btn-both">P파 + S파</button>
+    <label>규모: <input type="range" id="magnitude-slider" min="3" max="9" value="6" step="0.5"></label>
+    <span style="color:#ffd54f; font-family:var(--font-mono); font-size:0.75em;" id="mag-display">M 6.0</span>
+  </div>
+  <div class="threejs-info">버튼을 눌러 지진파 전파를 관찰하세요</div>
+</div>
+<p class="fig-title">그림 8.1. 지진파 전파 시뮬레이션. P파(종파)와 S파(횡파)의 전파 차이를 관찰하세요.</p>
+
+<h3>8.1 지진</h3>
+<p><strong>지진</strong>은 지각에 축적된 탄성 에너지가 갑자기 방출되면서 발생하는 진동입니다.</p>
+<ul>
+<li><strong>진원(Focus/Hypocenter)</strong>: 지하에서 에너지가 방출되는 실제 지점</li>
+<li><strong>진앙(Epicenter)</strong>: 진원의 바로 위 지표면 지점</li>
+<li><strong>규모(Magnitude)</strong>: 방출된 에너지의 크기 (리히터/모멘트 규모)</li>
+<li><strong>진도(Intensity)</strong>: 특정 장소에서 느끼는 흔들림의 정도 (수정 메르칼리)</li>
+</ul>
+
+<h4>지진파의 종류</h4>
+<table>
+<thead><tr><th>종류</th><th>유형</th><th>속도</th><th>매질</th><th>특징</th></tr></thead>
+<tbody>
+<tr><td>P파</td><td>종파(압축파)</td><td>5-13 km/s</td><td>고체+액체</td><td>가장 빠름, 먼저 도착</td></tr>
+<tr><td>S파</td><td>횡파(전단파)</td><td>3-7 km/s</td><td>고체만</td><td>P파 다음 도착, 피해 큼</td></tr>
+<tr><td>표면파</td><td>러브파/레일리파</td><td>2-4 km/s</td><td>지표면</td><td>가장 느림, 피해 최대</td></tr>
+</tbody>
+</table>
+
+<h3>8.2 화산</h3>
+<p><strong>화산 활동</strong>은 마그마가 지표로 분출되는 현상입니다. 대부분 판 경계(특히 수렴 경계와 발산 경계)에서 발생합니다.</p>
+
+<h4>화산의 유형</h4>
+<ul>
+<li><strong>순상화산</strong>: 유동성 높은 현무암질 용암, 완만한 경사 (하와이 마우나로아)</li>
+<li><strong>성층화산(복합화산)</strong>: 용암+화산쇄설물 교대, 급경사 (후지산, 세인트 헬렌스)</li>
+<li><strong>칼데라</strong>: 대규모 분화 후 함몰 (옐로스톤, 백두산)</li>
+</ul>
+
+<h3>8.3 쓰나미</h3>
+<p><strong>쓰나미(Tsunami)</strong>는 해저 지진, 해저 산사태, 화산 분화 등에 의해 발생하는 거대한 파도입니다.</p>
+<ul>
+<li>심해에서의 속도: 약 700-800 km/h (제트기 속도)</li>
+<li>심해 파고: 수십 cm (거의 감지 불가)</li>
+<li>연안 도달 시: 속도 감소, 파고 급증 (수 m~수십 m)</li>
+</ul>
+
+<h3>8.4 기상 재해</h3>
+<ul>
+<li><strong>태풍(허리케인)</strong>: 열대 해양에서 발달, 강풍·폭우·폭풍해일</li>
+<li><strong>토네이도</strong>: 강력한 상승기류에 의한 회전 기둥 (순간풍속 500 km/h 가능)</li>
+<li><strong>홍수</strong>: 집중호우, 댐 붕괴, 빙하호 결빙 붕괴 등</li>
+<li><strong>가뭄</strong>: 장기간 강수 부족 → 수자원·농업 피해</li>
+</ul>
+
+<h3>8.5 재해 대비와 경보 시스템</h3>
+<ul>
+<li><strong>지진 조기경보</strong>: P파 감지 후 S파/표면파 도달 전 경보 발령</li>
+<li><strong>쓰나미 경보</strong>: 해저 수압계 + 위성 감시 네트워크</li>
+<li><strong>화산 모니터링</strong>: 지진활동, 지표 변형, 가스 방출량 감시</li>
+<li><strong>기상 예보</strong>: 수치예보 모델, 위성·레이더 관측</li>
+</ul>
+
+<div class="quiz-box">
+<h4>🧪 확인 문제</h4>
+<p>지진 발생 시 가장 먼저 도착하는 파동은?</p>
+<div class="quiz-option" onclick="this.classList.add('correct')">① P파 (종파)</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">② S파 (횡파)</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">③ 러브파</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">④ 레일리파</div>
+</div>
+
+<div class="chapter-nav">
+  <a href="07-geological-time.html">← 지질시대</a>
+  <a href="09-resources-environment.html">자원과 환경 →</a>
+</div>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  const container = document.getElementById('seismic-sim');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050d18);
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0x203040, 0.5));
+  const light = new THREE.DirectionalLight(0xffffff, 0.6);
+  light.position.set(3, 3, 3);
+  scene.add(light);
+
+  // Earth cross-section (half circle)
+  const earthGroup = new THREE.Group();
+  scene.add(earthGroup);
+
+  // Layers as half circles
+  const layerData = [
+    { radius: 2.0, color: 0x5d4037, name: 'crust' },
+    { radius: 1.6, color: 0xe65100, name: 'mantle' },
+    { radius: 0.7, color: 0xff6d00, name: 'outer_core' },
+    { radius: 0.3, color: 0xffab00, name: 'inner_core' }
+  ];
+
+  layerData.forEach(layer => {
+    const geo = new THREE.CircleGeometry(layer.radius, 64, 0, Math.PI);
+    const mat = new THREE.MeshPhongMaterial({ color: layer.color, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.rotation.z = -Math.PI / 2;
+    earthGroup.add(mesh);
+  });
+
+  // Seismic waves
+  let waves = [];
+  let showP = true, showS = true;
+  let magnitude = 6;
+  let waveTriggered = false;
+
+  function triggerEarthquake() {
+    waves = [];
+    waveTriggered = true;
+    const numWaves = Math.floor(magnitude);
+
+    for (let i = 0; i < numWaves; i++) {
+      // P-wave (faster, red)
+      if (showP) {
+        const pGeo = new THREE.RingGeometry(0.01, 0.05, 32);
+        const pMat = new THREE.MeshBasicMaterial({ color: 0xff5722, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+        const pWave = new THREE.Mesh(pGeo, pMat);
+        pWave.position.set(0, 1.8, 0.1); // epicenter at top
+        pWave.userData = { speed: 0.03, type: 'P', delay: i * 10, age: 0 };
+        earthGroup.add(pWave);
+        waves.push(pWave);
+      }
+
+      // S-wave (slower, blue)
+      if (showS) {
+        const sGeo = new THREE.RingGeometry(0.01, 0.04, 32);
+        const sMat = new THREE.MeshBasicMaterial({ color: 0x42a5f5, transparent: true, opacity: 0.8, side: THREE.DoubleSide });
+        const sWave = new THREE.Mesh(sGeo, sMat);
+        sWave.position.set(0, 1.8, 0.1);
+        sWave.userData = { speed: 0.018, type: 'S', delay: i * 10 + 5, age: 0 };
+        earthGroup.add(sWave);
+        waves.push(sWave);
+      }
+    }
+  }
+
+  document.getElementById('btn-trigger').addEventListener('click', triggerEarthquake);
+  document.getElementById('btn-pwave').addEventListener('click', () => { showP = true; showS = false; });
+  document.getElementById('btn-swave').addEventListener('click', () => { showP = false; showS = true; });
+  document.getElementById('btn-both').addEventListener('click', () => { showP = true; showS = true; });
+
+  const magSlider = document.getElementById('magnitude-slider');
+  magSlider.addEventListener('input', () => {
+    magnitude = parseFloat(magSlider.value);
+    document.getElementById('mag-display').textContent = 'M ' + magnitude.toFixed(1);
+  });
+
+  let frameCount = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    frameCount++;
+
+    waves.forEach((wave, idx) => {
+      if (frameCount > wave.userData.delay) {
+        wave.userData.age++;
+        const scale = wave.userData.age * wave.userData.speed;
+        wave.scale.set(scale, scale, 1);
+        wave.material.opacity = Math.max(0, 0.8 - scale * 0.3);
+
+        // S-wave stops at outer core boundary
+        if (wave.userData.type === 'S' && scale > 1.3) {
+          wave.material.opacity = 0;
+        }
+      }
+    });
+
+    // Remove dead waves
+    waves = waves.filter(w => {
+      if (w.material.opacity <= 0) {
+        earthGroup.remove(w);
+        return false;
+      }
+      return true;
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

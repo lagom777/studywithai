@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1장. 관계형 데이터베이스 기초</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+<style>
+  .threejs-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    margin: 20px 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  }
+  .threejs-label {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    z-index: 10;
+  }
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html"><strong>1. 관계형 DB 기초</strong></a></li>
+    <li><a href="02-sql.html">2. SQL 핵심</a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+
+<h1>1장. 관계형 데이터베이스 기초</h1>
+
+<section id="section-1">
+<h2>1.1 관계형 모델이란?</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+관계형 데이터베이스는 <strong>데이터를 표(테이블)로 관리하는 방식</strong>입니다. 마치 엑셀 스프레드시트처럼 행과 열로 구성되어 있어요.
+</p>
+<p style="margin-top:15px;"><strong>예시:</strong> 학교의 학생 명부</p>
+<table style="width:100%; border-collapse:collapse; margin:10px 0;">
+  <tr style="background:#f0f0f0;">
+    <th style="border:1px solid #ccc; padding:8px;">학번</th>
+    <th style="border:1px solid #ccc; padding:8px;">이름</th>
+    <th style="border:1px solid #ccc; padding:8px;">학년</th>
+    <th style="border:1px solid #ccc; padding:8px;">전공</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid #ccc; padding:8px;">001</td>
+    <td style="border:1px solid #ccc; padding:8px;">김철수</td>
+    <td style="border:1px solid #ccc; padding:8px;">2학년</td>
+    <td style="border:1px solid #ccc; padding:8px;">컴퓨터공학</td>
+  </tr>
+  <tr style="background:#f9f9f9;">
+    <td style="border:1px solid #ccc; padding:8px;">002</td>
+    <td style="border:1px solid #ccc; padding:8px;">이영희</td>
+    <td style="border:1px solid #ccc; padding:8px;">3학년</td>
+    <td style="border:1px solid #ccc; padding:8px;">경영학</td>
+  </tr>
+</table>
+<p>이런 식으로 데이터를 구조화하여 효율적으로 관리합니다.</p>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 학술 정의</h3>
+<p>
+관계형 데이터 모델은 E.F. Codd가 1970년 "A Relational Model of Data for Large Shared Data Banks"에서 제안했습니다.
+</p>
+<p><strong>핵심 개념:</strong></p>
+<ul>
+  <li><strong>릴레이션(Relation):</strong> 수학의 집합론에 기반한 2차원 표. R ⊆ D₁ × D₂ × ... × Dₙ</li>
+  <li><strong>튜플(Tuple):</strong> 표의 한 행(row). 속성값들의 순서쌍 집합</li>
+  <li><strong>속성(Attribute):</strong> 표의 한 열(column). 특정 도메인의 값을 가짐</li>
+  <li><strong>도메인(Domain):</strong> 속성이 취할 수 있는 값들의 집합 (예: 학번 도메인 = {001, 002, ...})</li>
+  <li><strong>카디날리티(Cardinality):</strong> 릴레이션의 행(튜플) 개수</li>
+  <li><strong>디그리(Degree):</strong> 릴레이션의 열(속성) 개수</li>
+</ul>
+<p>관계형 모델의 강점은 <strong>수학적 엄밀성</strong>과 <strong>쿼리 최적화</strong>에 있습니다.</p>
+</div>
+</section>
+
+<section id="section-2">
+<h2>1.2 핵심 개념: 테이블, 행, 열</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+테이블은 <strong>행(row)</strong>과 <strong>열(column)</strong>로 이루어진 2차원 구조입니다.
+</p>
+<ul>
+  <li><strong>열(Column):</strong> 특정 속성을 나타냅니다. 예) "이름" 열, "학번" 열</li>
+  <li><strong>행(Row):</strong> 하나의 객체에 대한 정보입니다. 예) 학생 한 명의 모든 정보</li>
+  <li><strong>셀:</strong> 행과 열이 만나는 지점의 하나의 값</li>
+</ul>
+<p style="margin-top:15px;"><strong>학생 테이블 예시:</strong></p>
+<table style="width:100%; border-collapse:collapse; margin:10px 0;">
+  <tr style="background:#e3f2fd;">
+    <th style="border:2px solid #1976d2; padding:10px; text-align:left;">학번</th>
+    <th style="border:2px solid #1976d2; padding:10px; text-align:left;">이름</th>
+    <th style="border:2px solid #1976d2; padding:10px; text-align:left;">학년</th>
+    <th style="border:2px solid #1976d2; padding:10px; text-align:left;">전공</th>
+  </tr>
+  <tr>
+    <td style="border:1px solid #90caf9; padding:10px;">001</td>
+    <td style="border:1px solid #90caf9; padding:10px;">김철수</td>
+    <td style="border:1px solid #90caf9; padding:10px;">2</td>
+    <td style="border:1px solid #90caf9; padding:10px;">컴퓨터공학</td>
+  </tr>
+  <tr style="background:#f5f5f5;">
+    <td style="border:1px solid #90caf9; padding:10px;">002</td>
+    <td style="border:1px solid #90caf9; padding:10px;">이영희</td>
+    <td style="border:1px solid #90caf9; padding:10px;">3</td>
+    <td style="border:1px solid #90caf9; padding:10px;">경영학</td>
+  </tr>
+  <tr>
+    <td style="border:1px solid #90caf9; padding:10px;">003</td>
+    <td style="border:1px solid #90caf9; padding:10px;">박민준</td>
+    <td style="border:1px solid #90caf9; padding:10px;">1</td>
+    <td style="border:1px solid #90caf9; padding:10px;">수학</td>
+  </tr>
+</table>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 형식적 정의</h3>
+<p>
+<strong>관계 스키마(Relation Schema):</strong> R(A₁:D₁, A₂:D₂, ..., Aₙ:Dₙ)
+여기서 각 Aᵢ는 속성명, Dᵢ는 도메인입니다.
+</p>
+<p>
+<strong>관계 인스턴스(Relation Instance):</strong> 스키마에 대한 실제 데이터 튜플들의 집합.
+</p>
+<p><strong>관계대수(Relational Algebra) 기본 연산자:</strong></p>
+<ul>
+  <li><strong>선택(Selection, σ):</strong> σ_{condition}(R) - 조건을 만족하는 행 선택. 예) σ_{grade>2}(Students)</li>
+  <li><strong>프로젝션(Projection, π):</strong> π_{A₁,A₂,...}(R) - 특정 속성만 선택. 예) π_{name,dept}(Students)</li>
+  <li><strong>자연 조인(Natural Join, ⋈):</strong> R₁ ⋈ R₂ - 공통 속성을 기준으로 두 릴레이션 결합</li>
+  <li><strong>카티션 곱(Cartesian Product, ×):</strong> R₁ × R₂ - 모든 조합의 곱집합</li>
+  <li><strong>합집합(Union, ∪):</strong> R₁ ∪ R₂ - 두 릴레이션의 모든 행</li>
+  <li><strong>차집합(Difference, −):</strong> R₁ − R₂ - R₁에는 있고 R₂에 없는 행</li>
+  <li><strong>교집합(Intersection, ∩):</strong> R₁ ∩ R₂ = R₁ − (R₁ − R₂)</li>
+</ul>
+</div>
+</section>
+
+<section id="section-3">
+<h2>1.3 키(Key)의 종류</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+학생들을 구분하기 위해 <strong>학번</strong>이 필요하죠. 이것이 <strong>기본 키(Primary Key)</strong>입니다.
+</p>
+<p style="margin-top:15px;"><strong>키의 종류를 친구관계로 비유하면:</strong></p>
+<ul>
+  <li><strong>기본 키(PK):</strong> 각 사람의 주민등록번호처럼 유일하게 구분해주는 것</li>
+  <li><strong>외래 키(FK):</strong> 친구 목록에서 친구가 누구인지 가리키는 포인터. 다른 테이블과 연결하는 것</li>
+</ul>
+<p style="margin-top:15px;"><strong>예시:</strong></p>
+<p><em>Students 테이블</em> - 학번이 PK (각 학생을 유일하게 식별)</p>
+<p><em>Enrollments 테이블</em> - 학번과 과목코드가 FK (학생과 강좌를 연결)</p>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 형식적 정의</h3>
+<p>
+K를 릴레이션 R의 속성들의 부분집합이라 하자.
+</p>
+<ul>
+  <li><strong>슈퍼키(Superkey):</strong> K의 어떤 두 튜플도 모든 속성에서 동일한 값을 가지지 않음. ∀t₁,t₂ ∈ r, t₁ ≠ t₂ ⟹ t₁[K] ≠ t₂[K]</li>
+  <li><strong>후보 키(Candidate Key):</strong> 최소 슈퍼키. 어떤 진부분집합도 슈퍼키가 아님</li>
+  <li><strong>기본 키(Primary Key):</strong> DBA가 선택한 후보 키. NULL이 될 수 없음(NOT NULL, UNIQUE)</li>
+  <li><strong>대체 키(Alternate Key):</strong> 선택되지 않은 후보 키들</li>
+  <li><strong>외래 키(Foreign Key):</strong> 릴레이션 R₁의 속성 FK는 다른 릴레이션 R₂의 기본 키를 참조. ∀t ∈ R₁, t[FK] ∈ {t'[PK] : t' ∈ R₂} ∪ {NULL}</li>
+</ul>
+<p><strong>무결성 제약조건(Integrity Constraints):</strong></p>
+<ul>
+  <li><strong>엔티티 무결성(Entity Integrity):</strong> 기본 키는 NULL일 수 없음</li>
+  <li><strong>참조 무결성(Referential Integrity):</strong> 외래 키는 참조 대상의 기본 키 값이거나 NULL</li>
+  <li><strong>도메인 무결성(Domain Integrity):</strong> 각 속성은 도메인 내의 값만 가짐</li>
+</ul>
+</div>
+</section>
+
+<section id="section-4">
+<h2>1.4 관계 연산</h2>
+
+<div class="easy-version">
+<div class="easy-box">
+<h3>🎯 쉽게 이해하기</h3>
+<p>
+데이터베이스에서 데이터를 꺼낼 때 사용하는 기본 동작들입니다.
+</p>
+<ul>
+  <li><strong>필터링(σ - Selection):</strong> "학년이 2학년인 학생만 보여줘" → 특정 행만 추출</li>
+  <li><strong>특정 열만 보기(π - Projection):</strong> "학번과 이름만 보여줘" → 특정 열만 추출</li>
+  <li><strong>두 표 합치기(⋈ - Join):</strong> 학생 정보와 수강 정보를 학번으로 묶어서 보여주기</li>
+  <li><strong>합치기(∪ - Union):</strong> 컴퓨터공학 학생들과 경영학 학생들 합치기</li>
+</ul>
+<p style="margin-top:15px;"><strong>실제 예시:</strong></p>
+<p>학생 테이블에서 "2학년 학생의 이름과 전공만 보고 싶다" →</p>
+<p>π_{name,dept}(σ_{grade=2}(Students))</p>
+</div>
+</div>
+
+<div class="paper-version">
+<h3>📚 관계대수 상세</h3>
+<p>
+<strong>기본 집합 연산:</strong>
+</p>
+<ul>
+  <li><strong>합집합(∪):</strong> r₁ ∪ r₂ = {t | t ∈ r₁ ∨ t ∈ r₂}. 호환성: 같은 스키마 필요</li>
+  <li><strong>교집합(∩):</strong> r₁ ∩ r₂ = r₁ − (r₁ − r₂)</li>
+  <li><strong>차집합(−):</strong> r₁ − r₂ = {t | t ∈ r₁ ∧ t ∉ r₂}</li>
+  <li><strong>카티션 곱(×):</strong> r₁ × r₂ = {(t₁, t₂) | t₁ ∈ r₁ ∧ t₂ ∈ r₂}. 결과 도수 = |r₁| × |r₂|</li>
+</ul>
+<p>
+<strong>관계식 연산:</strong>
+</p>
+<ul>
+  <li><strong>선택(σ):</strong> σ_F(r) = {t | t ∈ r ∧ F(t) = true}. 여기서 F는 선택 조건식</li>
+  <li><strong>프로젝션(π):</strong> π_{A₁,...,Aₖ}(r) = {[t[A₁],...,t[Aₖ]] | t ∈ r}. 중복 제거됨</li>
+  <li><strong>조인(⋈):</strong> r₁ ⋈_F r₂ = σ_F(r₁ × r₂). 특수한 경우가 내부 조인, 외부 조인</li>
+  <li><strong>나누기(÷):</strong> r₁ ÷ r₂ = {t | ∀t' ∈ r₂, (t ⊕ t') ∈ r₁}. 복잡한 쿼리 표현에 사용</li>
+  <li><strong>이름변경(ρ):</strong> ρ_{S(B₁,...,Bₖ)}(r) - 릴레이션 이름이나 속성명 변경</li>
+</ul>
+<p><strong>동치 변환 규칙(Equivalence Rules):</strong></p>
+<ul>
+  <li>σ_{F₁∧F₂}(r) ≡ σ_{F₁}(σ_{F₂}(r)) (선택의 분해)</li>
+  <li>π_{A}(σ_F(r)) ≡ σ_F(π_{A}(r)) (선택과 프로젝션의 순서교환은 조건부)</li>
+  <li>σ_{F₁}(r₁ ⋈ r₂) ≡ σ_{F₁}(r₁) ⋈ r₂ (선택 연산 푸시다운)</li>
+</ul>
+</div>
+</section>
+
+<section id="visualization">
+<h2>1.5 3D ER 다이어그램</h2>
+<p>아래는 Students, Courses, Enrollments 테이블과 그들의 관계를 3D로 시각화한 것입니다. 마우스로 드래그하여 회전시킬 수 있습니다.</p>
+
+<div class="threejs-container" id="er-3d">
+  <div class="threejs-label">3D · ER DIAGRAM</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+  const container = document.getElementById('er-3d');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xf5f7fa);
+
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 0, 15);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  directionalLight.position.set(10, 10, 10);
+  scene.add(directionalLight);
+
+  // Create boxes for tables
+  const tables = [
+    { name: 'Students', pos: [-6, 0, 0], color: 0x7b5cff },
+    { name: 'Enrollments', pos: [0, 0, 0], color: 0x00d4ff },
+    { name: 'Courses', pos: [6, 0, 0], color: 0xff6b9d }
+  ];
+
+  const boxes = [];
+  const labels = [];
+
+  tables.forEach((table, idx) => {
+    const geometry = new THREE.BoxGeometry(3, 4, 1);
+    const material = new THREE.MeshPhongMaterial({
+      color: table.color,
+      emissive: 0x000000,
+      shininess: 100
+    });
+    const box = new THREE.Mesh(geometry, material);
+    box.position.set(...table.pos);
+    scene.add(box);
+    boxes.push(box);
+
+    // Add label using canvas texture
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 32px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(table.name, 128, 256);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const labelGeometry = new THREE.PlaneGeometry(3, 4);
+    const labelMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+    const labelMesh = new THREE.Mesh(labelGeometry, labelMaterial);
+    labelMesh.position.set(...table.pos);
+    labelMesh.position.z += 0.6;
+    scene.add(labelMesh);
+    labels.push(labelMesh);
+  });
+
+  // Create relationship lines (foreign keys)
+  const connections = [
+    { from: 0, to: 1, label: 'student_id' },
+    { from: 1, to: 2, label: 'course_id' }
+  ];
+
+  connections.forEach(conn => {
+    const start = new THREE.Vector3(...tables[conn.from].pos);
+    const end = new THREE.Vector3(...tables[conn.to].pos);
+    const middle = new THREE.Vector3().addVectors(start, end).multiplyScalar(0.5);
+
+    const points = [];
+    points.push(start);
+    points.push(middle.clone().setY(middle.y + 2));
+    points.push(end);
+
+    const curve = new THREE.CatmullRomCurve3(points);
+    const geometry = new THREE.BufferGeometry().setFromPoints(curve.getPoints(50));
+    const material = new THREE.LineBasicMaterial({ color: 0xffaa00, linewidth: 3 });
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+  });
+
+  // Mouse controls for rotation
+  let isDragging = false;
+  let previousMousePosition = { x: 0, y: 0 };
+  let rotation = { x: 0, y: 0 };
+
+  renderer.domElement.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    previousMousePosition = { x: e.clientX, y: e.clientY };
+  });
+
+  renderer.domElement.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+      const deltaX = e.clientX - previousMousePosition.x;
+      const deltaY = e.clientY - previousMousePosition.y;
+      rotation.y += deltaX * 0.005;
+      rotation.x += deltaY * 0.005;
+      previousMousePosition = { x: e.clientX, y: e.clientY };
+    }
+  });
+
+  renderer.domElement.addEventListener('mouseup', () => {
+    isDragging = false;
+  });
+
+  renderer.domElement.addEventListener('mouseleave', () => {
+    isDragging = false;
+  });
+
+  // Animation loop
+  function animate() {
+    requestAnimationFrame(animate);
+
+    // Apply controlled rotation
+    if (!isDragging) {
+      rotation.y += 0.003; // Auto-rotate
+    }
+
+    boxes.forEach(box => {
+      box.rotation.x = rotation.x;
+      box.rotation.y = rotation.y;
+    });
+    labels.forEach(label => {
+      label.rotation.x = rotation.x;
+      label.rotation.y = rotation.y;
+    });
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  // Handle window resize
+  window.addEventListener('resize', () => {
+    const width = container.clientWidth;
+    const height = container.clientHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+    renderer.setSize(width, height);
+  });
+})();
+</script>
+</section>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="../index.html" style="text-decoration:none;">← 표지</a>
+  <a href="02-sql.html" style="text-decoration:none;">SQL 핵심 →</a>
+</div>
+
+</main>
+</div>
+</body>
+</html>

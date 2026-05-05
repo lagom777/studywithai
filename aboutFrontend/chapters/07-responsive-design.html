@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>7장. 반응형 디자인 | 프론트엔드 학습 사이트</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .chapter-title {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .chapter-subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #00d4ff;
+    }
+
+    .section-content {
+      font-size: 1em;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+    }
+
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    /* Interactive Components */
+    .interactive-container {
+      background: linear-gradient(135deg, #f5f7fa 0%, #eff4f9 100%);
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .interactive-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Viewport Resizer */
+    .viewport-resizer {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .viewport-preview-container {
+      position: relative;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+      height: 500px;
+      resize: horizontal;
+      display: flex;
+      align-items: stretch;
+    }
+
+    .viewport-preview-iframe {
+      border: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .viewport-dimensions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 15px;
+      background: #f0f4f8;
+      border-radius: 6px;
+      font-weight: bold;
+      color: #7b5cff;
+    }
+
+    .breakpoint-indicators {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .breakpoint-badge {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-size: 0.9em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .breakpoint-badge.mobile {
+      background: #fef3c7;
+      color: #b45309;
+      border-color: #fcd34d;
+    }
+
+    .breakpoint-badge.tablet {
+      background: #d1fae5;
+      color: #065f46;
+      border-color: #6ee7b7;
+    }
+
+    .breakpoint-badge.desktop {
+      background: #dbeafe;
+      color: #0c4a6e;
+      border-color: #7dd3fc;
+    }
+
+    .breakpoint-badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    /* Media Query Builder */
+    .media-query-builder {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .builder-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+    }
+
+    .builder-control {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .builder-label {
+      font-weight: bold;
+      color: #333;
+      font-size: 0.95em;
+    }
+
+    .builder-select,
+    .builder-input {
+      padding: 10px 12px;
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      font-size: 0.95em;
+      font-family: inherit;
+    }
+
+    .builder-select:focus,
+    .builder-input:focus {
+      outline: none;
+      border-color: #7b5cff;
+      box-shadow: 0 0 0 3px rgba(123, 92, 255, 0.1);
+    }
+
+    .generated-query {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      border-left: 4px solid #7b5cff;
+      word-break: break-all;
+    }
+
+    /* Live Preview Section */
+    .live-preview-section {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .preview-card {
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+    }
+
+    .preview-card:hover {
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      transform: translateY(-2px);
+    }
+
+    .preview-label {
+      padding: 10px 15px;
+      background: #f0f4f8;
+      border-bottom: 2px solid #e0e7ff;
+      font-weight: bold;
+      color: #7b5cff;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    .preview-content {
+      padding: 15px;
+      height: 400px;
+      background: white;
+      overflow: auto;
+    }
+
+    .responsive-demo {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+      height: 100%;
+    }
+
+    .demo-box {
+      background: linear-gradient(135deg, #7b5cff, #00d4ff);
+      border-radius: 6px;
+      padding: 15px;
+      color: white;
+      text-align: center;
+      font-weight: bold;
+      word-break: break-word;
+    }
+
+    .tip-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .tip-box strong {
+      color: #b45309;
+    }
+
+    .note-box {
+      background: #e0e7ff;
+      border-left: 4px solid #7b5cff;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .note-box strong {
+      color: #7b5cff;
+    }
+
+    /* Navigation */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 2px solid #e0e7ff;
+    }
+
+    .nav-button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: 2px solid #7b5cff;
+      color: #7b5cff;
+    }
+
+    .nav-button:hover {
+      background: #7b5cff;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav-button.next {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      border: none;
+    }
+
+    .nav-button.next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(123, 92, 255, 0.4);
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-wrapper">
+    <aside>
+      <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+      <h3>전체 목차</h3>
+      <ol>
+        <li><a href="../index.html">📖 표지 · 소개</a></li>
+        <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+        <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+        <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+        <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+        <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+        <li><a href="06-state-management.html">6. 상태관리</a></li>
+        <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+        <li><a href="08-performance.html">8. 성능 최적화</a></li>
+        <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1 class="chapter-title">7장. 반응형 디자인</h1>
+      <p class="chapter-subtitle">다양한 기기에서 완벽하게 동작하는 웹사이트 만들기</p>
+
+      <!-- Section 7.1 -->
+      <section>
+        <h2 class="section-title">7.1 반응형 디자인이란?</h2>
+        <div class="section-content">
+          <p>반응형 디자인(Responsive Web Design)은 모든 기기의 화면 크기와 해상도에 최적화되어 보이는 웹사이트를 만드는 설계 철학입니다. 데스크톱, 태블릿, 모바일 폰 등 다양한 기기에서 사용자에게 최고의 경험을 제공합니다.</p>
+
+          <p><strong>Responsive vs Adaptive의 차이:</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li><strong>Responsive:</strong> CSS 미디어 쿼리와 유동적 레이아웃으로 모든 크기에 부드럽게 적응합니다.</li>
+            <li><strong>Adaptive:</strong> 특정 고정 크기(768px, 1024px 등)에 맞추어 레이아웃을 변경합니다.</li>
+          </ul>
+        </div>
+
+        <div class="note-box">
+          <strong>모바일 퍼스트 철학:</strong> 먼저 모바일 버전을 디자인하고 구현한 후, 더 큰 화면을 위해 기능을 추가합니다. 이는 성능과 접근성 측면에서 모두 이점이 있습니다.
+        </div>
+
+        <div class="code-block">/* 모바일 퍼스트 접근: 기본은 모바일 스타일 */
+body {
+  font-size: 14px;
+  padding: 10px;
+}
+
+/* 태블릿 이상 */
+@media (min-width: 768px) {
+  body {
+    font-size: 16px;
+    padding: 20px;
+  }
+}
+
+/* 데스크톱 이상 */
+@media (min-width: 1024px) {
+  body {
+    font-size: 18px;
+    padding: 40px;
+  }
+}</div>
+      </section>
+
+      <!-- Section 7.2 -->
+      <section>
+        <h2 class="section-title">7.2 미디어 쿼리</h2>
+        <div class="section-content">
+          <p>미디어 쿼리(<code>@media</code>)는 특정 조건(화면 크기, 기기 타입 등)에서만 CSS 규칙을 적용하는 기능입니다.</p>
+
+          <p><strong>기본 문법:</strong></p>
+        </div>
+
+        <div class="code-block">@media (조건) {
+  /* 조건을 만족할 때 적용되는 스타일 */
+}
+
+/* 실제 예시 */
+@media (max-width: 767px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .container {
+    width: 90%;
+  }
+}</div>
+
+        <p style="margin-top: 20px; color: #555;">
+          <strong>주요 Breakpoint 전략:</strong>
+        </p>
+        <ul style="margin-left: 20px; color: #555;">
+          <li><strong>Mobile:</strong> 320px ~ 479px (스마트폰)</li>
+          <li><strong>Small Mobile:</strong> 480px ~ 639px (큰 폰)</li>
+          <li><strong>Tablet:</strong> 640px ~ 1023px (아이패드)</li>
+          <li><strong>Desktop:</strong> 1024px 이상 (노트북, 데스크톱)</li>
+        </ul>
+
+        <div class="interactive-container">
+          <div class="interactive-title">🎯 미디어 쿼리 빌더</div>
+          <div class="media-query-builder">
+            <div class="builder-controls">
+              <div class="builder-control">
+                <label class="builder-label">조건 유형</label>
+                <select class="builder-select" id="queryType">
+                  <option value="max-width">최대 너비</option>
+                  <option value="min-width">최소 너비</option>
+                  <option value="range">너비 범위</option>
+                </select>
+              </div>
+              <div class="builder-control">
+                <label class="builder-label">값 1 (px)</label>
+                <input type="number" class="builder-input" id="value1" value="768" min="0">
+              </div>
+              <div class="builder-control">
+                <label class="builder-label">값 2 (px, 범위용)</label>
+                <input type="number" class="builder-input" id="value2" value="1024" min="0" disabled>
+              </div>
+            </div>
+            <div class="generated-query" id="generatedQuery">@media (max-width: 768px) { }</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 7.3 -->
+      <section>
+        <h2 class="section-title">7.3 유동적 레이아웃</h2>
+        <div class="section-content">
+          <p>픽셀(px) 고정값 대신 백분율(%), 뷰포트 단위(vw/vh), 현대적인 CSS 함수(clamp, min, max)를 사용하여 다양한 화면에 자동으로 맞추는 방법입니다.</p>
+        </div>
+
+        <div class="code-block">/* 백분율로 유동적 너비 설정 */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 뷰포트 단위 */
+.hero {
+  height: 100vh; /* 뷰포트 높이 100% */
+}
+
+/* clamp()로 반응형 폰트 크기 */
+h1 {
+  font-size: clamp(24px, 5vw, 48px);
+  /* 최소 24px, 권장 5vw, 최대 48px */
+}
+
+/* min()과 max() */
+.sidebar {
+  width: min(300px, 25%); /* 300px 또는 25% 중 더 작은 값 */
+  padding: max(10px, 2vw);
+}</div>
+
+        <div class="tip-box">
+          <strong>💡 Tip:</strong> <code>clamp()</code>를 사용하면 min-max-width 대신 하나의 값으로 반응형 속성을 설정할 수 있습니다. 가장 현대적이고 효율적인 방법입니다!
+        </div>
+      </section>
+
+      <!-- Section 7.4 -->
+      <section>
+        <h2 class="section-title">7.4 반응형 이미지와 미디어</h2>
+        <div class="section-content">
+          <p>모바일에서는 작은 이미지 파일을, 데스크톱에서는 고해상도 이미지를 제공하여 성능과 사용자 경험을 동시에 개선합니다.</p>
+        </div>
+
+        <div class="code-block"><!-- srcset으로 해상도별 이미지 -->
+&lt;img
+  src="image-800.jpg"
+  srcset="image-400.jpg 400w,
+          image-800.jpg 800w,
+          image-1200.jpg 1200w"
+  sizes="(max-width: 600px) 90vw,
+         (max-width: 1024px) 70vw,
+         800px"
+  alt="반응형 이미지"&gt;
+
+<!-- picture 태그로 포맷별 이미지 -->
+&lt;picture&gt;
+  &lt;source srcset="image.webp" type="image/webp"&gt;
+  &lt;source srcset="image.jpg" type="image/jpeg"&gt;
+  &lt;img src="image-fallback.jpg" alt="이미지"&gt;
+&lt;/picture&gt;
+
+/* object-fit으로 이미지 비율 유지 */
+img {
+  width: 100%;
+  height: 300px;
+  object-fit: cover; /* 비율 유지하면서 영역 채우기 */
+}</div>
+      </section>
+
+      <!-- Section 7.5 -->
+      <section>
+        <h2 class="section-title">7.5 모바일 퍼스트 전략과 Progressive Enhancement</h2>
+        <div class="section-content">
+          <p><strong>Progressive Enhancement(점진적 향상):</strong> 모든 사용자에게 기본 기능을 제공하고, 더 강력한 기기에서는 추가 기능과 개선된 경험을 제공합니다.</p>
+
+          <p style="margin-top: 15px;">구현 순서:</p>
+          <ol style="margin-left: 20px; color: #555;">
+            <li>HTML로 시맨틱한 구조 작성 (모든 기기에서 기본적으로 작동)</li>
+            <li>모바일 CSS 스타일 (기본 레이아웃 및 스타일)</li>
+            <li>태블릿, 데스크톱 CSS 추가 (향상된 레이아웃)</li>
+            <li>JavaScript 기능 (interactivity, 선택사항)</li>
+          </ol>
+        </div>
+
+        <div class="note-box">
+          <strong>왜 모바일 퍼스트인가?</strong> 모바일 사용자 수가 데스크톱을 넘었고, 모바일에서 최적화하면 더 가볍고 빠른 사이트가 됩니다.
+        </div>
+      </section>
+
+      <!-- Interactive Viewport Resizer -->
+      <section>
+        <h2 class="section-title">🎨 실습: Viewport 크기 조정 시뮬레이터</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">📱 반응형 미리보기</div>
+          <div class="viewport-resizer">
+            <div class="viewport-dimensions">
+              <span>현재 너비: <span id="currentWidth">375</span>px</span>
+              <span id="currentBreakpoint">📱 모바일</span>
+            </div>
+            <div id="viewportContainer" style="border: 2px solid #ddd; border-radius: 8px; overflow: hidden; position: relative; background: white;">
+              <div id="resizeableContent" style="width: 375px; height: 500px; background: white; padding: 20px; overflow-y: auto; transition: width 0.2s ease;">
+                <h3 style="color: #7b5cff; margin-top: 0;">반응형 테스트 콘텐츠</h3>
+                <p style="color: #555; line-height: 1.6;">화면 너비를 조정하면서 레이아웃이 어떻게 변하는지 관찰하세요.</p>
+                <div id="responseiveDemo" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-top: 20px;">
+                  <div style="background: linear-gradient(135deg, #7b5cff, #00d4ff); color: white; padding: 20px; border-radius: 6px; text-align: center; font-weight: bold;">상자 1</div>
+                  <div style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; padding: 20px; border-radius: 6px; text-align: center; font-weight: bold;">상자 2</div>
+                  <div style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; padding: 20px; border-radius: 6px; text-align: center; font-weight: bold;">상자 3</div>
+                </div>
+              </div>
+              <input type="range" id="resizeSlider" min="320" max="1440" value="375" style="width: 100%; height: 30px; margin-top: 10px; cursor: pointer;">
+            </div>
+            <div class="breakpoint-indicators">
+              <div class="breakpoint-badge mobile" onclick="setViewportWidth(375)">📱 모바일 (375px)</div>
+              <div class="breakpoint-badge tablet" onclick="setViewportWidth(768)">📱 태블릿 (768px)</div>
+              <div class="breakpoint-badge desktop" onclick="setViewportWidth(1024)">🖥️데스크톱 (1024px)</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Live Preview Section -->
+      <section>
+        <h2 class="section-title">🖼️ 반응형 레이아웃 라이브 프리뷰</h2>
+        <div class="live-preview-section">
+          <div class="preview-card">
+            <div class="preview-label">📱 모바일 (375px)</div>
+            <div class="preview-content">
+              <div class="responsive-demo" style="grid-template-columns: 1fr;">
+                <div class="demo-box">헤더</div>
+                <div class="demo-box">콘텐츠 1</div>
+                <div class="demo-box">콘텐츠 2</div>
+                <div class="demo-box">사이드바</div>
+                <div class="demo-box">푸터</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-card">
+            <div class="preview-label">📱 태블릿 (768px)</div>
+            <div class="preview-content">
+              <div class="responsive-demo" style="grid-template-columns: 2fr 1fr;">
+                <div style="grid-column: 1/-1; background: linear-gradient(135deg, #7b5cff, #00d4ff); border-radius: 6px; padding: 15px; color: white; text-align: center; font-weight: bold;">헤더</div>
+                <div class="demo-box">콘텐츠 1</div>
+                <div class="demo-box">사이드바</div>
+                <div class="demo-box">콘텐츠 2</div>
+                <div style="grid-column: 1/-1; background: linear-gradient(135deg, #7b5cff, #00d4ff); border-radius: 6px; padding: 15px; color: white; text-align: center; font-weight: bold;">푸터</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-card">
+            <div class="preview-label">🖥️ 데스크톱 (1024px+)</div>
+            <div class="preview-content">
+              <div class="responsive-demo" style="grid-template-columns: 3fr 1fr;">
+                <div style="grid-column: 1/-1; background: linear-gradient(135deg, #7b5cff, #00d4ff); border-radius: 6px; padding: 15px; color: white; text-align: center; font-weight: bold;">헤더</div>
+                <div class="demo-box">콘텐츠 1</div>
+                <div class="demo-box">사이드바</div>
+                <div class="demo-box">콘텐츠 2</div>
+                <div style="grid-column: 1/-1; background: linear-gradient(135deg, #7b5cff, #00d4ff); border-radius: 6px; padding: 15px; color: white; text-align: center; font-weight: bold;">푸터</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="chapter-nav">
+        <a href="06-state-management.html" class="nav-button">← 이전: 상태관리</a>
+        <span style="color: #999; font-weight: bold;">7 / 10</span>
+        <a href="08-performance.html" class="nav-button next">다음: 성능 최적화 →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Media Query Builder
+    const queryType = document.getElementById('queryType');
+    const value1 = document.getElementById('value1');
+    const value2 = document.getElementById('value2');
+    const generatedQuery = document.getElementById('generatedQuery');
+
+    function updateQuery() {
+      let query = '';
+      if (queryType.value === 'max-width') {
+        query = `@media (max-width: ${value1.value}px) { }`;
+      } else if (queryType.value === 'min-width') {
+        query = `@media (min-width: ${value1.value}px) { }`;
+      } else if (queryType.value === 'range') {
+        query = `@media (min-width: ${value1.value}px) and (max-width: ${value2.value}px) { }`;
+      }
+      generatedQuery.textContent = query;
+    }
+
+    queryType.addEventListener('change', () => {
+      value2.disabled = queryType.value !== 'range';
+      updateQuery();
+    });
+    value1.addEventListener('input', updateQuery);
+    value2.addEventListener('input', updateQuery);
+
+    // Viewport Resizer
+    const resizeSlider = document.getElementById('resizeSlider');
+    const resizeableContent = document.getElementById('resizeableContent');
+    const currentWidth = document.getElementById('currentWidth');
+    const currentBreakpoint = document.getElementById('currentBreakpoint');
+
+    function updateViewport(width) {
+      resizeableContent.style.width = width + 'px';
+      currentWidth.textContent = width;
+
+      if (width <= 479) {
+        currentBreakpoint.textContent = '📱 모바일 (320-479px)';
+      } else if (width <= 639) {
+        currentBreakpoint.textContent = '📱 큰 폰 (480-639px)';
+      } else if (width <= 1023) {
+        currentBreakpoint.textContent = '📱 태블릿 (640-1023px)';
+      } else {
+        currentBreakpoint.textContent = '🖥️ 데스크톱 (1024px+)';
+      }
+    }
+
+    function setViewportWidth(width) {
+      resizeSlider.value = width;
+      updateViewport(width);
+    }
+
+    resizeSlider.addEventListener('input', (e) => {
+      updateViewport(parseInt(e.target.value));
+    });
+  </script>
+</body>
+</html>

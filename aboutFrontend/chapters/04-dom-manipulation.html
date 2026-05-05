@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4장. DOM 조작 | 한국 프론트엔드 학습</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    aside {
+      background: rgba(30, 30, 50, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+      border: 1px solid rgba(123, 92, 255, 0.3);
+    }
+
+    aside h3 {
+      color: #7b5cff;
+      margin: 15px 0 10px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    aside ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    aside li {
+      margin: 8px 0;
+    }
+
+    aside a {
+      color: #00d4ff;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+
+    aside a:hover {
+      color: #7b5cff;
+    }
+
+    main {
+      background: rgba(30, 30, 50, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(123, 92, 255, 0.2);
+    }
+
+    h1 {
+      color: #00d4ff;
+      margin-top: 0;
+      font-size: 2.5em;
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2 {
+      color: #7b5cff;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid rgba(123, 92, 255, 0.5);
+      padding-bottom: 10px;
+    }
+
+    p {
+      line-height: 1.8;
+      color: #c0c0c0;
+      margin: 10px 0;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .interactive-box {
+      background: linear-gradient(135deg, rgba(123, 92, 255, 0.1), rgba(0, 212, 255, 0.1));
+      border: 2px solid rgba(123, 92, 255, 0.3);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .demo-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-size: 13px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(123, 92, 255, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #domTreeCanvas {
+      width: 100%;
+      height: 400px;
+      background: rgba(10, 10, 20, 0.8);
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .tree-viewer {
+      background: rgba(10, 10, 20, 0.8);
+      padding: 15px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      color: #00d4ff;
+      margin: 15px 0;
+    }
+
+    .tree-node {
+      margin-left: 20px;
+      padding: 3px 0;
+    }
+
+    .event-demo-container {
+      display: flex;
+      gap: 30px;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .event-box {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      background: rgba(123, 92, 255, 0.2);
+      border: 2px solid rgba(123, 92, 255, 0.4);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      user-select: none;
+    }
+
+    .event-box:hover {
+      border-color: #00d4ff;
+      box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    }
+
+    .event-box.active {
+      background: rgba(0, 212, 255, 0.3);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+    }
+
+    .nested-event-box {
+      width: 150px;
+      height: 150px;
+      background: rgba(0, 212, 255, 0.15);
+      border: 2px solid rgba(0, 212, 255, 0.3);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nested-event-box.active {
+      background: rgba(0, 212, 255, 0.5);
+      box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.4);
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid rgba(123, 92, 255, 0.3);
+    }
+
+    .comparison-table th {
+      background: rgba(123, 92, 255, 0.2);
+      color: #7b5cff;
+      font-weight: 600;
+    }
+
+    .comparison-table tr:hover {
+      background: rgba(123, 92, 255, 0.1);
+    }
+
+    .code-block {
+      background: rgba(10, 10, 20, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      border-left: 4px solid #7b5cff;
+    }
+
+    code {
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: relative;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside>
+      <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+      <h3>전체 목차</h3>
+      <ol>
+        <li><a href="../index.html">📖 표지 · 소개</a></li>
+        <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+        <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+        <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+        <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+        <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+        <li><a href="06-state-management.html">6. 상태관리</a></li>
+        <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+        <li><a href="08-performance.html">8. 성능 최적화</a></li>
+        <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1>4장. DOM 조작</h1>
+      <p style="font-size: 1.1em; color: #7b5cff;">Document Object Model의 개념과 JavaScript를 통한 동적 조작</p>
+
+      <section class="section">
+        <h2>4.1 DOM이란?</h2>
+        <p>DOM(Document Object Model)은 HTML 문서를 객체 트리 구조로 표현한 API입니다. 브라우저가 HTML을 파싱할 때 각 요소를 트리 형태로 구성하여 JavaScript에서 접근하고 조작할 수 있게 해줍니다.</p>
+
+        <div class="interactive-box">
+          <h3>DOM 트리 구조 시각화</h3>
+          <p>아래의 3D 시각화에서 DOM 트리를 입체적으로 확인할 수 있습니다. 마우스로 각 노드에 호버하면 해당 요소가 강조됩니다.</p>
+          <canvas id="domTreeCanvas"></canvas>
+          <p style="font-size: 0.9em; color: #999;">💡 팁: 마우스를 움직여 각 노드를 하이라이트하세요. 파란색=div, 초록색=p, 주황색=span</p>
+        </div>
+
+        <div class="code-block">
+          <code>const root = document.documentElement; // &lt;html&gt; 루트<br/>const body = document.body;            // &lt;body&gt; 요소<br/>const nodes = document.childNodes;      // 자식 노드 목록</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4.2 요소 선택과 탐색</h2>
+        <p>DOM 조작의 첫 단계는 조작할 요소를 선택하는 것입니다. 다양한 선택 메서드와 탐색 방법이 있습니다.</p>
+
+        <h3>선택 메서드</h3>
+        <div class="code-block">
+          <code>// 선택 메서드들<br/>document.getElementById('id')           // ID로 선택 (가장 빠름)<br/>document.querySelector('selector')     // CSS 선택자로 첫 요소 선택<br/>document.querySelectorAll('selector')  // CSS 선택자로 모든 요소 선택<br/>document.getElementsByClassName('cls') // 클래스로 선택<br/>document.getElementsByTagName('div')   // 태그명으로 선택</code>
+        </div>
+
+        <h3>노드 탐색</h3>
+        <div class="code-block">
+          <code>const elem = document.querySelector('.target');<br/>elem.parentNode;          // 부모 노드<br/>elem.childNodes;          // 자식 노드 목록 (텍스트 노드 포함)<br/>elem.children;            // 자식 요소 (요소만)<br/>elem.firstChild;          // 첫 자식<br/>elem.nextSibling;         // 다음 형제 노드<br/>elem.previousSibling;     // 이전 형제 노드</code>
+        </div>
+
+        <div class="interactive-box">
+          <h3>라이브 DOM 트리 뷰어</h3>
+          <p>버튼을 클릭하여 DOM 구조를 동적으로 변경하고 실시간으로 트리를 확인하세요.</p>
+          <div class="demo-controls">
+            <button onclick="addDOMNode()">노드 추가</button>
+            <button onclick="removeDOMNode()">마지막 노드 제거</button>
+            <button onclick="clearDOMTree()">초기화</button>
+          </div>
+          <div id="treeOutputContainer" class="tree-viewer"></div>
+          <div id="domManipulationArea" style="background: rgba(123, 92, 255, 0.1); padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <!-- Nodes will be added here -->
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4.3 이벤트 시스템</h2>
+        <p>이벤트는 사용자 상호작용(클릭, 입력 등)이나 브라우저 작동에 의해 발생하는 신호입니다. JavaScript는 이벤트를 감지하고 처리합니다.</p>
+
+        <h3>이벤트 리스너 등록</h3>
+        <div class="code-block">
+          <code>element.addEventListener('click', (event) => {<br/>&nbsp;&nbsp;console.log('클릭됨!', event);<br/>});<br/><br/>element.removeEventListener('click', handler);</code>
+        </div>
+
+        <h3>이벤트 버블링과 캡처링</h3>
+        <p><span class="highlight">버블링</span>은 이벤트가 발생한 요소에서 시작하여 부모 요소로 전파되는 것입니다. <span class="highlight">캡처링</span>은 루트에서 시작하여 하위 요소로 전파됩니다.</p>
+
+        <div class="interactive-box">
+          <h3>이벤트 버블링 데모</h3>
+          <p>박스를 클릭하면 이벤트가 어떻게 전파되는지 확인하세요. 순서대로 불이 켜집니다.</p>
+          <div class="demo-controls">
+            <button onclick="resetEventBubbling()">리셋</button>
+          </div>
+          <div id="outerBox" class="event-box" style="width: 250px; height: 250px;">
+            Outer (div)
+            <div id="middleBox" class="nested-event-box" style="width: 180px; height: 180px;">
+              Middle (div)
+              <div id="innerBox" class="nested-event-box" style="width: 120px; height: 120px;">
+                Inner (button)
+              </div>
+            </div>
+          </div>
+          <div id="bubblingLog" style="margin-top: 20px; padding: 15px; background: rgba(10, 10, 20, 0.8); border-radius: 8px; color: #00d4ff; font-family: monospace; font-size: 12px; max-height: 150px; overflow-y: auto;"></div>
+        </div>
+
+        <h3>이벤트 위임 (Event Delegation)</h3>
+        <p>많은 자식 요소에 각각 리스너를 등록하는 대신, 부모 요소에 하나의 리스너를 등록하고 event.target을 확인하는 방식입니다.</p>
+        <div class="code-block">
+          <code>parent.addEventListener('click', (event) => {<br/>&nbsp;&nbsp;if (event.target.matches('.child-item')) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;// 자식 요소 클릭 처리<br/>&nbsp;&nbsp;}<br/>});</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4.4 DOM 조작 메서드</h2>
+        <p>요소를 선택한 후, 내용을 변경하거나 새로운 요소를 추가할 수 있습니다.</p>
+
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>메서드</th>
+              <th>설명</th>
+              <th>성능</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>innerHTML</code></td>
+              <td>요소의 HTML 내용을 문자열로 설정/조회</td>
+              <td>느림 (리파싱 발생)</td>
+            </tr>
+            <tr>
+              <td><code>textContent</code></td>
+              <td>요소의 텍스트만 설정/조회 (태그 미파싱)</td>
+              <td>빠름</td>
+            </tr>
+            <tr>
+              <td><code>createElement()</code></td>
+              <td>새로운 요소 생성</td>
+              <td>빠름</td>
+            </tr>
+            <tr>
+              <td><code>appendChild()</code></td>
+              <td>자식 요소 추가</td>
+              <td>중간</td>
+            </tr>
+            <tr>
+              <td><code>insertBefore()</code></td>
+              <td>특정 위치에 요소 삽입</td>
+              <td>중간</td>
+            </tr>
+            <tr>
+              <td><code>removeChild()</code></td>
+              <td>자식 요소 제거</td>
+              <td>빠름</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <code>// 요소 생성 및 추가<br/>const newDiv = document.createElement('div');<br/>newDiv.textContent = '새로운 요소';<br/>newDiv.className = 'new-item';<br/>parent.appendChild(newDiv);<br/><br/>// 요소 제거<br/>parent.removeChild(newDiv);<br/><br/>// HTML 직접 변경 (주의: XSS 위험)<br/>element.innerHTML = '&lt;p&gt;새 내용&lt;/p&gt;';</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>4.5 가상 DOM 개념</h2>
+        <p>실제 DOM 조작은 비용이 높으므로 (리플로우, 리페인트), React 같은 라이브러리는 <span class="highlight">가상 DOM</span>을 사용합니다.</p>
+
+        <h3>가상 DOM의 장점</h3>
+        <ul style="color: #c0c0c0;">
+          <li><strong>배칭(Batching):</strong> 여러 업데이트를 모아서 한 번에 적용</li>
+          <li><strong>Diffing:</strong> 변경된 부분만 찾아 효율적으로 업데이트</li>
+          <li><strong>최적화:</strong> 불필요한 리렌더링 방지</li>
+          <li><strong>추상화:</strong> 개발자가 선언적 코드 작성 가능</li>
+        </ul>
+
+        <div class="interactive-box">
+          <h3>실제 DOM vs 가상 DOM</h3>
+          <p>1000개의 리스트 항목을 업데이트할 때의 차이를 시뮬레이션합니다.</p>
+          <div class="demo-controls">
+            <button onclick="testRealDOM()">실제 DOM 업데이트</button>
+            <button onclick="testVirtualDOM()">가상 DOM 업데이트</button>
+          </div>
+          <div id="domComparisonResult" style="margin-top: 15px; padding: 15px; background: rgba(10, 10, 20, 0.8); border-radius: 8px; color: #00d4ff; font-family: monospace; font-size: 12px;"></div>
+        </div>
+
+        <h3>Diffing 알고리즘</h3>
+        <div class="code-block">
+          <code>// 간단한 Diffing 개념<br/>function diff(oldVDOM, newVDOM) {<br/>&nbsp;&nbsp;const changes = [];<br/>&nbsp;&nbsp;if (oldVDOM.type !== newVDOM.type) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;changes.push({ action: 'replace', element: newVDOM });<br/>&nbsp;&nbsp;}<br/>&nbsp;&nbsp;// props, children 비교 ...<br/>&nbsp;&nbsp;return changes;<br/>}</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>핵심 요약</h2>
+        <div class="interactive-box" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 92, 255, 0.1)); border-color: rgba(0, 212, 255, 0.4);">
+          <ul style="color: #c0c0c0; line-height: 2;">
+            <li>✅ DOM은 HTML 문서의 객체 표현이며 트리 구조로 되어있습니다.</li>
+            <li>✅ querySelector, getElementById 등으로 요소를 선택하고 탐색합니다.</li>
+            <li>✅ addEventListener로 이벤트를 감지하고 event 객체를 활용합니다.</li>
+            <li>✅ createElement, appendChild 등으로 동적으로 요소를 조작합니다.</li>
+            <li>✅ 가상 DOM은 성능 최적화를 위해 실제 DOM 업데이트를 스케줄링합니다.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ==================== 3D DOM Tree Visualization ====================
+    let domTreeScene, domTreeCamera, domTreeRenderer;
+    let domTreeObjects = [];
+    let hoveredObject = null;
+
+    function initDOMTreeVisualization() {
+      const canvas = document.getElementById('domTreeCanvas');
+
+      domTreeScene = new THREE.Scene();
+      domTreeScene.background = new THREE.Color(0x0a0a14);
+
+      domTreeCamera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+      domTreeCamera.position.set(0, 15, 20);
+
+      domTreeRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      domTreeRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      domTreeRenderer.setPixelRatio(window.devicePixelRatio);
+
+      // Lighting
+      const light = new THREE.DirectionalLight(0xffffff, 0.8);
+      light.position.set(10, 20, 10);
+      domTreeScene.add(light);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      domTreeScene.add(ambientLight);
+
+      // Create DOM tree structure
+      const htmlNode = createDOMNodeVisualization('html', 0, 15, 0, 0xFF5722);
+      domTreeScene.add(htmlNode);
+
+      const bodyNode = createDOMNodeVisualization('body', -5, 10, 0, 0x2196F3);
+      domTreeScene.add(bodyNode);
+      drawLine(htmlNode, bodyNode);
+
+      const headerNode = createDOMNodeVisualization('header', -8, 5, -2, 0x2196F3);
+      domTreeScene.add(headerNode);
+      drawLine(bodyNode, headerNode);
+
+      const mainNode = createDOMNodeVisualization('main', -2, 5, 2, 0x2196F3);
+      domTreeScene.add(mainNode);
+      drawLine(bodyNode, mainNode);
+
+      const footerNode = createDOMNodeVisualization('footer', 4, 5, 2, 0x2196F3);
+      domTreeScene.add(footerNode);
+      drawLine(bodyNode, footerNode);
+
+      const h1Node = createDOMNodeVisualization('h1', -8, 0, -2, 0x4CAF50);
+      domTreeScene.add(h1Node);
+      drawLine(headerNode, h1Node);
+
+      const pNode = createDOMNodeVisualization('p', -2, 0, 2, 0x4CAF50);
+      domTreeScene.add(pNode);
+      drawLine(mainNode, pNode);
+
+      const spanNode = createDOMNodeVisualization('span', 1, 0, 2, 0xFFC107);
+      domTreeScene.add(spanNode);
+      drawLine(pNode, spanNode);
+
+      // Mouse interaction
+      canvas.addEventListener('mousemove', (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / canvas.clientWidth * 2 - 1;
+        const y = -(e.clientY - rect.top) / canvas.clientHeight * 2 + 1;
+
+        const raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(new THREE.Vector2(x, y), domTreeCamera);
+        const intersects = raycaster.intersectObjects(domTreeObjects);
+
+        if (hoveredObject) {
+          hoveredObject.userData.originalMaterial.emissive.setHex(0x000000);
+        }
+
+        if (intersects.length > 0) {
+          hoveredObject = intersects[0].object;
+          hoveredObject.userData.originalMaterial.emissive.setHex(0x00ff00);
+        } else {
+          hoveredObject = null;
+        }
+      });
+
+      animateDOMTree();
+    }
+
+    function createDOMNodeVisualization(label, x, y, z, color) {
+      const geometry = new THREE.BoxGeometry(1.5, 1, 1.5);
+      const material = new THREE.MeshPhongMaterial({ color: color, emissive: 0x000000 });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(x, y, z);
+      mesh.userData.originalMaterial = material;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 64;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 24px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, 128, 32);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      const textMaterial = new THREE.MeshBasicMaterial({ map: texture });
+      const textGeometry = new THREE.PlaneGeometry(1.4, 0.8);
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.z = 0.8;
+      mesh.add(textMesh);
+
+      domTreeObjects.push(mesh);
+      return mesh;
+    }
+
+    function drawLine(from, to) {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(
+        new Float32Array([
+          from.position.x, from.position.y, from.position.z,
+          to.position.x, to.position.y, to.position.z
+        ]), 3
+      ));
+      const material = new THREE.LineBasicMaterial({ color: 0x7b5cff, linewidth: 2 });
+      const line = new THREE.Line(geometry, material);
+      domTreeScene.add(line);
+    }
+
+    function animateDOMTree() {
+      requestAnimationFrame(animateDOMTree);
+
+      domTreeObjects.forEach(obj => {
+        if (obj !== hoveredObject) {
+          obj.rotation.x += 0.001;
+          obj.rotation.y += 0.002;
+        }
+      });
+
+      domTreeRenderer.render(domTreeScene, domTreeCamera);
+    }
+
+    // ==================== DOM Tree Viewer ====================
+    let nodeCount = 3;
+
+    function addDOMNode() {
+      const container = document.getElementById('domManipulationArea');
+      const newNode = document.createElement('div');
+      newNode.style.cssText = 'background: rgba(0, 212, 255, 0.1); padding: 10px; margin: 8px 0; border-radius: 6px; border-left: 3px solid #00d4ff;';
+      newNode.textContent = `노드 ${nodeCount++}`;
+      container.appendChild(newNode);
+      updateTreeDisplay();
+    }
+
+    function removeDOMNode() {
+      const container = document.getElementById('domManipulationArea');
+      if (container.lastChild) {
+        container.removeChild(container.lastChild);
+        nodeCount--;
+        updateTreeDisplay();
+      }
+    }
+
+    function clearDOMTree() {
+      const container = document.getElementById('domManipulationArea');
+      container.innerHTML = '';
+      nodeCount = 3;
+      updateTreeDisplay();
+    }
+
+    function updateTreeDisplay() {
+      const container = document.getElementById('domManipulationArea');
+      const output = document.getElementById('treeOutputContainer');
+      const childCount = container.children.length;
+
+      let tree = '📄 domManipulationArea\n';
+      for (let i = 0; i < childCount; i++) {
+        tree += `  ├─ div.node-${i} (노드 ${i})\n`;
+      }
+
+      output.textContent = tree || '📄 domManipulationArea\n  (빈 컨테이너)';
+    }
+
+    // ==================== Event Bubbling Demo ====================
+    function setupEventBubbling() {
+      const outer = document.getElementById('outerBox');
+      const middle = document.getElementById('middleBox');
+      const inner = document.getElementById('innerBox');
+      const log = document.getElementById('bubblingLog');
+      let logEntries = [];
+
+      function logEvent(name) {
+        const timestamp = new Date().toLocaleTimeString();
+        logEntries.push(`[${timestamp}] ${name}`);
+        if (logEntries.length > 8) logEntries.shift();
+        log.textContent = logEntries.join('\n');
+      }
+
+      outer.addEventListener('click', (e) => {
+        outer.classList.add('active');
+        setTimeout(() => outer.classList.remove('active'), 300);
+        logEvent('1️⃣ Outer clicked (bubbling phase)');
+        e.stopPropagation = () => {
+          logEntries.push('🛑 Propagation stopped');
+          log.textContent = logEntries.join('\n');
+          e.stopPropagation();
+        };
+      });
+
+      middle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        middle.classList.add('active');
+        setTimeout(() => middle.classList.remove('active'), 300);
+        logEvent('2️⃣ Middle clicked (stopped)');
+      });
+
+      inner.addEventListener('click', (e) => {
+        e.stopPropagation();
+        inner.classList.add('active');
+        setTimeout(() => inner.classList.remove('active'), 300);
+        logEvent('🎯 Inner clicked');
+      });
+
+      logEvent('준비완료: 박스를 클릭하세요');
+    }
+
+    function resetEventBubbling() {
+      document.getElementById('bubblingLog').textContent = '준비완료: 박스를 클릭하세요';
+      document.getElementById('bubblingLog').textContent = '';
+    }
+
+    // ==================== Real vs Virtual DOM Demo ====================
+    function testRealDOM() {
+      const start = performance.now();
+
+      // Simulate real DOM updates (one by one)
+      const container = document.createElement('div');
+      for (let i = 0; i < 1000; i++) {
+        const item = document.createElement('div');
+        item.textContent = `Item ${i}`;
+        container.appendChild(item);
+      }
+
+      for (let i = 0; i < 1000; i++) {
+        container.children[i].textContent = `Updated ${i}`;
+      }
+
+      const end = performance.now();
+      const result = document.getElementById('domComparisonResult');
+      result.innerHTML = `<strong>실제 DOM 업데이트:</strong><br/>시간: ${(end - start).toFixed(2)}ms<br/>✗ 각 업데이트마다 리플로우/리페인트 발생<br/>✗ 성능이 선형적으로 증가`;
+    }
+
+    function testVirtualDOM() {
+      const start = performance.now();
+
+      // Simulate virtual DOM (batched update)
+      const vdom = [];
+      for (let i = 0; i < 1000; i++) {
+        vdom.push({ id: i, text: `Item ${i}` });
+      }
+
+      // Update all in memory first
+      for (let i = 0; i < 1000; i++) {
+        vdom[i].text = `Updated ${i}`;
+      }
+
+      // Batch diff and update
+      const diffs = [];
+      for (let i = 0; i < 1000; i++) {
+        diffs.push({ action: 'update', id: i });
+      }
+
+      const end = performance.now();
+      const result = document.getElementById('domComparisonResult');
+      result.innerHTML = `<strong>가상 DOM 업데이트:</strong><br/>시간: ${(end - start).toFixed(2)}ms<br/>✓ 메모리에서 배치 처리<br/>✓ 한 번에 DOM 업데이트<br/>✓ 성능이 훨씬 빠름`;
+    }
+
+    // ==================== Initialize on Load ====================
+    window.addEventListener('load', () => {
+      initDOMTreeVisualization();
+      setupEventBubbling();
+      updateTreeDisplay();
+
+      // Window resize handler
+      window.addEventListener('resize', () => {
+        const canvas = document.getElementById('domTreeCanvas');
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        domTreeCamera.aspect = width / height;
+        domTreeCamera.updateProjectionMatrix();
+        domTreeRenderer.setSize(width, height);
+      });
+    });
+  </script>
+</body>
+</html>

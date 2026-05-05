@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6장. 상태관리 | 한국 프론트엔드 학습</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f0f1e 0%, #1a1a2e 100%);
+      color: #e0e0e0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    aside {
+      background: rgba(30, 30, 50, 0.8);
+      padding: 20px;
+      border-radius: 12px;
+      height: fit-content;
+      position: sticky;
+      top: 20px;
+      border: 1px solid rgba(123, 92, 255, 0.3);
+    }
+
+    aside h3 {
+      color: #7b5cff;
+      margin: 15px 0 10px 0;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    aside ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    aside li {
+      margin: 8px 0;
+    }
+
+    aside a {
+      color: #00d4ff;
+      text-decoration: none;
+      font-size: 13px;
+      transition: color 0.2s ease;
+    }
+
+    aside a:hover {
+      color: #7b5cff;
+    }
+
+    main {
+      background: rgba(30, 30, 50, 0.6);
+      padding: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(123, 92, 255, 0.2);
+    }
+
+    h1 {
+      color: #00d4ff;
+      margin-top: 0;
+      font-size: 2.5em;
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    h2 {
+      color: #7b5cff;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      border-bottom: 2px solid rgba(123, 92, 255, 0.5);
+      padding-bottom: 10px;
+    }
+
+    h3 {
+      color: #00d4ff;
+      margin-top: 20px;
+    }
+
+    p {
+      line-height: 1.8;
+      color: #c0c0c0;
+      margin: 10px 0;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .interactive-box {
+      background: linear-gradient(135deg, rgba(123, 92, 255, 0.1), rgba(0, 212, 255, 0.1));
+      border: 2px solid rgba(123, 92, 255, 0.3);
+      border-radius: 10px;
+      padding: 25px;
+      margin: 20px 0;
+    }
+
+    .demo-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-size: 13px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(123, 92, 255, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    #reduxCanvas {
+      width: 100%;
+      height: 450px;
+      background: rgba(10, 10, 20, 0.8);
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .code-block {
+      background: rgba(10, 10, 20, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      border-left: 4px solid #7b5cff;
+    }
+
+    code {
+      color: #00d4ff;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+
+    .highlight {
+      color: #ff00ff;
+      font-weight: 600;
+    }
+
+    .demo-card {
+      background: rgba(123, 92, 255, 0.15);
+      border: 2px solid rgba(123, 92, 255, 0.3);
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .comparison-item {
+      background: rgba(30, 30, 50, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid rgba(123, 92, 255, 0.3);
+    }
+
+    .comparison-item h4 {
+      color: #00d4ff;
+      margin: 0 0 10px 0;
+      border-bottom: 2px solid rgba(123, 92, 255, 0.3);
+      padding-bottom: 8px;
+    }
+
+    .comparison-item p {
+      margin: 5px 0;
+      font-size: 0.95em;
+    }
+
+    .comparison-item ul {
+      margin: 10px 0;
+      padding-left: 20px;
+      color: #c0c0c0;
+    }
+
+    .comparison-item li {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+
+    .state-demo-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .state-box {
+      background: rgba(10, 10, 20, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      border: 2px solid rgba(123, 92, 255, 0.3);
+    }
+
+    .state-display {
+      background: rgba(0, 212, 255, 0.1);
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #00d4ff;
+      margin: 10px 0;
+      font-family: monospace;
+      font-size: 13px;
+      color: #00d4ff;
+    }
+
+    .redux-flow {
+      position: relative;
+      background: rgba(10, 10, 20, 0.8);
+      padding: 30px;
+      border-radius: 8px;
+      border: 2px dashed rgba(123, 92, 255, 0.4);
+      margin: 20px 0;
+    }
+
+    .flow-step {
+      background: linear-gradient(120deg, rgba(123, 92, 255, 0.3), rgba(0, 212, 255, 0.1));
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid rgba(123, 92, 255, 0.4);
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .flow-step::before {
+      content: '→';
+      color: #7b5cff;
+      font-weight: bold;
+      font-size: 1.5em;
+      flex-shrink: 0;
+    }
+
+    .flow-step:first-of-type::before {
+      content: '🎯';
+    }
+
+    .state-comparison {
+      background: rgba(30, 30, 50, 0.8);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid rgba(123, 92, 255, 0.3);
+      margin: 15px 0;
+    }
+
+    .state-type {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin: 15px 0;
+    }
+
+    .state-type-item {
+      background: rgba(10, 10, 20, 0.6);
+      padding: 15px;
+      border-radius: 6px;
+      border-left: 4px solid #7b5cff;
+    }
+
+    .state-type-item h4 {
+      color: #00d4ff;
+      margin: 0 0 8px 0;
+    }
+
+    .state-type-item p {
+      margin: 5px 0;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .state-demo-container {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        position: relative;
+        top: 0;
+      }
+
+      .state-type {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside>
+      <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+      <h3>전체 목차</h3>
+      <ol>
+        <li><a href="../index.html">📖 표지 · 소개</a></li>
+        <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+        <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+        <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+        <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+        <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+        <li><a href="06-state-management.html">6. 상태관리</a></li>
+        <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+        <li><a href="08-performance.html">8. 성능 최적화</a></li>
+        <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1>6장. 상태관리</h1>
+      <p style="font-size: 1.1em; color: #7b5cff;">React 애플리케이션의 상태를 효율적으로 관리하는 방법들</p>
+
+      <section class="section">
+        <h2>6.1 상태란?</h2>
+        <p>상태(State)는 애플리케이션이 어느 순간의 조건을 나타내는 데이터입니다. 시간에 따라 변할 수 있으며, 이 변화가 UI 업데이트를 트리거합니다.</p>
+
+        <h3>UI 상태 vs 서버 상태</h3>
+        <div class="state-comparison">
+          <div class="state-type">
+            <div class="state-type-item">
+              <h4>UI 상태</h4>
+              <p>• 모달 열림/닫힘</p>
+              <p>• 입력 필드 값</p>
+              <p>• 탭 선택</p>
+              <p>• 폼 유효성</p>
+              <p>💡 애플리케이션 메모리에만 존재</p>
+            </div>
+            <div class="state-type-item">
+              <h4>서버 상태</h4>
+              <p>• 데이터베이스의 데이터</p>
+              <p>• 사용자 정보</p>
+              <p>• 게시물 목록</p>
+              <p>• 비동기 데이터</p>
+              <p>💡 백엔드에서 관리하며 캐싱 필요</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <code>// UI 상태 예제<br/>function Modal() {<br/>&nbsp;&nbsp;const [isOpen, setIsOpen] = useState(false);<br/>&nbsp;&nbsp;// isOpen은 UI 상태<br/>}<br/><br/>// 서버 상태 예제<br/>function UserList() {<br/>&nbsp;&nbsp;const [users, setUsers] = useState([]);<br/>&nbsp;&nbsp;// users는 서버에서 가져온 상태<br/>}</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>6.2 React Context API</h2>
+        <p>Context는 <span class="highlight">깊은 계층 구조에서 Props Drilling을 피</span>하기 위해 사용합니다. 전역 상태를 여러 컴포넌트에 제공합니다.</p>
+
+        <h3>Context 사용 패턴</h3>
+        <div class="code-block">
+          <code>// 1. Context 생성<br/>const ThemeContext = React.createContext();<br/><br/>// 2. Provider로 감싸기<br/>function App() {<br/>&nbsp;&nbsp;const [theme, setTheme] = useState('light');<br/>&nbsp;&nbsp;return (<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;ThemeContext.Provider value={{ theme, setTheme }}&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;MainContent /&gt;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ThemeContext.Provider&gt;<br/>&nbsp;&nbsp;);<br/>}<br/><br/>// 3. 자식 컴포넌트에서 사용<br/>function Button() {<br/>&nbsp;&nbsp;const { theme } = useContext(ThemeContext);<br/>&nbsp;&nbsp;return &lt;button style={{ background: theme }}&gt;버튼&lt;/button&gt;;<br/>}</code>
+        </div>
+
+        <h3>Context API의 장단점</h3>
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <h4>✅ 장점</h4>
+            <ul>
+              <li>Props Drilling 제거</li>
+              <li>내장 API (추가 라이브러리 불필요)</li>
+              <li>간단한 전역 상태</li>
+              <li>학습 곡선 완만</li>
+            </ul>
+          </div>
+          <div class="comparison-item">
+            <h4>❌ 단점</h4>
+            <ul>
+              <li>성능 최적화 어려움</li>
+              <li>DevTools 부족</li>
+              <li>복잡한 상태 관리 시 코드 증가</li>
+              <li>미들웨어 미지원</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>6.3 Redux 패턴</h2>
+        <p>Redux는 <span class="highlight">예측 가능한 상태 관리</span>를 위한 라이브러리입니다. Action → Reducer → Store → View의 단방향 사이클을 따릅니다.</p>
+
+        <h3>Redux 데이터 흐름</h3>
+        <div class="interactive-box">
+          <div class="demo-controls">
+            <button onclick="dispatchReduxAction()">⚡ Action 디스패치</button>
+            <button onclick="resetReduxFlow()">🔄 리셋</button>
+          </div>
+          <canvas id="reduxCanvas"></canvas>
+          <p style="font-size: 0.9em; color: #999;">💡 버튼을 클릭하여 Redux 사이클을 시뮬레이션하세요.</p>
+        </div>
+
+        <h3>Redux의 3가지 원칙</h3>
+        <div class="redux-flow">
+          <div class="flow-step">
+            <strong>Single Source of Truth</strong>
+            <p style="margin: 0; margin-left: auto;">전체 상태가 하나의 Store에 저장</p>
+          </div>
+          <div class="flow-step">
+            <strong>State is Read-Only</strong>
+            <p style="margin: 0; margin-left: auto;">상태 변경은 Action을 통해서만 가능</p>
+          </div>
+          <div class="flow-step">
+            <strong>Changes are Made with Pure Reducers</strong>
+            <p style="margin: 0; margin-left: auto;">순수 함수인 Reducer로만 상태 업데이트</p>
+          </div>
+        </div>
+
+        <h3>Redux 구현 예제</h3>
+        <div class="code-block">
+          <code>// 1. Action 정의<br/>const INCREMENT = 'INCREMENT';<br/>const increment = () => ({ type: INCREMENT });<br/><br/>// 2. Reducer 작성<br/>function counterReducer(state = 0, action) {<br/>&nbsp;&nbsp;if (action.type === INCREMENT) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;return state + 1;<br/>&nbsp;&nbsp;}<br/>&nbsp;&nbsp;return state;<br/>}<br/><br/>// 3. Store 생성<br/>const store = createStore(counterReducer);<br/><br/>// 4. 컴포넌트에서 사용<br/>store.dispatch(increment());<br/>const state = store.getState();</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>6.4 현대적 대안들</h2>
+        <p>Redux 외에도 상태 관리를 위한 더 가볍고 간단한 라이브러리들이 있습니다.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <h4>📦 Zustand</h4>
+            <ul>
+              <li>미니멀한 API</li>
+              <li>번들 크기 매우 작음</li>
+              <li>DevTools 지원</li>
+              <li>미들웨어 지원</li>
+            </ul>
+            <div class="code-block" style="margin: 10px 0; font-size: 11px;">
+              <code>const useStore = create(set => ({<br/>&nbsp;&nbsp;count: 0,<br/>&nbsp;&nbsp;inc: () => set(s => ({count: s.count+1}))<br/>}))</code>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <h4>⚛️ Recoil</h4>
+            <ul>
+              <li>Facebook 개발</li>
+              <li>선언적 상태</li>
+              <li>비동기 지원</li>
+              <li>세밀한 구독</li>
+            </ul>
+            <div class="code-block" style="margin: 10px 0; font-size: 11px;">
+              <code>const countAtom = atom({<br/>&nbsp;&nbsp;key: 'count',<br/>&nbsp;&nbsp;default: 0<br/>})</code>
+            </div>
+          </div>
+          <div class="comparison-item">
+            <h4>⚙️ Jotai</h4>
+            <ul>
+              <li>Recoil 영감</li>
+              <li>더 간단한 API</li>
+              <li>TypeScript 친화적</li>
+              <li>번들 최소화</li>
+            </ul>
+            <div class="code-block" style="margin: 10px 0; font-size: 11px;">
+              <code>const countAtom = atom(0);<br/>const [count, setCount] = useAtom(<br/>&nbsp;&nbsp;countAtom<br/>)</code>
+            </div>
+          </div>
+        </div>
+
+        <h3>비교 차트</h3>
+        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+          <thead>
+            <tr style="background: rgba(123, 92, 255, 0.2);">
+              <th style="padding: 12px; text-align: left; border-bottom: 2px solid rgba(123, 92, 255, 0.5); color: #7b5cff;">라이브러리</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid rgba(123, 92, 255, 0.5); color: #7b5cff;">번들 크기</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid rgba(123, 92, 255, 0.5); color: #7b5cff;">학습 곡선</th>
+              <th style="padding: 12px; text-align: center; border-bottom: 2px solid rgba(123, 92, 255, 0.5); color: #7b5cff;">기능성</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid rgba(123, 92, 255, 0.3);">
+              <td style="padding: 12px;">Redux</td>
+              <td style="padding: 12px; text-align: center;">중간</td>
+              <td style="padding: 12px; text-align: center;">높음</td>
+              <td style="padding: 12px; text-align: center;">매우 풍부</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(123, 92, 255, 0.3);">
+              <td style="padding: 12px;">Zustand</td>
+              <td style="padding: 12px; text-align: center;">⭐⭐⭐</td>
+              <td style="padding: 12px; text-align: center;">낮음</td>
+              <td style="padding: 12px; text-align: center;">충분</td>
+            </tr>
+            <tr style="border-bottom: 1px solid rgba(123, 92, 255, 0.3);">
+              <td style="padding: 12px;">Recoil</td>
+              <td style="padding: 12px; text-align: center;">중간</td>
+              <td style="padding: 12px; text-align: center;">중간</td>
+              <td style="padding: 12px; text-align: center;">매우 풍부</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px;">Jotai</td>
+              <td style="padding: 12px; text-align: center;">⭐⭐⭐</td>
+              <td style="padding: 12px; text-align: center;">낮음</td>
+              <td style="padding: 12px; text-align: center;">충분</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="section">
+        <h2>6.5 서버 상태 관리</h2>
+        <p>API 데이터, 데이터베이스 상태 같은 비동기 데이터 관리를 위한 라이브러리들입니다.</p>
+
+        <div class="comparison-grid">
+          <div class="comparison-item">
+            <h4>React Query</h4>
+            <ul>
+              <li>자동 캐싱</li>
+              <li>백그라운드 동기화</li>
+              <li>재시도 로직</li>
+              <li>상태 머신</li>
+            </ul>
+            <p style="color: #00d4ff; font-weight: 600;">TanStack Query</p>
+          </div>
+          <div class="comparison-item">
+            <h4>SWR</h4>
+            <ul>
+              <li>간단한 API</li>
+              <li>자동 리페칭</li>
+              <li>초점 재개 시 갱신</li>
+              <li>번들 매우 작음</li>
+            </ul>
+            <p style="color: #00d4ff; font-weight: 600;">Vercel 개발</p>
+          </div>
+        </div>
+
+        <h3>React Query 기본 사용법</h3>
+        <div class="code-block">
+          <code>import { useQuery } from 'react-query';<br/><br/>function UserList() {<br/>&nbsp;&nbsp;const { data, isLoading, error } = useQuery('users', <br/>&nbsp;&nbsp;&nbsp;&nbsp;() => fetch('/api/users').then(r => r.json())<br/>&nbsp;&nbsp;);<br/>&nbsp;&nbsp;<br/>&nbsp;&nbsp;if (isLoading) return &lt;div&gt;로딩...&lt;/div&gt;;<br/>&nbsp;&nbsp;if (error) return &lt;div&gt;에러: {error.message}&lt;/div&gt;;<br/>&nbsp;&nbsp;return &lt;div&gt;{data.map(u => &lt;p key={u.id}&gt;{u.name}&lt;/p&gt;)}&lt;/div&gt;;<br/>}</code>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>상태 관리 방식 비교</h2>
+        <div class="interactive-box">
+          <h3>Context API vs Redux 데모</h3>
+          <p>같은 카운터를 두 가지 방식으로 구현했을 때의 차이를 확인하세요.</p>
+          <div class="state-demo-container">
+            <div class="state-box">
+              <h4 style="color: #7b5cff; margin-top: 0;">Context API</h4>
+              <p style="font-size: 0.9em; color: #999;">더 간단하지만 성능 최적화 어려움</p>
+              <button onclick="incrementContextCounter()">카운트 증가</button>
+              <div class="state-display" id="contextCounterDisplay">
+                Count: 0
+              </div>
+              <div class="code-block" style="font-size: 11px;">
+                <code>const [count, setCount] = useState(0)</code>
+              </div>
+            </div>
+            <div class="state-box">
+              <h4 style="color: #00d4ff; margin-top: 0;">Redux</h4>
+              <p style="font-size: 0.9em; color: #999;">더 복잡하지만 성능 최적화 용이</p>
+              <button onclick="incrementReduxCounter()">카운트 증가</button>
+              <div class="state-display" id="reduxCounterDisplay">
+                Count: 0
+              </div>
+              <div class="code-block" style="font-size: 11px;">
+                <code>dispatch({type: 'INCREMENT'})</code>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>상태 관리 선택 가이드</h2>
+        <div class="interactive-box" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 92, 255, 0.1)); border-color: rgba(0, 212, 255, 0.4);">
+          <h3>어떤 것을 선택할까?</h3>
+          <ul style="color: #c0c0c0; line-height: 2;">
+            <li>📍 <strong>useState + Props</strong>: 작은 프로젝트, 간단한 상태</li>
+            <li>🌍 <strong>Context API</strong>: 중간 규모, 테마/언어 같은 전역 설정</li>
+            <li>🎯 <strong>Zustand/Jotai</strong>: 현대적이고 간단한 상태 관리</li>
+            <li>⚙️ <strong>Redux</strong>: 복잡한 상태 로직, 시간여행 디버깅 필요</li>
+            <li>🔄 <strong>React Query</strong>: 서버 상태, 데이터 페칭</li>
+            <li>♾️ <strong>조합</strong>: UI 상태(Zustand) + 서버 상태(React Query)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2>핵심 요약</h2>
+        <div class="interactive-box" style="background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(123, 92, 255, 0.1)); border-color: rgba(0, 212, 255, 0.4);">
+          <ul style="color: #c0c0c0; line-height: 2;">
+            <li>✅ 상태는 UI 상태와 서버 상태로 나뉘며 다르게 관리합니다.</li>
+            <li>✅ Context API는 Props Drilling을 제거하지만 성능 최적화가 어렵습니다.</li>
+            <li>✅ Redux는 예측 가능한 상태 관리를 위해 단방향 데이터 흐름을 강제합니다.</li>
+            <li>✅ Zustand, Jotai 같은 현대적 대안들은 더 간단하고 가볍습니다.</li>
+            <li>✅ React Query, SWR은 서버 상태 관리를 위한 전문 라이브러리입니다.</li>
+            <li>✅ 프로젝트 규모와 복잡도에 따라 적절한 도구를 선택해야 합니다.</li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script>
+    // ==================== Redux Flow Visualization ====================
+    let reduxScene, reduxCamera, reduxRenderer;
+    let reduxFlowObjects = [];
+    let isReduxAnimating = false;
+    let dataPacket = null;
+
+    function initReduxVisualization() {
+      const canvas = document.getElementById('reduxCanvas');
+
+      reduxScene = new THREE.Scene();
+      reduxScene.background = new THREE.Color(0x0a0a14);
+
+      reduxCamera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+      reduxCamera.position.set(0, 0, 25);
+
+      reduxRenderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      reduxRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      reduxRenderer.setPixelRatio(window.devicePixelRatio);
+
+      // Lighting
+      const light = new THREE.DirectionalLight(0xffffff, 0.8);
+      light.position.set(10, 20, 10);
+      reduxScene.add(light);
+
+      const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+      reduxScene.add(ambientLight);
+
+      // Create Redux cycle boxes
+      const actionBox = createReduxBox('Action', -12, 0, 0, 0xFF6B6B);
+      reduxScene.add(actionBox);
+
+      const reducerBox = createReduxBox('Reducer', -4, 8, 0, 0xFFA500);
+      reduxScene.add(reducerBox);
+
+      const storeBox = createReduxBox('Store', 4, 8, 0, 0x4ECDC4);
+      reduxScene.add(storeBox);
+
+      const viewBox = createReduxBox('View', 12, 0, 0, 0x95E1D3);
+      reduxScene.add(viewBox);
+
+      // Draw connecting lines
+      drawReduxLine(actionBox, reducerBox);
+      drawReduxLine(reducerBox, storeBox);
+      drawReduxLine(storeBox, viewBox);
+      drawReduxLine(viewBox, actionBox);
+
+      // Create data packet
+      const packetGeometry = new THREE.SphereGeometry(0.8, 16, 16);
+      const packetMaterial = new THREE.MeshPhongMaterial({
+        color: 0x00FF00,
+        emissive: 0x00AA00,
+        shininess: 100
+      });
+      dataPacket = new THREE.Mesh(packetGeometry, packetMaterial);
+      dataPacket.position.copy(actionBox.position);
+      dataPacket.visible = false;
+      reduxScene.add(dataPacket);
+
+      animateReduxFlow();
+    }
+
+    function createReduxBox(label, x, y, z, color) {
+      const geometry = new THREE.BoxGeometry(2.5, 1.5, 1);
+      const material = new THREE.MeshPhongMaterial({
+        color: color,
+        emissive: 0x000000,
+        shininess: 100
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.set(x, y, z);
+
+      // Add label
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 128;
+      const ctx = canvas.getContext('2d');
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 28px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(label, 128, 64);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      const textMaterial = new THREE.MeshBasicMaterial({ map: texture });
+      const textGeometry = new THREE.PlaneGeometry(2.4, 1.4);
+      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+      textMesh.position.z = 0.51;
+      mesh.add(textMesh);
+
+      reduxFlowObjects.push(mesh);
+      return mesh;
+    }
+
+    function drawReduxLine(from, to) {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(
+        new Float32Array([
+          from.position.x + (to.position.x > from.position.x ? 1.3 : -1.3),
+          from.position.y,
+          from.position.z,
+          to.position.x + (from.position.x > to.position.x ? 1.3 : -1.3),
+          to.position.y,
+          to.position.z
+        ]), 3
+      ));
+      const material = new THREE.LineBasicMaterial({ color: 0x7b5cff, linewidth: 3 });
+      const line = new THREE.Line(geometry, material);
+      reduxScene.add(line);
+    }
+
+    function dispatchReduxAction() {
+      if (isReduxAnimating) return;
+      isReduxAnimating = true;
+
+      dataPacket.visible = true;
+      dataPacket.position.copy(reduxFlowObjects[0].position);
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 0.02;
+
+        // Move packet through the cycle
+        const positions = [
+          new THREE.Vector3(-12, 0, 0),
+          new THREE.Vector3(-4, 8, 0),
+          new THREE.Vector3(4, 8, 0),
+          new THREE.Vector3(12, 0, 0),
+          new THREE.Vector3(-12, 0, 0)
+        ];
+
+        const segment = Math.floor(progress * 4);
+        const segmentProgress = (progress * 4) % 1;
+
+        if (segment < positions.length - 1) {
+          const currentPos = positions[segment];
+          const nextPos = positions[segment + 1];
+          dataPacket.position.lerpVectors(currentPos, nextPos, segmentProgress);
+
+          // Highlight boxes
+          reduxFlowObjects.forEach((box, idx) => {
+            box.material.emissive.setHex(idx === segment ? 0x00ff00 : 0x000000);
+          });
+        } else {
+          clearInterval(interval);
+          dataPacket.visible = false;
+          reduxFlowObjects.forEach(box => {
+            box.material.emissive.setHex(0x000000);
+          });
+          isReduxAnimating = false;
+        }
+      }, 50);
+    }
+
+    function resetReduxFlow() {
+      if (dataPacket) {
+        dataPacket.visible = false;
+      }
+      reduxFlowObjects.forEach(box => {
+        box.material.emissive.setHex(0x000000);
+      });
+      isReduxAnimating = false;
+    }
+
+    function animateReduxFlow() {
+      requestAnimationFrame(animateReduxFlow);
+
+      reduxFlowObjects.forEach(box => {
+        box.rotation.x += 0.002;
+        box.rotation.y += 0.003;
+      });
+
+      if (dataPacket && dataPacket.visible) {
+        dataPacket.rotation.x += 0.05;
+        dataPacket.rotation.y += 0.07;
+      }
+
+      reduxRenderer.render(reduxScene, reduxCamera);
+    }
+
+    // ==================== Counter Demos ====================
+    let contextCounter = 0;
+    let reduxCounter = 0;
+
+    function incrementContextCounter() {
+      contextCounter++;
+      document.getElementById('contextCounterDisplay').textContent = `Count: ${contextCounter}`;
+    }
+
+    function incrementReduxCounter() {
+      reduxCounter++;
+      document.getElementById('reduxCounterDisplay').textContent = `Count: ${reduxCounter}`;
+    }
+
+    // ==================== Window Resize Handler ====================
+    window.addEventListener('resize', () => {
+      const canvas = document.getElementById('reduxCanvas');
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+
+      if (reduxCamera) {
+        reduxCamera.aspect = width / height;
+        reduxCamera.updateProjectionMatrix();
+      }
+      if (reduxRenderer) {
+        reduxRenderer.setSize(width, height);
+      }
+    });
+
+    // ==================== Initialize on Load ====================
+    window.addEventListener('load', () => {
+      initReduxVisualization();
+    });
+  </script>
+</body>
+</html>

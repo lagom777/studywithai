@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. 열역학 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html" style="color:var(--accent);font-weight:600;">3. 열역학</a></li>
+    <li><a href="04-waves.html">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>열역학</em>:<br>분자의 춤</h1>
+  <p class="authors">Chapter 3 — Thermodynamics & Kinetic Theory</p>
+  <p class="affiliation">기체 분자 운동 시뮬레이터 포함</p>
+</header>
+
+<h2>열역학 제0법칙과 온도</h2>
+<p>두 물체가 각각 제3의 물체와 열적 평형에 있으면, 두 물체도 서로 열적 평형에 있습니다. 이것이 "온도"라는 개념의 기초입니다.</p>
+
+<h2>열역학 법칙들</h2>
+
+<div class="info-card energy">
+  <h4>제1법칙: 에너지 보존</h4>
+  <p>계의 내부 에너지 변화는 흡수한 열에서 한 일을 뺀 것과 같다.</p>
+</div>
+<div class="formula">ΔU = Q − W</div>
+
+<div class="info-card quantum">
+  <h4>제2법칙: 엔트로피 증가</h4>
+  <p>고립된 계의 엔트로피는 절대 감소하지 않는다. 열은 자발적으로 차가운 곳에서 뜨거운 곳으로 이동하지 않는다.</p>
+</div>
+<div class="formula">ΔS ≥ 0 &nbsp;&nbsp;(고립계)</div>
+
+<div class="info-card">
+  <h4>제3법칙: 절대영도</h4>
+  <p>어떤 유한한 과정으로도 절대영도(0K)에 도달할 수 없다.</p>
+</div>
+
+<h2>기체 분자 운동 시뮬레이터</h2>
+<p>온도를 높이면 분자들이 더 빠르게 움직입니다. 슬라이더를 조절하여 온도에 따른 분자 운동을 관찰하세요.</p>
+
+<div class="scene-3d" id="gas-scene">
+  <div class="scene-controls">
+    <label>온도: <span id="temp-val">300</span>K</label>
+    <input type="range" id="temp-slider" min="50" max="1000" value="300">
+    <label>분자 수: <span id="num-val">50</span></label>
+    <input type="range" id="num-slider" min="10" max="100" value="50">
+  </div>
+</div>
+<span class="interact-hint">🌡️ 온도를 올리면 분자 속도가 증가합니다</span>
+
+<h2>이상기체 법칙</h2>
+<div class="formula">PV = nRT</div>
+<p>P는 압력, V는 부피, n은 몰 수, R은 기체 상수(8.314 J/mol·K), T는 절대 온도입니다.</p>
+
+<h3>분자 운동론</h3>
+<p>기체의 압력은 분자들이 벽에 충돌하면서 생기며, 온도는 분자의 평균 운동 에너지에 비례합니다:</p>
+<div class="formula">½m⟨v²⟩ = (3/2)kT</div>
+
+<div class="info-card wave">
+  <h4>💡 맥스웰-볼츠만 분포</h4>
+  <p>같은 온도에서도 분자들의 속도는 다양합니다. 시뮬레이터에서 빠른 분자와 느린 분자가 공존하는 것을 확인하세요!</p>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('gas-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 0, 12);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Box wireframe
+  const boxGeo = new THREE.BoxGeometry(8, 6, 6);
+  const boxMat = new THREE.LineBasicMaterial({ color: 0x00d4ff, transparent: true, opacity: 0.3 });
+  const boxEdges = new THREE.LineSegments(new THREE.EdgesGeometry(boxGeo), boxMat);
+  scene.add(boxEdges);
+
+  let molecules = [];
+  let numMolecules = 50;
+  let temperature = 300;
+
+  function createMolecules(n) {
+    molecules.forEach(m => scene.remove(m.mesh));
+    molecules = [];
+    for (let i = 0; i < n; i++) {
+      const geo = new THREE.SphereGeometry(0.1, 8, 8);
+      const hue = Math.random();
+      const color = new THREE.Color().setHSL(hue, 0.8, 0.6);
+      const mat = new THREE.MeshBasicMaterial({ color });
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(
+        (Math.random() - 0.5) * 7,
+        (Math.random() - 0.5) * 5,
+        (Math.random() - 0.5) * 5
+      );
+      const speed = Math.sqrt(temperature / 300) * (0.5 + Math.random() * 1.5);
+      const vel = new THREE.Vector3(
+        (Math.random() - 0.5) * speed,
+        (Math.random() - 0.5) * speed,
+        (Math.random() - 0.5) * speed
+      );
+      molecules.push({ mesh, vel });
+      scene.add(mesh);
+    }
+  }
+  createMolecules(numMolecules);
+
+  const tempSlider = document.getElementById('temp-slider');
+  const tempVal = document.getElementById('temp-val');
+  const numSlider = document.getElementById('num-slider');
+  const numVal = document.getElementById('num-val');
+
+  tempSlider.addEventListener('input', () => {
+    temperature = parseInt(tempSlider.value);
+    tempVal.textContent = temperature;
+    const factor = Math.sqrt(temperature / 300);
+    molecules.forEach(m => {
+      m.vel.normalize().multiplyScalar(factor * (0.5 + Math.random() * 1.5));
+    });
+  });
+  numSlider.addEventListener('input', () => {
+    numMolecules = parseInt(numSlider.value);
+    numVal.textContent = numMolecules;
+    createMolecules(numMolecules);
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const speedFactor = Math.sqrt(temperature / 300) * 0.04;
+
+    molecules.forEach(m => {
+      m.mesh.position.add(m.vel.clone().multiplyScalar(speedFactor));
+      // Bounce off walls
+      if (Math.abs(m.mesh.position.x) > 3.8) m.vel.x *= -1;
+      if (Math.abs(m.mesh.position.y) > 2.8) m.vel.y *= -1;
+      if (Math.abs(m.mesh.position.z) > 2.8) m.vel.z *= -1;
+    });
+
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

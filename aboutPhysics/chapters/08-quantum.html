@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8. 양자역학 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html">3. 열역학</a></li>
+    <li><a href="04-waves.html">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html" style="color:var(--accent);font-weight:600;">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>양자</em>역학:<br>확률의 세계</h1>
+  <p class="authors">Chapter 8 — Quantum Mechanics & Wave Functions</p>
+  <p class="affiliation">전자 궤도 확률 분포 시뮬레이터 포함</p>
+</header>
+
+<h2>양자역학의 탄생</h2>
+<p>20세기 초, 흑체복사, 광전효과, 수소 스펙트럼 등 고전물리로 설명할 수 없는 현상들이 발견되면서 양자역학이 탄생했습니���.</p>
+
+<div class="info-card quantum">
+  <h4>플랑크의 양자 가설 (1900)</h4>
+  <p>에너지는 연속적이 아니라 불연속적인 덩어리(양자)로 방출/흡수된다: E = nhf</p>
+</div>
+
+<div class="info-card energy">
+  <h4>드브로이 파동 (1924)</h4>
+  <p>모든 물질은 파동적 성질을 가진다: λ = h/p = h/(mv)</p>
+</div>
+
+<h2>슈뢰딩거 방정식</h2>
+<p>양자역학의 핵심 방정식. 파동함수 ψ의 시간 변화를 기술합니다:</p>
+<div class="formula">iℏ ∂ψ/∂t = Ĥψ</div>
+
+<div class="info-card">
+  <h4>확률 해석 (보른 규칙)</h4>
+  <p>|ψ(x)|²은 위치 x에서 입자를 발견할 확률 밀도입니다. 측정 전까지 입자의 위치는 "확정"되지 않습니다.</p>
+</div>
+
+<h2>수소 원자 전자 궤도</h2>
+<p>아래에서 양자수(n, l)를 바꿔가며 전자의 확률 분포를 3D로 관찰하세요.</p>
+
+<div class="scene-3d" id="orbital-scene">
+  <div class="scene-controls">
+    <label>n = <span id="n-val">2</span></label>
+    <input type="range" id="n-slider" min="1" max="4" value="2">
+    <label>l = <span id="l-val">1</span></label>
+    <input type="range" id="l-slider" min="0" max="3" value="1">
+  </div>
+</div>
+<span class="interact-hint">🌀 양자수를 바꿔서 오비탈 모양 변화를 관찰하세요</span>
+
+<h2>불확정성 원리</h2>
+<div class="formula">Δx · Δp ≥ ℏ/2</div>
+<p>위치를 정확히 알수록 운동량은 불확실해지고, 운동량을 정확히 알수록 위치가 불확실해집니다. 이것은 측정 기술의 한계가 아니라 자연의 근본적 성질입니다.</p>
+
+<h3>양자 터널링</h3>
+<div class="info-card wave">
+  <h4>고전적으로 불가능한 일</h4>
+  <p>입자가 에너지 장벽을 "통과"할 수 있습니다. 터널 다이오드, 핵융합, STM(주사형 터널링 현미경)의 원리입니다.</p>
+</div>
+
+<h3>양자 얽힘</h3>
+<p>두 입자가 얽히면, 하나를 측정하는 순간 다른 입자의 상태가 즉시 결정됩니다. 아인슈타인은 이를 "으스스한 원격 작용"이라 불렀지만, 실험으로 확인된 실재입니다.</p>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('orbital-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 3, 8);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  let particles = [];
+  let n = 2, l = 1;
+
+  function generateOrbital() {
+    particles.forEach(p => scene.remove(p));
+    particles = [];
+
+    const numPoints = 2000;
+    const geo = new THREE.BufferGeometry();
+    const positions = new Float32Array(numPoints * 3);
+    const colors = new Float32Array(numPoints * 3);
+
+    for (let i = 0; i < numPoints; i++) {
+      // Simple orbital approximation
+      const r = (Math.random() ** 0.5) * n * 2;
+      const theta = Math.random() * Math.PI;
+      const phi = Math.random() * Math.PI * 2;
+
+      let prob;
+      if (l === 0) {
+        // s orbital - spherical
+        prob = Math.exp(-r / n);
+      } else if (l === 1) {
+        // p orbital - dumbbell
+        prob = Math.exp(-r / n) * Math.abs(Math.cos(theta));
+      } else if (l === 2) {
+        // d orbital - cloverleaf
+        prob = Math.exp(-r / n) * Math.sin(theta) * Math.sin(theta) * Math.abs(Math.cos(2 * phi));
+      } else {
+        prob = Math.exp(-r / n) * Math.sin(theta) * Math.abs(Math.cos(3 * phi));
+      }
+
+      if (Math.random() < prob) {
+        const x = r * Math.sin(theta) * Math.cos(phi);
+        const y = r * Math.sin(theta) * Math.sin(phi);
+        const z = r * Math.cos(theta);
+        positions[i * 3] = x;
+        positions[i * 3 + 1] = y;
+        positions[i * 3 + 2] = z;
+
+        // Color by probability
+        const intensity = prob;
+        colors[i * 3] = 0.0 + intensity * 0.6;     // R
+        colors[i * 3 + 1] = 0.5 + intensity * 0.3; // G
+        colors[i * 3 + 2] = 1.0;                     // B
+      }
+    }
+
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+    const mat = new THREE.PointsMaterial({
+      size: 0.05,
+      vertexColors: true,
+      transparent: true,
+      opacity: 0.7
+    });
+    const points = new THREE.Points(geo, mat);
+    scene.add(points);
+    particles.push(points);
+  }
+  generateOrbital();
+
+  // Nucleus
+  const nucleus = new THREE.Mesh(
+    new THREE.SphereGeometry(0.15, 16, 16),
+    new THREE.MeshBasicMaterial({ color: 0xff6b35 })
+  );
+  scene.add(nucleus);
+
+  const nSlider = document.getElementById('n-slider');
+  const lSlider = document.getElementById('l-slider');
+  const nVal = document.getElementById('n-val');
+  const lVal = document.getElementById('l-val');
+
+  nSlider.addEventListener('input', () => {
+    n = parseInt(nSlider.value);
+    nVal.textContent = n;
+    lSlider.max = n - 1;
+    if (l >= n) { l = n - 1; lSlider.value = l; lVal.textContent = l; }
+    generateOrbital();
+  });
+  lSlider.addEventListener('input', () => {
+    l = parseInt(lSlider.value);
+    lVal.textContent = l;
+    generateOrbital();
+  });
+
+  let angle = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    angle += 0.005;
+    scene.rotation.y = angle;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

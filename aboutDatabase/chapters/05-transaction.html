@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5장. 트랜잭션과 동시성 제어</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html">1. 관계형 DB 기초</a></li>
+    <li><a href="02-sql.html">2. SQL 핵심</a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+
+<h1>5장. 트랜잭션과 동시성 제어</h1>
+
+<section id="section-1">
+  <h2>1. 트랜잭션이란?</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>은행에서 A 계좌에서 돈을 빼고 B 계좌에 넣는 송금 과정을 생각해봅시다.</p>
+    <ul>
+      <li>A에서 100만원 빼기</li>
+      <li>B에 100만원 더하기</li>
+    </ul>
+    <p>만약 첫 번째 작업은 완료되었는데 컴퓨터가 꺼진다면? 돈이 사라집니다!</p>
+    <p><strong>트랜잭션:</strong> 이 두 작업을 하나의 묶음으로 취급해서 "둘 다 성공" 또는 "둘 다 실패"만 가능하게 만듭니다.</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>정의:</strong> 트랜잭션(Transaction)은 데이터베이스의 논리적 단위로, 여러 개의 SQL 문들이 모두 성공하거나 모두 실패해야 하는 작업의 집합입니다.</p>
+    <p><strong>명령어:</strong></p>
+    <ul>
+      <li><code>BEGIN</code> 또는 <code>START TRANSACTION</code>: 트랜잭션 시작</li>
+      <li><code>COMMIT</code>: 모든 변경 사항을 영구 저장</li>
+      <li><code>ROLLBACK</code>: 트랜잭션 시작 전으로 되돌리기</li>
+    </ul>
+    <p><strong>Atomicity Guarantee:</strong> 트랜잭션 내의 모든 작업이 원자적(atomic)으로 처리되어야 함</p>
+  </div>
+</section>
+
+<section id="section-2">
+  <h2>2. ACID 속성</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>트랜잭션이 안전하려면 4가지 속성을 가져야 합니다:</p>
+    <ul>
+      <li><strong>원자성(Atomicity):</strong> 다 되거나 다 안 되거나. 반쪽짜리는 없음.</li>
+      <li><strong>일관성(Consistency):</strong> 데이터 규칙을 위반할 수 없음. (예: 나이는 음수 불가)</li>
+      <li><strong>격리성(Isolation):</strong> 여러 트랜잭션이 동시에 실행되어도 서로 방해하지 않음.</li>
+      <li><strong>지속성(Durability):</strong> 한번 저장되면 영구적. 전기가 나가도 복구됨.</li>
+    </ul>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>원자성:</strong> All or Nothing. 트랜잭션의 모든 연산이 수행되거나 하나도 수행되지 않음.</p>
+    <p><strong>일관성:</strong> 트랜잭션 시작 전과 후의 무결성 제약 조건이 모두 만족되어야 함.</p>
+    <p><strong>격리성:</strong> 동시 실행 중인 트랜잭션들 간의 상호 간섭이 없어야 함. Serializability 보장.</p>
+    <p><strong>지속성:</strong> 커밋된 트랜잭션의 데이터는 시스템 장애 후에도 복구 가능해야 함.</p>
+    <p><strong>WAL (Write-Ahead Logging):</strong> 디스크에 쓰기 전에 로그에 먼저 기록. ARIES 복구 알고리즘 사용.</p>
+  </div>
+</section>
+
+<section id="section-3">
+  <h2>3. 격리 수준</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>도서관에서 같은 책을 여러 명이 동시에 볼 때의 규칙처럼, DB도 격리 수준을 정합니다:</p>
+    <ul>
+      <li><strong>READ UNCOMMITTED:</strong> 누구나 마음대로 접근 (가장 빠름, 가장 위험)</li>
+      <li><strong>READ COMMITTED:</strong> 완료된 책만 봄 (적당함)</li>
+      <li><strong>REPEATABLE READ:</strong> 같은 책은 같은 사람과만 공유 (엄격함)</li>
+      <li><strong>SERIALIZABLE:</strong> 한 명씩 순서대로 (가장 안전, 가장 느림)</li>
+    </ul>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>READ UNCOMMITTED:</strong> 커밋되지 않은 데이터 읽기 가능. Dirty Read 허용.</p>
+    <p><strong>READ COMMITTED:</strong> 커밋된 데이터만 읽기. Non-repeatable Read 발생 가능.</p>
+    <p><strong>REPEATABLE READ:</strong> 트랜잭션 중에 읽은 데이터는 항상 같음. Phantom Read 발생 가능.</p>
+    <p><strong>SERIALIZABLE:</strong> 모든 격리 수준의 이상현상(Dirty Read, Non-repeatable Read, Phantom Read) 방지.</p>
+    <p><strong>이상 현상:</strong></p>
+    <ul>
+      <li>Dirty Read: 커밋되지 않은 데이터를 다른 트랜잭션이 읽음</li>
+      <li>Non-repeatable Read: 같은 데이터를 읽을 때마다 값이 달라짐</li>
+      <li>Phantom Read: 범위 검색 중 새 행이 추가됨</li>
+    </ul>
+  </div>
+</section>
+
+<section id="section-4">
+  <h2>4. 잠금과 동시성</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>화장실 문에 잠금장치가 있는 이유와 같습니다:</p>
+    <ul>
+      <li><strong>공유 잠금(Shared Lock):</strong> 여러 명이 함께 책을 읽을 수 있음 (쓰기는 불가)</li>
+      <li><strong>배타 잠금(Exclusive Lock):</strong> 한 명만 독점해서 쓸 수 있음</li>
+    </ul>
+    <p>잠금을 잘못 관리하면 <strong>데드락</strong>이 발생합니다. (A가 B를 기다리고, B가 A를 기다리는 상황)</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>2PL (Two-Phase Locking):</strong> 확장 단계(Growing Phase)에서만 잠금 획득, 축소 단계(Shrinking Phase)에서만 해제.</p>
+    <p><strong>데드락 탐지 및 예방:</strong></p>
+    <ul>
+      <li>Wait-for Graph를 이용한 사이클 탐지</li>
+      <li>Timeout 기반 해제</li>
+      <li>타임스탬프 기반 우선순위 지정</li>
+    </ul>
+    <p><strong>MVCC (Multi-Version Concurrency Control):</strong> 데이터의 여러 버전을 유지하여 읽기와 쓰기를 동시에 진행. PostgreSQL, MySQL InnoDB에서 사용.</p>
+  </div>
+</section>
+
+<div class="interactive-demo" style="margin:40px 0;padding:20px;background:#f0f4ff;border-radius:8px;border-left:4px solid #7b5cff;">
+  <h3>🏦 ACID 속성 시뮬레이터</h3>
+  <p style="margin-bottom:15px;font-size:14px;">송금 시뮬레이션: 김철수 계좌 → 이영희 계좌</p>
+
+  <div style="display:flex;gap:30px;margin:20px 0;">
+    <div style="flex:1;padding:15px;background:#fff;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <h4 style="margin:0 0 10px 0;">김철수 계좌</h4>
+      <p style="font-size:24px;font-weight:bold;color:#7b5cff;" id="account1">1,000,000원</p>
+    </div>
+    <div style="flex:1;padding:15px;background:#fff;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+      <h4 style="margin:0 0 10px 0;">이영희 계좌</h4>
+      <p style="font-size:24px;font-weight:bold;color:#00d4ff;" id="account2">500,000원</p>
+    </div>
+  </div>
+
+  <div style="margin:20px 0;">
+    <label style="display:block;margin-bottom:10px;">
+      <input type="checkbox" id="failureToggle"> 송금 중 장애 발생 시뮬레이션
+    </label>
+    <button onclick="simulateTransfer()" style="padding:10px 20px;background:#7b5cff;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">100,000원 송금 시작</button>
+    <button onclick="resetTransaction()" style="margin-left:10px;padding:10px 20px;background:#999;color:#fff;border:none;border-radius:6px;cursor:pointer;font-weight:bold;">초기화</button>
+  </div>
+
+  <div id="transaction-log" style="margin-top:15px;padding:10px;background:#fff;border-radius:6px;min-height:60px;font-size:13px;font-family:monospace;line-height:1.6;color:#666;overflow-y:auto;max-height:120px;"></div>
+</div>
+
+<script>
+let account1 = 1000000;
+let account2 = 500000;
+const transferAmount = 100000;
+
+function updateDisplay() {
+  document.getElementById('account1').textContent = account1.toLocaleString() + '원';
+  document.getElementById('account2').textContent = account2.toLocaleString() + '원';
+}
+
+function logTransaction(msg) {
+  const log = document.getElementById('transaction-log');
+  const time = new Date().toLocaleTimeString();
+  log.innerHTML += `[${time}] ${msg}\n`;
+  log.scrollTop = log.scrollHeight;
+}
+
+function simulateTransfer() {
+  const log = document.getElementById('transaction-log');
+  log.innerHTML = '';
+  const hasFailure = document.getElementById('failureToggle').checked;
+
+  logTransaction('트랜잭션 시작 (BEGIN)');
+
+  setTimeout(() => {
+    logTransaction('Step 1: 김철수 계좌에서 ' + transferAmount.toLocaleString() + '원 출금');
+    account1 -= transferAmount;
+    updateDisplay();
+  }, 500);
+
+  setTimeout(() => {
+    if (hasFailure) {
+      logTransaction('⚠️ 장애 발생! (네트워크 끊김)');
+      logTransaction('ROLLBACK 실행 - 모든 변경 취소');
+      account1 += transferAmount;
+      updateDisplay();
+    } else {
+      logTransaction('Step 2: 이영희 계좌에 ' + transferAmount.toLocaleString() + '원 입금');
+      account2 += transferAmount;
+      updateDisplay();
+    }
+  }, 1500);
+
+  setTimeout(() => {
+    if (!hasFailure) {
+      logTransaction('✅ COMMIT - 트랜잭션 완료 (데이터 영구 저장)');
+    }
+    logTransaction('ACID 속성 확보: ' + (hasFailure ? '원자성(Rollback)' : '원자성, 일관성, 지속성'));
+  }, 2500);
+}
+
+function resetTransaction() {
+  account1 = 1000000;
+  account2 = 500000;
+  updateDisplay();
+  document.getElementById('transaction-log').innerHTML = '';
+}
+
+updateDisplay();
+</script>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="04-index.html" style="text-decoration:none;">← 인덱스와 최적화</a>
+  <a href="06-nosql.html" style="text-decoration:none;">NoSQL →</a>
+</div>
+
+</main>
+</div>
+</body>
+</html>

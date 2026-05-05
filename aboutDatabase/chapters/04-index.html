@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4장. 인덱스와 최적화</title>
+<link rel="stylesheet" href="../styles.css">
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-relational.html">1. 관계형 DB 기초</a></li>
+    <li><a href="02-sql.html">2. SQL 핵심</a></li>
+    <li><a href="03-normalization.html">3. 정규화</a></li>
+    <li><a href="04-index.html">4. 인덱스와 최적화</a></li>
+    <li><a href="05-transaction.html">5. 트랜잭션과 동시성</a></li>
+    <li><a href="06-nosql.html">6. NoSQL</a></li>
+    <li><a href="07-distributed.html">7. 분산 DB</a></li>
+    <li><a href="08-modeling.html">8. 데이터 모델링</a></li>
+    <li><a href="09-patterns.html">9. 실전 설계 패턴</a></li>
+  </ol>
+</aside>
+<main>
+
+<h1>4장. 인덱스와 최적화</h1>
+
+<section id="section-1">
+  <h2>1. 인덱스란?</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>인덱스는 책의 목차나 색인과 같습니다. 전체 페이지를 하나하나 넘기지 않고, 원하는 내용을 바로 찾을 수 있게 해줍니다.</p>
+    <p>예를 들어, 1000명의 학생 정보에서 "이름이 김철수인 학생"을 찾을 때:</p>
+    <ul>
+      <li><strong>인덱스 없음:</strong> 1000명을 처음부터 끝까지 하나씩 확인 → 평균 500번</li>
+      <li><strong>인덱스 있음:</strong> 알파벳 목차로 "김"을 찾으면 → 약 10번</li>
+    </ul>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>정의:</strong> 인덱스(Index)는 데이터 테이블의 특정 컬럼에 대해 별도의 데이터 구조(주로 B-Tree)를 유지하여 검색 성능을 개선하는 메커니즘입니다.</p>
+    <p><strong>시간복잡도:</strong></p>
+    <ul>
+      <li>Full Scan: O(n) - n은 테이블의 행 수</li>
+      <li>B-Tree 인덱스: O(log n)</li>
+    </ul>
+    <p><strong>비용:</strong> 인덱스 유지에 따른 쓰기 작업 오버헤드, 저장 공간 증가</p>
+  </div>
+</section>
+
+<section id="section-2">
+  <h2>2. B-Tree와 B+Tree</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>B-Tree는 도서관의 분류 체계와 같습니다:</p>
+    <ul>
+      <li><strong>1층:</strong> 큰 카테고리 (문학, 과학, 역사...)</li>
+      <li><strong>2층:</strong> 작은 카테고리 (한국 문학, 외국 문학...)</li>
+      <li><strong>3층:</strong> 원하는 책을 찾음</li>
+    </ul>
+    <p>B+Tree는 B-Tree의 개선판으로, 리프 노드들이 서로 연결되어 있어서 범위 검색이 더 빠릅니다.</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>B-Tree 특성:</strong></p>
+    <ul>
+      <li>차수(Order) m인 B-Tree는 최대 m개의 자식을 가짐</li>
+      <li>모든 리프 노드는 같은 깊이(균형 유지)</li>
+      <li>삽입/삭제 시 분할(split)과 병합(merge) 연산 수행</li>
+    </ul>
+    <p><strong>B+Tree vs B-Tree:</strong> B+Tree는 내부 노드에 데이터를 저장하지 않고 인덱스만 저장, 리프 노드에만 실제 데이터 저장. 리프 노드를 연결 리스트로 연결하여 범위 검색 시 O(log n) 후 선형 순회.</p>
+  </div>
+</section>
+
+<section id="section-3">
+  <h2>3. 쿼리 실행 계획(EXPLAIN)</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>내비게이션이 목적지로 가는 최적 경로를 미리 알려주듯이, 데이터베이스도 SQL 쿼리를 실행하기 전에 최적 경로를 계획합니다.</p>
+    <p>이 계획을 확인하려면 SQL 앞에 EXPLAIN을 붙입니다:</p>
+    <code>EXPLAIN SELECT * FROM users WHERE age > 30;</code>
+    <p>이 명령은 DB가 어떤 경로로 데이터를 찾을 것인지 보여줍니다.</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>쿼리 옵티마이저:</strong> 가능한 모든 실행 계획의 비용을 추정하고 최소 비용 계획을 선택합니다.</p>
+    <p><strong>비용 기반 최적화(Cost-Based Optimization):</strong></p>
+    <ul>
+      <li>Full Scan: I/O 비용 = 전체 페이지 수</li>
+      <li>Index Scan: I/O 비용 = 인덱스 높이 + 결과 페이지 수</li>
+      <li>Index Seek: 가장 효율적 (인덱스로 범위를 좁힌 후 검색)</li>
+    </ul>
+    <p><strong>통계 정보:</strong> 카디널리티(Cardinality), 페이지 수, 히스토그램을 기반으로 계산</p>
+  </div>
+</section>
+
+<section id="section-4">
+  <h2>4. 인덱스 설계 전략</h2>
+
+  <div class="easy-version">
+    <h4>쉬운 설명</h4>
+    <p>어디에 인덱스를 걸어야 빨리 찾을 수 있을까?</p>
+    <ul>
+      <li><strong>WHERE 절:</strong> 가장 자주 검색하는 컬럼</li>
+      <li><strong>JOIN 절:</strong> 두 테이블을 연결하는 컬럼</li>
+      <li><strong>ORDER BY 절:</strong> 정렬하는 컬럼</li>
+    </ul>
+    <p>예: "users 테이블에서 나이 > 30인 사람을 찾는다" → age 컬럼에 인덱스!</p>
+  </div>
+
+  <div class="paper-version">
+    <h4>논문 수준 설명</h4>
+    <p><strong>복합 인덱스(Composite Index):</strong> 여러 컬럼을 함께 인덱싱. 순서가 중요 (WHERE a AND b vs WHERE b AND a에서 성능 차이)</p>
+    <p><strong>커버링 인덱스(Covering Index):</strong> 인덱스만으로 쿼리가 완성되어 테이블 접근이 불필요</p>
+    <p><strong>선택도(Selectivity):</strong> 컬럼의 고유값 비율. 선택도가 높을수록 인덱싱 효과 큼</p>
+    <p><strong>카디널리티(Cardinality):</strong> 컬럼의 서로 다른 값의 개수. 낮은 카디널리티(성별 등)는 인덱싱 효율 낮음</p>
+  </div>
+</section>
+
+<div class="threejs-container" id="btree-3d">
+  <div class="threejs-label">3D · B-TREE INDEX 시각화</div>
+  <div id="canvas-container" style="width:100%;height:600px;background:#f5f5f5;border-radius:8px;position:relative;"></div>
+  <div class="threejs-controls" style="margin-top:12px;display:flex;gap:8px;justify-content:center;">
+    <button onclick="searchBTree(15)" style="padding:8px 12px;background:#7b5cff;color:#fff;border:none;border-radius:6px;cursor:pointer;">검색: 15</button>
+    <button onclick="searchBTree(42)" style="padding:8px 12px;background:#7b5cff;color:#fff;border:none;border-radius:6px;cursor:pointer;">검색: 42</button>
+    <button onclick="searchBTree(78)" style="padding:8px 12px;background:#7b5cff;color:#fff;border:none;border-radius:6px;cursor:pointer;">검색: 78</button>
+    <button onclick="resetBTree()" style="padding:8px 12px;background:#999;color:#fff;border:none;border-radius:6px;cursor:pointer;">초기화</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  let scene, camera, renderer, btreeGroup, searchPath = [];
+
+  function initScene() {
+    const container = document.getElementById('canvas-container');
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf5f5f5);
+
+    camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    camera.position.z = 15;
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    // Lighting
+    const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    light1.position.set(10, 10, 10);
+    light1.castShadow = true;
+    scene.add(light1);
+
+    const light2 = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(light2);
+
+    btreeGroup = new THREE.Group();
+    scene.add(btreeGroup);
+
+    createBTree();
+    animate();
+  }
+
+  function createBTree() {
+    btreeGroup.clear();
+
+    // Root node
+    const rootBox = createNode(0, 6, 0, [30, 50]);
+    btreeGroup.add(rootBox);
+
+    // Level 2 nodes
+    for (let i = 0; i < 3; i++) {
+      const x = -6 + i * 6;
+      const y = 2;
+      const nodeBox = createNode(x, y, 0, [15 + i*10, 35 + i*10, 60 + i*10]);
+      btreeGroup.add(nodeBox);
+
+      // Connect to root
+      drawLine(0, 6, 0, x, y, 0);
+    }
+
+    // Level 3 (leaf nodes)
+    const leafPositions = [
+      [-8, -2, 0, [10, 20]],
+      [-4, -2, 0, [25, 35]],
+      [0, -2, 0, [42, 55, 70]],
+      [4, -2, 0, [78, 85, 92]],
+      [8, -2, 0, [100, 110]]
+    ];
+
+    leafPositions.forEach(([x, y, z, values]) => {
+      const leafBox = createNode(x, y, z, values);
+      btreeGroup.add(leafBox);
+    });
+  }
+
+  function createNode(x, y, z, values) {
+    const group = new THREE.Group();
+
+    const geometry = new THREE.BoxGeometry(2.5, 1.2, 0.5);
+    const material = new THREE.MeshPhongMaterial({ color: 0x7b5cff });
+    const box = new THREE.Mesh(geometry, material);
+    box.position.set(x, y, z);
+    box.castShadow = true;
+    box.userData = { values: values, x: x, y: y, z: z };
+    group.add(box);
+
+    // Label
+    const canvas = document.createElement('canvas');
+    canvas.width = 256;
+    canvas.height = 128;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 20px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(values.join(', '), 128, 64);
+
+    const texture = new THREE.CanvasTexture(canvas);
+    const labelGeom = new THREE.PlaneGeometry(2.4, 1.1);
+    const labelMat = new THREE.MeshBasicMaterial({ map: texture });
+    const labelMesh = new THREE.Mesh(labelGeom, labelMat);
+    labelMesh.position.z = 0.3;
+    group.add(labelMesh);
+
+    return group;
+  }
+
+  function drawLine(x1, y1, z1, x2, y2, z2) {
+    const geometry = new THREE.BufferGeometry();
+    const positions = new Float32Array([x1, y1, z1, x2, y2, z2]);
+    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+    const material = new THREE.LineBasicMaterial({ color: 0xcccccc, linewidth: 2 });
+    const line = new THREE.Line(geometry, material);
+    btreeGroup.add(line);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
+  }
+
+  window.searchBTree = function(value) {
+    resetBTree();
+
+    // Reset colors
+    btreeGroup.children.forEach(child => {
+      if (child.children[0] && child.children[0].material) {
+        child.children[0].material.color.set(0x7b5cff);
+      }
+    });
+
+    // Simulate search path
+    const path = findSearchPath(value);
+
+    // Highlight path
+    let delay = 0;
+    path.forEach(node => {
+      setTimeout(() => {
+        if (node.children[0] && node.children[0].material) {
+          node.children[0].material.color.set(0x00d4ff);
+        }
+      }, delay);
+      delay += 300;
+    });
+  };
+
+  function findSearchPath(value) {
+    const path = [];
+    btreeGroup.children.forEach(child => {
+      if (child.userData && child.userData.values) {
+        const values = child.userData.values;
+        if (values.includes(value) ||
+            (value >= Math.min(...values) && value <= Math.max(...values))) {
+          path.push(child);
+        }
+      }
+    });
+    return path;
+  }
+
+  window.resetBTree = function() {
+    btreeGroup.children.forEach(child => {
+      if (child.children[0] && child.children[0].material) {
+        child.children[0].material.color.set(0x7b5cff);
+      }
+    });
+  };
+
+  window.addEventListener('load', initScene);
+})();
+</script>
+
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--rule);">
+  <a href="03-normalization.html" style="text-decoration:none;">← 정규화</a>
+  <a href="05-transaction.html" style="text-decoration:none;">트랜잭션과 동시성 →</a>
+</div>
+
+</main>
+</div>
+</body>
+</html>

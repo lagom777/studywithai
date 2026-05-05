@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9장. 자원과 환경</title>
+<link rel="stylesheet" href="../styles.css">
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;border:none;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌍 표지 · 소개</a></li>
+    <li><a href="01-structure.html">1. 지구의 구조</a></li>
+    <li><a href="02-plate-tectonics.html">2. 판구조론</a></li>
+    <li><a href="03-minerals-rocks.html">3. 광물과 암석</a></li>
+    <li><a href="04-atmosphere.html">4. 대기과학</a></li>
+    <li><a href="05-oceanography.html">5. 해양학</a></li>
+    <li><a href="06-climate-change.html">6. 기후변화</a></li>
+    <li><a href="07-geological-time.html">7. 지질시대</a></li>
+    <li><a href="08-natural-disasters.html">8. 자연재해</a></li>
+    <li><a href="09-resources-environment.html">9. 자원과 환경</a></li>
+  </ol>
+</aside>
+<main>
+<h2>9. 자원과 환경</h2>
+
+<div class="info-box">
+<p><strong>지구의 자원은 유한합니다.</strong> 에너지 자원, 광물 자원, 수자원 등 인류 문명의 기반이 되는 자원들의 형성 과정과 지속가능한 이용 방법을 이해하는 것이 중요합니다.</p>
+<p>아래 3D 시각화에서 전 세계 자원 분포를 탐색해보세요.</p>
+</div>
+
+<div class="threejs-container" data-label="지구 자원 분포" id="resource-globe" style="height:500px;">
+  <div class="threejs-controls">
+    <button id="btn-fossil">화석연료</button>
+    <button id="btn-mineral-res">광물자원</button>
+    <button id="btn-water">수자원</button>
+    <button id="btn-renewable">재생에너지</button>
+  </div>
+  <div class="threejs-info" id="resource-info">화석연료: 석유, 천연가스, 석탄 분포</div>
+</div>
+<p class="fig-title">그림 9.1. 전 지구 자원 분포 시각화. 자원 유형을 선택하여 분포 패턴을 관찰하세요.</p>
+
+<h3>9.1 에너지 자원</h3>
+<h4>화석연료</h4>
+<p>화석연료는 과거 생물의 유해가 지질학적 시간에 걸쳐 변환된 것입니다:</p>
+<ul>
+<li><strong>석탄</strong>: 고대 식물(주로 석탄기 숲) → 이탄 → 갈탄 → 역청탄 → 무연탄</li>
+<li><strong>석유</strong>: 해양 미생물 유해 → 케로젠 → 원유 (근원암 → 저류암 이동)</li>
+<li><strong>천연가스</strong>: 석유와 유사한 과정, 더 높은 온도/압력에서 형성</li>
+</ul>
+
+<h4>재생에너지</h4>
+<ul>
+<li><strong>태양에너지</strong>: 태양 복사 이용 (광전지, 태양열)</li>
+<li><strong>풍력</strong>: 대기 순환(기압 차)에 의한 바람 에너지</li>
+<li><strong>수력</strong>: 물의 위치에너지 → 전기</li>
+<li><strong>지열</strong>: 지구 내부 열에너지 (아이슬란드, 뉴질랜드)</li>
+<li><strong>조력/파력</strong>: 달의 인력에 의한 조석, 해양 파도</li>
+</ul>
+
+<h3>9.2 광물 자원</h3>
+<p>광물 자원은 경제적 가치가 있는 광물의 집중 분포(광상)입니다.</p>
+<table>
+<thead><tr><th>광상 유형</th><th>형성 과정</th><th>대표 광물</th></tr></thead>
+<tbody>
+<tr><td>마그마 광상</td><td>마그마 냉각 시 분리</td><td>크롬, 백금, 니켈</td></tr>
+<tr><td>열수 광상</td><td>열수 용액에서 침전</td><td>금, 은, 구리, 아연</td></tr>
+<tr><td>퇴적 광상</td><td>풍화·퇴적 과정</td><td>철광석, 알루미늄(보크사이트)</td></tr>
+<tr><td>변성 광상</td><td>변성작용</td><td>석면, 활석, 대리석</td></tr>
+<tr><td>증발 광상</td><td>염수 증발</td><td>소금, 석고, 칼리</td></tr>
+</tbody>
+</table>
+
+<h3>9.3 수자원</h3>
+<p>지구의 물 중 담수는 약 2.5%에 불과하며, 그 중 대부분은 빙하나 심부 지하수에 저장되어 있습니다.</p>
+<ul>
+<li><strong>지표수</strong>: 하천, 호수 (접근 가능한 담수의 극소량)</li>
+<li><strong>지하수</strong>: 대수층에 저장 (농업·생활용수의 주요 원천)</li>
+<li><strong>빙하</strong>: 전체 담수의 ~69% (기후변화로 감소 중)</li>
+</ul>
+<p>물 순환(수문 순환): 증발 → 응결(구름) → 강수 → 유출/침투 → 해양으로 복귀</p>
+
+<h3>9.4 토양</h3>
+<p><strong>토양</strong>은 암석의 풍화산물, 유기물, 물, 공기의 혼합체로, 생태계의 기반입니다.</p>
+<ul>
+<li><strong>O층</strong>: 유기물층 (낙엽, 부식질)</li>
+<li><strong>A층</strong>: 표토 (유기물 풍부, 용탈 발생)</li>
+<li><strong>B층</strong>: 심토 (용탈된 물질 집적)</li>
+<li><strong>C층</strong>: 모재 (풍화된 기반암)</li>
+<li><strong>R층</strong>: 기반암</li>
+</ul>
+
+<h3>9.5 환경 문제와 지속가능성</h3>
+<ul>
+<li><strong>자원 고갈</strong>: 화석연료 유한성, 광물자원 감소, 지하수 과다 취수</li>
+<li><strong>환경오염</strong>: 대기·수질·토양 오염, 플라스틱 오염, 방사성 폐기물</li>
+<li><strong>생태계 파괴</strong>: 삼림 벌채, 서식지 단편화, 생물다양성 감소</li>
+<li><strong>지속가능한 발전</strong>: 미래 세대의 필요를 충족할 능력을 손상하지 않으면서 현재 세대의 필요를 충족하는 발전 (브룬트란트 보고서, 1987)</li>
+</ul>
+
+<h3>9.6 한국의 지질과 자원</h3>
+<ul>
+<li><strong>지질 특성</strong>: 선캄브리아 변성암(경기 변성암 복합체), 고생대 퇴적암(태백산 분지), 중생대 화강암·화산암</li>
+<li><strong>광물 자원</strong>: 텅스텐(상동), 석회석(충청·강원), 고령토, 규석</li>
+<li><strong>에너지</strong>: 화석연료 부족 → 수입 의존 / 재생에너지 확대 중</li>
+</ul>
+
+<div class="quiz-box">
+<h4>🧪 확인 문제</h4>
+<p>전체 담수의 약 69%가 저장되어 있는 곳은?</p>
+<div class="quiz-option" onclick="this.classList.add('wrong')">① 지하수</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">② 하천과 호수</div>
+<div class="quiz-option" onclick="this.classList.add('correct')">③ 빙하와 만년설</div>
+<div class="quiz-option" onclick="this.classList.add('wrong')">④ 대기 중 수증기</div>
+</div>
+
+<div class="chapter-nav">
+  <a href="08-natural-disasters.html">← 자연재해</a>
+  <a href="../index.html">표지로 →</a>
+</div>
+</main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  const container = document.getElementById('resource-globe');
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x050d18);
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 100);
+  camera.position.set(0, 1, 3.5);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+  container.appendChild(renderer.domElement);
+
+  scene.add(new THREE.AmbientLight(0x404060, 0.5));
+  const light = new THREE.DirectionalLight(0xffffff, 0.8);
+  light.position.set(3, 2, 3);
+  scene.add(light);
+
+  const globeGroup = new THREE.Group();
+  scene.add(globeGroup);
+
+  // Earth globe
+  const earthGeo = new THREE.SphereGeometry(1, 64, 64);
+  const earthMat = new THREE.MeshPhongMaterial({
+    color: 0x1a237e, transparent: true, opacity: 0.6, shininess: 20
+  });
+  globeGroup.add(new THREE.Mesh(earthGeo, earthMat));
+
+  // Wireframe
+  const wireGeo = new THREE.SphereGeometry(1.001, 24, 24);
+  const wireMat = new THREE.MeshBasicMaterial({ color: 0x1565c0, wireframe: true, transparent: true, opacity: 0.2 });
+  globeGroup.add(new THREE.Mesh(wireGeo, wireMat));
+
+  // Resource markers
+  const resourceSets = {
+    fossil: [
+      { lat: 25, lon: 50, size: 0.08, label: '중동 석유' },
+      { lat: 60, lon: 70, size: 0.06, label: '러시아 천연가스' },
+      { lat: 35, lon: -100, size: 0.05, label: '미국 셰일' },
+      { lat: -20, lon: -50, size: 0.04, label: '브라질 심해유전' },
+      { lat: 35, lon: 110, size: 0.06, label: '중국 석탄' },
+      { lat: -25, lon: 135, size: 0.04, label: '호주 석탄' }
+    ],
+    mineral: [
+      { lat: -25, lon: 25, size: 0.07, label: '남아공 금/다이아몬드' },
+      { lat: -15, lon: -70, size: 0.06, label: '칠레 구리' },
+      { lat: -20, lon: 120, size: 0.06, label: '호주 철광석' },
+      { lat: 0, lon: 25, size: 0.05, label: '콩고 코발트' },
+      { lat: 35, lon: 105, size: 0.05, label: '중국 희토류' },
+      { lat: 60, lon: 100, size: 0.04, label: '러시아 니켈' }
+    ],
+    water: [
+      { lat: 0, lon: -60, size: 0.08, label: '아마존 유역' },
+      { lat: 50, lon: -90, size: 0.06, label: '오대호' },
+      { lat: 60, lon: 90, size: 0.07, label: '바이칼 호' },
+      { lat: -35, lon: -65, size: 0.04, label: '과라니 대수층' },
+      { lat: 30, lon: 80, size: 0.05, label: '히말라야 빙하' }
+    ],
+    renewable: [
+      { lat: 25, lon: 0, size: 0.07, label: '사하라 태양광' },
+      { lat: 55, lon: 5, size: 0.05, label: '북해 풍력' },
+      { lat: 65, lon: -20, size: 0.06, label: '아이슬란드 지열' },
+      { lat: -20, lon: 50, size: 0.04, label: '동아프리카 지열' },
+      { lat: 35, lon: -120, size: 0.04, label: '캘리포니아 태양광' }
+    ]
+  };
+
+  let currentMarkers = [];
+  const markerColor = {
+    fossil: 0xff5722,
+    mineral: 0xffd54f,
+    water: 0x42a5f5,
+    renewable: 0x66bb6a
+  };
+
+  function latLonToVec3(lat, lon, radius) {
+    const phi = (90 - lat) * Math.PI / 180;
+    const theta = (lon + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+      -radius * Math.sin(phi) * Math.cos(theta),
+      radius * Math.cos(phi),
+      radius * Math.sin(phi) * Math.sin(theta)
+    );
+  }
+
+  function showResources(type) {
+    // Remove current markers
+    currentMarkers.forEach(m => globeGroup.remove(m));
+    currentMarkers = [];
+
+    const data = resourceSets[type];
+    const color = markerColor[type];
+
+    data.forEach(d => {
+      const pos = latLonToVec3(d.lat, d.lon, 1.02);
+      const geo = new THREE.SphereGeometry(d.size, 16, 16);
+      const mat = new THREE.MeshPhongMaterial({
+        color: color, emissive: color, emissiveIntensity: 0.5, transparent: true, opacity: 0.8
+      });
+      const marker = new THREE.Mesh(geo, mat);
+      marker.position.copy(pos);
+      globeGroup.add(marker);
+      currentMarkers.push(marker);
+
+      // Pulse ring
+      const ringGeo = new THREE.RingGeometry(d.size, d.size + 0.02, 16);
+      const ringMat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.4, side: THREE.DoubleSide });
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      ring.position.copy(pos);
+      ring.lookAt(0, 0, 0);
+      ring.userData = { baseScale: 1, phase: Math.random() * Math.PI * 2 };
+      globeGroup.add(ring);
+      currentMarkers.push(ring);
+    });
+
+    const labels = { fossil: '화석연료: 석유, 천연가스, 석탄 분포', mineral: '광물자원: 금속·비금속 광물 분포', water: '수자원: 주요 담수 저장소', renewable: '재생에너지: 태양광, 풍력, 지열 잠재력' };
+    document.getElementById('resource-info').textContent = labels[type];
+  }
+
+  showResources('fossil');
+
+  document.getElementById('btn-fossil').addEventListener('click', () => showResources('fossil'));
+  document.getElementById('btn-mineral-res').addEventListener('click', () => showResources('mineral'));
+  document.getElementById('btn-water').addEventListener('click', () => showResources('water'));
+  document.getElementById('btn-renewable').addEventListener('click', () => showResources('renewable'));
+
+  // Mouse rotation
+  let isDragging = false, prevMouse = { x: 0, y: 0 };
+  container.addEventListener('mousedown', (e) => {
+    if (e.target.tagName === 'BUTTON') return;
+    isDragging = true; prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  container.addEventListener('mousemove', (e) => {
+    if (!isDragging) return;
+    globeGroup.rotation.y += (e.clientX - prevMouse.x) * 0.01;
+    globeGroup.rotation.x += (e.clientY - prevMouse.y) * 0.01;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  container.addEventListener('mouseup', () => { isDragging = false; });
+  container.addEventListener('mouseleave', () => { isDragging = false; });
+
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.02;
+
+    // Pulse markers
+    currentMarkers.forEach(m => {
+      if (m.userData && m.userData.baseScale) {
+        const s = 1 + Math.sin(time * 2 + m.userData.phase) * 0.3;
+        m.scale.set(s, s, s);
+      }
+    });
+
+    if (!isDragging) globeGroup.rotation.y += 0.002;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

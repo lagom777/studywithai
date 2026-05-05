@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7. 현대물리 · 상대성 — aboutPhysics</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🔬 표지 · 소개</a></li>
+    <li><a href="01-mechanics.html">1. 역학 · 뉴턴의 세계</a></li>
+    <li><a href="02-energy.html">2. 에너지와 운동량</a></li>
+    <li><a href="03-thermodynamics.html">3. 열역학</a></li>
+    <li><a href="04-waves.html">4. 파동과 소리</a></li>
+    <li><a href="05-optics.html">5. 빛과 광학</a></li>
+    <li><a href="06-electromagnetism.html">6. 전자기학</a></li>
+    <li><a href="07-modern.html" style="color:var(--accent);font-weight:600;">7. 현대물리 · 상대성</a></li>
+    <li><a href="08-quantum.html">8. 양자역학</a></li>
+    <li><a href="09-nuclear.html">9. 핵물리와 입자</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1><em>상대성</em>이론:<br>시공간의 구조</h1>
+  <p class="authors">Chapter 7 — Special & General Relativity</p>
+  <p class="affiliation">시공간 왜곡 시뮬레이터 포함</p>
+</header>
+
+<h2>특수 상대성이론</h2>
+<p>아인슈타인의 두 가지 공준: (1) 물리 법칙은 모든 관성 좌표계에서 동일하다. (2) 진공에서 빛의 속도는 관측자의 운동 상태와 무관하게 일정하다.</p>
+
+<div class="info-card">
+  <h4>시간 팽창</h4>
+  <p>움직이는 시계는 느리게 간다. 속도가 빛의 속도에 가까울수록 효과가 극적으로 증가합니다.</p>
+</div>
+<div class="formula">Δt' = Δt / √(1 − v²/c²) = γΔt</div>
+
+<div class="info-card energy">
+  <h4>길이 수축</h4>
+  <p>운동 방향으로 물체의 길이가 줄어든다.</p>
+</div>
+<div class="formula">L' = L × √(1 − v²/c²) = L/γ</div>
+
+<div class="info-card quantum">
+  <h4>질량-에너지 등가</h4>
+  <p>질량은 곧 에너지이다. 작은 질량도 엄청난 에너지를 담고 있습니다.</p>
+</div>
+<div class="formula">E = mc² &nbsp;&nbsp;&nbsp; E² = (pc)² + (mc²)²</div>
+
+<h2>시공간 왜곡 시뮬레이터</h2>
+<p>질량이 시공간을 어떻게 휘게 하는지 관찰하세요. 질량을 키우면 왜곡이 더 심해집니다.</p>
+
+<div class="scene-3d" id="spacetime-scene">
+  <div class="scene-controls">
+    <label>질량: <span id="mass-val">5</span> M☉</label>
+    <input type="range" id="mass-slider" min="1" max="20" value="5">
+  </div>
+</div>
+<span class="interact-hint">🌀 질량을 키워서 시공간 곡률 변화를 관찰하세요</span>
+
+<h2>일반 상대성이론</h2>
+<p>중력은 힘이 아니라 시공간의 곡률이다. 질량과 에너지가 시공간을 휘게 하고, 물체는 그 휘어진 시공간에서 가장 곧은 경로(측지선)를 따라 움직입니다.</p>
+
+<div class="formula">G_μν + Λg_μν = (8πG/c⁴) T_μν</div>
+
+<h3>일반상대성의 검증</h3>
+<div class="info-card wave">
+  <h4>관측적 증거들</h4>
+  <p>수성의 근일점 이동, 빛의 중력 편향, 중력 적색편이, 중력파 검출(2015, LIGO), GPS 보정</p>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('spacetime-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 8, 10);
+  camera.lookAt(0, -1, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Spacetime fabric mesh
+  const segments = 60;
+  const geometry = new THREE.PlaneGeometry(16, 16, segments, segments);
+  const material = new THREE.MeshBasicMaterial({
+    color: 0x00d4ff, wireframe: true, transparent: true, opacity: 0.5
+  });
+  const fabric = new THREE.Mesh(geometry, material);
+  fabric.rotation.x = -Math.PI / 2;
+  scene.add(fabric);
+
+  // Central mass sphere
+  const massSphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.4, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0xff6b35 })
+  );
+  scene.add(massSphere);
+
+  let massValue = 5;
+
+  function updateFabric() {
+    const positions = geometry.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
+      const x = positions.getX(i);
+      const y = positions.getY(i);
+      const dist = Math.sqrt(x * x + y * y);
+      const depression = -massValue * 0.3 / (dist + 0.8);
+      positions.setZ(i, depression);
+    }
+    positions.needsUpdate = true;
+    massSphere.position.y = -massValue * 0.3 / 0.8;
+    massSphere.scale.setScalar(0.3 + massValue * 0.05);
+  }
+  updateFabric();
+
+  const massSlider = document.getElementById('mass-slider');
+  const massVal = document.getElementById('mass-val');
+  massSlider.addEventListener('input', () => {
+    massValue = parseInt(massSlider.value);
+    massVal.textContent = massValue;
+    updateFabric();
+  });
+
+  // Rotate scene slowly
+  let angle = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    angle += 0.003;
+    camera.position.x = Math.sin(angle) * 12;
+    camera.position.z = Math.cos(angle) * 12;
+    camera.lookAt(0, -1, 0);
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

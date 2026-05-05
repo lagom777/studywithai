@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>8장. 성능 최적화 | 프론트엔드 학습 사이트</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <style>
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .chapter-title {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      color: #222;
+    }
+
+    .chapter-subtitle {
+      font-size: 1.1em;
+      color: #666;
+      margin-bottom: 40px;
+    }
+
+    section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 1.8em;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #00d4ff;
+    }
+
+    .section-content {
+      font-size: 1em;
+      line-height: 1.8;
+      color: #444;
+      margin-bottom: 20px;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      color: #d63384;
+    }
+
+    .code-block {
+      background: #2d3748;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      font-family: 'Courier New', monospace;
+      font-size: 0.95em;
+      line-height: 1.6;
+    }
+
+    /* Interactive Components */
+    .interactive-container {
+      background: linear-gradient(135deg, #f5f7fa 0%, #eff4f9 100%);
+      border: 2px solid #e0e7ff;
+      border-radius: 12px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .interactive-title {
+      font-size: 1.3em;
+      font-weight: bold;
+      color: #7b5cff;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Three.js Canvas */
+    #performanceCanvas {
+      width: 100%;
+      height: 500px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      display: block;
+    }
+
+    /* Performance Simulator */
+    .perf-simulator {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .perf-slider-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .perf-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .perf-slider {
+      width: 100%;
+      height: 8px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #7b5cff, #00d4ff);
+      -webkit-appearance: none;
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .perf-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #7b5cff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(123, 92, 255, 0.4);
+    }
+
+    .perf-slider::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      border: 3px solid #7b5cff;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(123, 92, 255, 0.4);
+    }
+
+    .perf-metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .perf-metric-card {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #7b5cff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .metric-label {
+      font-size: 0.9em;
+      color: #999;
+      margin-bottom: 5px;
+    }
+
+    .metric-value {
+      font-size: 1.4em;
+      font-weight: bold;
+      color: #7b5cff;
+    }
+
+    /* Waterfall Chart */
+    .waterfall-chart {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e0e7ff;
+    }
+
+    .waterfall-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 15px;
+      margin-bottom: 15px;
+      align-items: center;
+    }
+
+    .waterfall-label {
+      font-weight: bold;
+      font-size: 0.9em;
+      color: #333;
+      text-align: right;
+    }
+
+    .waterfall-bar {
+      height: 30px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      color: white;
+      font-weight: bold;
+      font-size: 0.85em;
+    }
+
+    /* Comparison */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .comparison-card {
+      border-radius: 8px;
+      padding: 20px;
+      color: white;
+    }
+
+    .comparison-card.unoptimized {
+      background: linear-gradient(135deg, #ff6b6b, #ff8787);
+    }
+
+    .comparison-card.optimized {
+      background: linear-gradient(135deg, #51cf66, #82c91e);
+    }
+
+    .comparison-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+
+    .comparison-metric {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .comparison-metric-label {
+      font-size: 0.95em;
+    }
+
+    .comparison-metric-value {
+      font-weight: bold;
+    }
+
+    /* Tip and Note boxes */
+    .tip-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .tip-box strong {
+      color: #b45309;
+    }
+
+    .note-box {
+      background: #e0e7ff;
+      border-left: 4px solid #7b5cff;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 20px 0;
+    }
+
+    .note-box strong {
+      color: #7b5cff;
+    }
+
+    /* Navigation */
+    .chapter-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 60px;
+      padding-top: 30px;
+      border-top: 2px solid #e0e7ff;
+    }
+
+    .nav-button {
+      padding: 12px 24px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      border: 2px solid #7b5cff;
+      color: #7b5cff;
+    }
+
+    .nav-button:hover {
+      background: #7b5cff;
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .nav-button.next {
+      background: linear-gradient(120deg, #7b5cff, #00d4ff);
+      color: white;
+      border: none;
+    }
+
+    .nav-button.next:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(123, 92, 255, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-wrapper">
+    <aside>
+      <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+      <h3>전체 목차</h3>
+      <ol>
+        <li><a href="../index.html">📖 표지 · 소개</a></li>
+        <li><a href="01-html-basics.html">1. HTML 기초</a></li>
+        <li><a href="02-css-layout.html">2. CSS와 레이아웃</a></li>
+        <li><a href="03-javascript-core.html">3. JavaScript 핵심</a></li>
+        <li><a href="04-dom-manipulation.html">4. DOM 조작</a></li>
+        <li><a href="05-react-components.html">5. React와 컴포넌트</a></li>
+        <li><a href="06-state-management.html">6. 상태관리</a></li>
+        <li><a href="07-responsive-design.html">7. 반응형 디자인</a></li>
+        <li><a href="08-performance.html">8. 성능 최적화</a></li>
+        <li><a href="09-build-deploy.html">9. 빌드도구와 배포</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <h1 class="chapter-title">8장. 성능 최적화</h1>
+      <p class="chapter-subtitle">빠르고 반응형이 좋은 웹사이트의 비결</p>
+
+      <!-- Section 8.1 -->
+      <section>
+        <h2 class="section-title">8.1 웹 성능이 중요한 이유</h2>
+        <div class="section-content">
+          <p>웹 성능은 단순한 기술 문제를 넘어 비즈니스에 직접적인 영향을 미칩니다.</p>
+
+          <p><strong>로딩 시간과 사용자 행동:</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>페이지 로딩 시간 1초 증가 → 사용자 만족도 7% 감소</li>
+            <li>로딩 3초 이상 → 모바일 사용자 40% 이탈</li>
+            <li>성능 개선 → 전환율(수익) 증가</li>
+          </ul>
+
+          <p style="margin-top: 15px;"><strong>검색 엔진 최적화(SEO):</strong> Google은 Core Web Vitals을 검색 순위의 핵심 요소로 반영합니다.</p>
+        </div>
+
+        <div class="note-box">
+          <strong>💡 핵심:</strong> 성능 최적화는 기술뿐만 아니라 사용자 경험과 수익성을 향상시키는 전략입니다.
+        </div>
+      </section>
+
+      <!-- Section 8.2 -->
+      <section>
+        <h2 class="section-title">8.2 Core Web Vitals</h2>
+        <div class="section-content">
+          <p>Google이 정의한 웹 성능의 3가지 핵심 지표입니다.</p>
+
+          <p style="margin-top: 15px;"><strong>1. LCP (Largest Contentful Paint)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>주요 콘텐츠가 화면에 나타나는 시간</li>
+            <li>목표: 2.5초 이내</li>
+          </ul>
+
+          <p style="margin-top: 15px;"><strong>2. FID / INP (First Input Delay / Interaction to Next Paint)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>사용자가 클릭했을 때 응답 시간</li>
+            <li>목표: 100ms 이내</li>
+          </ul>
+
+          <p style="margin-top: 15px;"><strong>3. CLS (Cumulative Layout Shift)</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>페이지 요소가 얼마나 움직이는가</li>
+            <li>목표: 0.1 이하</li>
+          </ul>
+        </div>
+
+        <div class="code-block">/* Core Web Vitals 측정 코드 */
+web.vitals.onLCP((metric) => {
+  console.log('LCP:', metric.value);
+});
+
+web.vitals.onFID((metric) => {
+  console.log('FID:', metric.value);
+});
+
+web.vitals.onCLS((metric) => {
+  console.log('CLS:', metric.value);
+});</div>
+      </section>
+
+      <!-- Section 8.3 -->
+      <section>
+        <h2 class="section-title">8.3 번들 최적화</h2>
+        <div class="section-content">
+          <p>JavaScript와 CSS 번들 크기를 줄여 로딩 시간을 단축합니다.</p>
+
+          <p style="margin-top: 15px;"><strong>Tree Shaking:</strong> 사용하지 않는 코드를 빌드 과정에서 제거합니다.</p>
+        </div>
+
+        <div class="code-block">/* ES6 모듈 문법 사용 (Tree shaking 가능) */
+export function usedFunction() { }
+export function unusedFunction() { }
+
+// 사용하는 것만 import
+import { usedFunction } from './utils.js';
+
+/* Webpack에서 tree shaking 활성화 */
+// webpack.config.js
+module.exports = {
+  mode: 'production',
+  optimization: {
+    usedExports: true,
+    sideEffects: false
+  }
+};
+
+/* Code Splitting */
+import { lazy, Suspense } from 'react';
+
+const HeavyComponent = lazy(() => import('./HeavyComponent'));
+
+export function App() {
+  return (
+    &lt;Suspense fallback={&lt;div&gt;로딩 중...&lt;/div&gt;}&gt;
+      &lt;HeavyComponent /&gt;
+    &lt;/Suspense&gt;
+  );
+}</div>
+
+        <p style="margin-top: 15px;"><strong>Dynamic Import:</strong> 필요할 때만 코드를 로드합니다.</p>
+
+        <div class="code-block">// 사용자 클릭 시에만 모듈 로드
+button.addEventListener('click', async () => {
+  const module = await import('./heavy-module.js');
+  module.doSomething();
+});
+</div>
+      </section>
+
+      <!-- Section 8.4 -->
+      <section>
+        <h2 class="section-title">8.4 이미지 최적화</h2>
+        <div class="section-content">
+          <p>이미지는 대부분의 웹사이트에서 가장 큰 파일입니다. 효율적인 이미지 관리가 성능 개선의 핵심입니다.</p>
+
+          <p style="margin-top: 15px;"><strong>포맷 최적화:</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li><strong>WebP:</strong> JPEG보다 25-35% 작은 파일 크기</li>
+            <li><strong>AVIF:</strong> 가장 최신 포맷, WebP보다도 더 효율적</li>
+            <li><strong>Fallback:</strong> 지원하지 않는 브라우저를 위한 PNG/JPEG</li>
+          </ul>
+        </div>
+
+        <div class="code-block">&lt;picture&gt;
+  &lt;source srcset="image.avif" type="image/avif"&gt;
+  &lt;source srcset="image.webp" type="image/webp"&gt;
+  &lt;source srcset="image.jpg" type="image/jpeg"&gt;
+  &lt;img src="image.jpg" alt="최적화된 이미지"&gt;
+&lt;/picture&gt;
+
+/* Lazy Loading - 스크롤했을 때만 로드 */
+&lt;img src="placeholder.jpg" loading="lazy" alt="지연 로드 이미지"&gt;
+
+/* Responsive Images with srcset */
+&lt;img
+  srcset="small.jpg 480w, medium.jpg 768w, large.jpg 1200w"
+  sizes="(max-width: 480px) 100vw, (max-width: 768px) 50vw, 33vw"
+  src="large.jpg"
+  alt="반응형 이미지"&gt;
+</div>
+      </section>
+
+      <!-- Section 8.5 -->
+      <section>
+        <h2 class="section-title">8.5 렌더링 최적화</h2>
+        <div class="section-content">
+          <p>Critical Rendering Path (CRP)는 브라우저가 HTML, CSS, JavaScript를 처리하여 화면에 그리는 순서입니다.</p>
+
+          <p style="margin-top: 15px;"><strong>성능 개선 전략:</strong></p>
+          <ul style="margin-left: 20px; color: #555;">
+            <li>중요 CSS는 inline으로, 나머지는 async/defer로 로드</li>
+            <li>JavaScript 실행을 지연시켜 렌더링 블로킹 제거</li>
+            <li>Reflow/Repaint 최소화 (DOM 변경 배치 처리)</li>
+          </ul>
+        </div>
+
+        <div class="code-block">/* 렌더링 블로킹 제거 */
+&lt;!-- CSS는 head에서 로드 (렌더링 차단) --&gt;
+&lt;link rel="stylesheet" href="style.css"&gt;
+
+&lt;!-- 중요한 CSS만 inline으로 --&gt;
+&lt;style&gt;
+  /* 초기 화면에 필요한 스타일 */
+  body { font-family: sans-serif; }
+&lt;/style&gt;
+
+&lt;!-- JavaScript는 body 끝에서 로드 --&gt;
+&lt;script src="app.js" defer&gt;&lt;/script&gt;
+
+/* Reflow/Repaint 최소화 */
+// ❌ 나쁜 예: 반복마다 DOM에 접근
+for (let i = 0; i &lt; 100; i++) {
+  element.style.width = (i * 10) + 'px'; // 매번 reflow!
+}
+
+// ✅ 좋은 예: 배치 처리
+const widths = Array.from({length: 100}, (_, i) => (i * 10) + 'px');
+element.style.width = widths[widths.length - 1];
+</div>
+      </section>
+
+      <!-- Section 8.6 -->
+      <section>
+        <h2 class="section-title">8.6 캐싱 전략</h2>
+        <div class="section-content">
+          <p>캐싱은 같은 데이터를 반복 요청하지 않아 로딩 시간을 획기적으로 단축합니다.</p>
+
+          <p style="margin-top: 15px;"><strong>3단계 캐싱:</strong></p>
+          <ol style="margin-left: 20px; color: #555;">
+            <li><strong>브라우저 캐시:</strong> 로컬 저장소에 저장된 파일</li>
+            <li><strong>Service Worker:</strong> 오프라인에서도 작동하는 네트워크 캐시</li>
+            <li><strong>CDN:</strong> 전 세계 서버에 콘텐츠 복제</li>
+          </ol>
+        </div>
+
+        <div class="code-block">/* HTTP 캐시 헤더 설정 */
+// HTML: 매번 확인
+Cache-Control: no-cache, must-revalidate
+
+// CSS/JS: 1년 캐시 (해시 기반 버저닝 사용)
+Cache-Control: public, max-age=31536000, immutable
+
+// 이미지: 30일 캐시
+Cache-Control: public, max-age=2592000
+
+/* Service Worker 캐싱 */
+self.addEventListener('install', (event) => {
+  event.waitUntil(
+    caches.open('v1').then((cache) => {
+      return cache.addAll([
+        '/',
+        '/styles.css',
+        '/app.js'
+      ]);
+    })
+  );
+});
+</div>
+      </section>
+
+      <!-- Three.js Visualization: Critical Rendering Path -->
+      <section>
+        <h2 class="section-title">🎨 3D 시각화: Critical Rendering Path</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">🏭 렌더링 파이프라인</div>
+          <canvas id="performanceCanvas"></canvas>
+        </div>
+      </section>
+
+      <!-- Performance Simulator -->
+      <section>
+        <h2 class="section-title">📊 성능 측정기: 최적화 시뮬레이터</h2>
+        <div class="interactive-container">
+          <div class="interactive-title">⚙️ 최적화 옵션 조정</div>
+          <div class="perf-simulator">
+            <div class="perf-slider-group">
+              <div class="perf-label">
+                <span>이미지 최적화</span>
+                <span id="imgOptLabel">0%</span>
+              </div>
+              <input type="range" class="perf-slider" id="imgOptSlider" min="0" max="100" value="0">
+            </div>
+            <div class="perf-slider-group">
+              <div class="perf-label">
+                <span>번들 최적화</span>
+                <span id="bundleOptLabel">0%</span>
+              </div>
+              <input type="range" class="perf-slider" id="bundleOptSlider" min="0" max="100" value="0">
+            </div>
+            <div class="perf-slider-group">
+              <div class="perf-label">
+                <span>캐싱 활성화</span>
+                <span id="cacheOptLabel">0%</span>
+              </div>
+              <input type="range" class="perf-slider" id="cacheOptSlider" min="0" max="100" value="0">
+            </div>
+            <div class="perf-slider-group">
+              <div class="perf-label">
+                <span>Code Splitting</span>
+                <span id="splitOptLabel">0%</span>
+              </div>
+              <input type="range" class="perf-slider" id="splitOptSlider" min="0" max="100" value="0">
+            </div>
+
+            <div class="perf-metrics">
+              <div class="perf-metric-card">
+                <div class="metric-label">LCP (로드 시간)</div>
+                <div class="metric-value"><span id="lcpValue">4.2</span>s</div>
+              </div>
+              <div class="perf-metric-card">
+                <div class="metric-label">FID (응답성)</div>
+                <div class="metric-value"><span id="fidValue">45</span>ms</div>
+              </div>
+              <div class="perf-metric-card">
+                <div class="metric-label">CLS (안정성)</div>
+                <div class="metric-value"><span id="clsValue">0.15</span></div>
+              </div>
+              <div class="perf-metric-card">
+                <div class="metric-label">번들 크기</div>
+                <div class="metric-value"><span id="bundleSize">850</span>KB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Waterfall Chart -->
+      <section>
+        <h2 class="section-title">📈 네트워크 워터폴 차트</h2>
+        <div class="interactive-container">
+          <div class="waterfall-chart">
+            <div class="waterfall-item">
+              <div class="waterfall-label">HTML</div>
+              <div class="waterfall-bar" style="background: linear-gradient(90deg, #7b5cff, #00d4ff); width: 200px;">200ms</div>
+            </div>
+            <div class="waterfall-item">
+              <div class="waterfall-label">CSS</div>
+              <div class="waterfall-bar" style="background: linear-gradient(90deg, #4facfe, #00f2fe); width: 150px;">150ms</div>
+            </div>
+            <div class="waterfall-item">
+              <div class="waterfall-label">JS</div>
+              <div class="waterfall-bar" style="background: linear-gradient(90deg, #f093fb, #f5576c); width: 450px;">450ms</div>
+            </div>
+            <div class="waterfall-item">
+              <div class="waterfall-label">이미지</div>
+              <div class="waterfall-bar" style="background: linear-gradient(90deg, #fa709a, #fee140); width: 800px;">800ms</div>
+            </div>
+            <div class="waterfall-item">
+              <div class="waterfall-label">API</div>
+              <div class="waterfall-bar" style="background: linear-gradient(90deg, #30cfd0, #330867); width: 600px;">600ms</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Before/After Comparison -->
+      <section>
+        <h2 class="section-title">🔄 최적화 전후 비교</h2>
+        <div class="comparison-grid">
+          <div class="comparison-card unoptimized">
+            <div class="comparison-title">❌ 최적화 전</div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">총 로딩 시간</span>
+              <span class="comparison-metric-value">8.5s</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">번들 크기</span>
+              <span class="comparison-metric-value">2.5MB</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">Lighthouse 점수</span>
+              <span class="comparison-metric-value">35점</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">CLS</span>
+              <span class="comparison-metric-value">0.25</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">사용자 이탈율</span>
+              <span class="comparison-metric-value">45%</span>
+            </div>
+          </div>
+
+          <div class="comparison-card optimized">
+            <div class="comparison-title">✅ 최적화 후</div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">총 로딩 시간</span>
+              <span class="comparison-metric-value">2.1s</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">번들 크기</span>
+              <span class="comparison-metric-value">650KB</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">Lighthouse 점수</span>
+              <span class="comparison-metric-value">92점</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">CLS</span>
+              <span class="comparison-metric-value">0.05</span>
+            </div>
+            <div class="comparison-metric">
+              <span class="comparison-metric-label">사용자 이탈율</span>
+              <span class="comparison-metric-value">12%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation -->
+      <div class="chapter-nav">
+        <a href="07-responsive-design.html" class="nav-button">← 이전: 반응형 디자인</a>
+        <span style="color: #999; font-weight: bold;">8 / 10</span>
+        <a href="09-build-deploy.html" class="nav-button next">다음: 빌드도구와 배포 →</a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Three.js visualization for Critical Rendering Path
+    const canvas = document.getElementById('performanceCanvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+    renderer.setClearColor(0x0f3460, 1);
+    camera.position.z = 12;
+
+    // Create pipeline boxes and connections
+    const stages = [
+      { name: 'HTML Parse', color: 0x7b5cff },
+      { name: 'DOM', color: 0x00d4ff },
+      { name: 'CSSOM', color: 0x4facfe },
+      { name: 'Render Tree', color: 0xf093fb },
+      { name: 'Layout', color: 0xfa709a },
+      { name: 'Paint', color: 0xfee140 },
+      { name: 'Composite', color: 0x51cf66 }
+    ];
+
+    const boxes = [];
+    const startX = -8;
+    const spacing = 2.5;
+
+    stages.forEach((stage, idx) => {
+      const geometry = new THREE.BoxGeometry(1.8, 1.2, 1.2);
+      const material = new THREE.MeshPhongMaterial({ color: stage.color });
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = startX + idx * spacing;
+      mesh.position.y = 0;
+      mesh.userData = { isBottleneck: idx === 4 }; // Layout as bottleneck
+      scene.add(mesh);
+      boxes.push(mesh);
+    });
+
+    // Add lighting
+    const light1 = new THREE.DirectionalLight(0xffffff, 0.8);
+    light1.position.set(5, 10, 7);
+    scene.add(light1);
+
+    const light2 = new THREE.PointLight(0x00d4ff, 0.5);
+    light2.position.set(-10, -10, 10);
+    scene.add(light2);
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    scene.add(ambientLight);
+
+    // Particles flowing through pipeline
+    const particleGeometry = new THREE.SphereGeometry(0.15, 8, 8);
+    const particleMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff88 });
+    const particles = [];
+
+    for (let i = 0; i < 5; i++) {
+      const particle = new THREE.Mesh(particleGeometry, particleMaterial);
+      particle.position.set(startX, 0, 3);
+      particle.userData = { progress: i * 0.2 };
+      scene.add(particle);
+      particles.push(particle);
+    }
+
+    // Animation loop
+    let time = 0;
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 0.01;
+
+      // Rotate boxes
+      boxes.forEach((box, idx) => {
+        box.rotation.x += 0.005;
+        box.rotation.y += 0.008;
+
+        // Pulse bottleneck (Layout stage)
+        if (box.userData.isBottleneck) {
+          const scale = 1 + Math.sin(time * 3) * 0.2;
+          box.scale.set(scale, scale, scale);
+          box.material.color.setHex(0xff6b6b); // Red for bottleneck
+        }
+      });
+
+      // Move particles through pipeline
+      particles.forEach((particle, idx) => {
+        const progress = (time * 0.1 + idx * 0.2) % stages.length;
+        const currentStageIdx = Math.floor(progress);
+        const nextStageIdx = (currentStageIdx + 1) % stages.length;
+
+        const currentBox = boxes[currentStageIdx];
+        const nextBox = boxes[nextStageIdx];
+
+        if (currentBox && nextBox) {
+          const alpha = progress % 1;
+          particle.position.lerp(nextBox.position, alpha);
+          particle.position.z = 3;
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+
+    // Performance Simulator
+    const imgOptSlider = document.getElementById('imgOptSlider');
+    const bundleOptSlider = document.getElementById('bundleOptSlider');
+    const cacheOptSlider = document.getElementById('cacheOptSlider');
+    const splitOptSlider = document.getElementById('splitOptSlider');
+
+    function updateMetrics() {
+      const imgOpt = parseInt(imgOptSlider.value);
+      const bundleOpt = parseInt(bundleOptSlider.value);
+      const cacheOpt = parseInt(cacheOptSlider.value);
+      const splitOpt = parseInt(splitOptSlider.value);
+
+      // Update labels
+      document.getElementById('imgOptLabel').textContent = imgOpt + '%';
+      document.getElementById('bundleOptLabel').textContent = bundleOpt + '%';
+      document.getElementById('cacheOptLabel').textContent = cacheOpt + '%';
+      document.getElementById('splitOptLabel').textContent = splitOpt + '%';
+
+      // Calculate metrics
+      const baseLCP = 4.2;
+      const baseFID = 45;
+      const baseCLS = 0.15;
+      const baseBundle = 850;
+
+      const lcpReduction = (imgOpt * 0.01 + cacheOpt * 0.015 + bundleOpt * 0.005) * baseLCP;
+      const fidReduction = (bundleOpt * 0.004 + splitOpt * 0.003) * baseFID;
+      const clsReduction = (bundleOpt * 0.001) * baseCLS;
+      const bundleReduction = (bundleOpt * 0.005 + splitOpt * 0.003) * baseBundle;
+
+      const lcp = Math.max(0.5, baseLCP - lcpReduction);
+      const fid = Math.max(10, baseFID - fidReduction);
+      const cls = Math.max(0.01, baseCLS - clsReduction);
+      const bundle = Math.max(300, baseBundle - bundleReduction);
+
+      document.getElementById('lcpValue').textContent = lcp.toFixed(1);
+      document.getElementById('fidValue').textContent = fid.toFixed(0);
+      document.getElementById('clsValue').textContent = cls.toFixed(3);
+      document.getElementById('bundleSize').textContent = bundle.toFixed(0);
+    }
+
+    imgOptSlider.addEventListener('input', updateMetrics);
+    bundleOptSlider.addEventListener('input', updateMetrics);
+    cacheOptSlider.addEventListener('input', updateMetrics);
+    splitOptSlider.addEventListener('input', updateMetrics);
+  </script>
+</body>
+</html>
