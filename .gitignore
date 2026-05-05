@@ -1,0 +1,20 @@
+# Cloudflare wrangler artifacts
+.wrangler/
+**/.wrangler/
+
+# Editor / OS
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+# Local Claude config
+.claude/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Misc
+node_modules/

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3-4장. 수학적 기초와 ML 이론</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="sec3">
+<h2>3. 수학적 기초</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 AI에 필요한 수학 4가지</h4>
+<ul>
+  <li><strong>선형대수</strong> = 숫자 여러 개를 한 번에 다루는 법 (엑셀 표 생각)</li>
+  <li><strong>확률</strong> = "얼마나 그럴 것 같은지" 계산</li>
+  <li><strong>정보이론</strong> = "이 정보 얼마나 놀라운가?" 측정 (항상 맞는 말 = 정보 0)</li>
+  <li><strong>최적화</strong> = 울퉁불퉁한 산에서 가장 낮은 계곡 찾아 내려가기</li>
+</ul>
+<div class="analogy">요리로 비유: 재료 조합(선형대수) + 이 레시피 성공률(확률) + 맛의 깊이/다양성(정보) + 딱 맞는 불 세기 찾기(최적화).</div>
+<div class="example">"<strong>경사하강법</strong>"은 안개 낀 산에서 발밑 기울기만 느끼면서 아래로 내려가는 것. AI 학습 = 이걸 수억 번 반복.</div>
+</div></div>
+<div class="paper-version">
+
+
+<section id="sec3-1">
+<h3>3.1 선형대수 (Linear Algebra)</h3>
+<p>
+딥러닝의 모든 계산은 본질적으로 텐서 연산이다. 벡터 $\mathbf{x} \in \mathbb{R}^d$와 행렬 $\mathbf{W} \in \mathbb{R}^{m \times d}$에 대해
+선형 변환은 $\mathbf{y} = \mathbf{W}\mathbf{x} + \mathbf{b}$로 표현된다.
+핵심 개념은 다음과 같다:
+</p>
+<ul>
+  <li><strong>특이값 분해(SVD)</strong>: $\mathbf{A} = \mathbf{U}\boldsymbol{\Sigma}\mathbf{V}^\top$, 여기서 $\mathbf{U}, \mathbf{V}$는 직교행렬. 주성분분석(PCA), 저랭크 근사, LoRA 파인튜닝의 기반이다.</li>
+  <li><strong>고유분해(Eigendecomposition)</strong>: $\mathbf{A}\mathbf{v} = \lambda\mathbf{v}$. 헤시안의 고유값은 손실 지형의 곡률을 나타내며, 최적화 경로에 결정적이다.</li>
+  <li><strong>노름(Norm)</strong>: $\ell_2$ 노름 $\|\mathbf{x}\|_2 = \sqrt{\sum_i x_i^2}$는 유클리드 거리; $\ell_1$ 노름은 희소성을 유도한다.</li>
+  <li><strong>야코비안(Jacobian)</strong>: $\mathbf{J}_{ij} = \partial f_i / \partial x_j$. 역전파에서 그래디언트 흐름의 구성요소이다.</li>
+</ul>
+
+<div class="theorem">
+  <strong>정리 3.1 (Johnson–Lindenstrauss, 1984).</strong> $n$개의 점을 $\mathbb{R}^d$에서 $\mathbb{R}^k$로 무작위 사영할 때,
+  $k = O(\varepsilon^{-2}\log n)$이면 쌍별 거리가 $(1\pm\varepsilon)$ 배 내로 보존된다.
+  이는 고차원 임베딩의 차원 축소 가능성에 대한 근거이다.
+</div>
+</section>
+
+<section id="sec3-2">
+<h3>3.2 확률론과 통계 (Probability and Statistics)</h3>
+<p>
+기계학습은 본질적으로 불확실성 하의 추론이다. 데이터를 확률분포 $p(\mathbf{x}, y)$로부터의 i.i.d. 표본으로 간주하며,
+학습의 목표는 조건부 분포 $p(y \mid \mathbf{x})$를 근사하는 것이다.
+</p>
+<p>
+<strong>최대우도추정(MLE)</strong>은 관측 데이터의 우도를 최대화한다:
+\[
+\hat{\theta}_{\text{MLE}} = \arg\max_\theta \sum_{i=1}^n \log p(y_i \mid \mathbf{x}_i; \theta)
+\]
+<strong>최대사후확률(MAP)</strong>는 사전분포를 포함한다: $\hat{\theta}_{\text{MAP}} = \arg\max_\theta [\log p(D\mid\theta) + \log p(\theta)]$.
+$\ell_2$ 정규화는 가우시안 사전, $\ell_1$ 정규화는 라플라스 사전에 대응함이 알려져 있다.
+</p>
+<p>
+<strong>베이즈 정리</strong> $p(\theta \mid D) = p(D\mid\theta)p(\theta) / p(D)$는 사후분포 추론의 기초이며,
+변분 추론(Variational Inference)과 MCMC는 계산 가능한 근사 기법이다.
+</p>
+</section>
+
+<section id="sec3-3">
+<h3>3.3 정보이론 (Information Theory)</h3>
+<p>
+Shannon(1948)이 정립한 정보이론은 딥러닝의 손실함수 설계에 근본적 영향을 미친다.
+</p>
+<ul>
+  <li><strong>엔트로피</strong>: $H(p) = -\sum_x p(x)\log p(x)$. 분포의 불확실성의 척도.</li>
+  <li><strong>교차엔트로피</strong>: $H(p, q) = -\sum_x p(x)\log q(x)$. 분류 손실로 사용된다.</li>
+  <li><strong>KL 발산</strong>: $D_{\text{KL}}(p\|q) = \sum_x p(x)\log\frac{p(x)}{q(x)} \geq 0$. 분포 간 거리(비대칭).</li>
+  <li><strong>상호정보량</strong>: $I(X;Y) = H(X) - H(X\mid Y)$. 표현학습과 InfoGAN, CLIP의 이론적 기반.</li>
+</ul>
+<p>
+분류에서의 교차엔트로피 손실 최소화는 모델 분포 $q_\theta$가 데이터 분포 $p$에 대해 $D_{\text{KL}}(p\|q_\theta)$를 최소화하는 것과 동치이다.
+</p>
+</section>
+
+<section id="sec3-4">
+<h3>3.4 최적화 (Optimization)</h3>
+<p>
+딥러닝 훈련은 비볼록(non-convex) 함수 $\mathcal{L}(\theta)$의 최소화 문제이다.
+일차 방법인 <strong>확률적 경사하강법(SGD)</strong>은 다음 갱신을 수행한다:
+\[
+\theta_{t+1} = \theta_t - \eta \nabla_\theta \mathcal{L}_{\text{batch}}(\theta_t) \tag{3.1}
+\]
+여기서 $\eta$는 학습률, 미니배치는 전체 데이터의 부분집합이다.
+</p>
+<p>
+실무에서는 적응적 최적화가 표준이다. <strong>Adam</strong>(Kingma & Ba, 2014)은 그래디언트의 1차·2차 모멘트 추정값을 활용한다:
+\[
+\begin{aligned}
+m_t &= \beta_1 m_{t-1} + (1-\beta_1)g_t \\
+v_t &= \beta_2 v_{t-1} + (1-\beta_2)g_t^2 \\
+\theta_{t+1} &= \theta_t - \eta \cdot \hat{m}_t / (\sqrt{\hat{v}_t}+\epsilon)
+\end{aligned}
+\]
+Loshchilov & Hutter(2019)의 <strong>AdamW</strong>는 가중치 감쇠를 그래디언트에서 분리함으로써 일반화 성능을 개선하여
+현재 LLM 훈련의 사실상 표준 최적화기로 자리잡았다.
+</p>
+
+<div class="theorem">
+  <strong>관찰 3.2 (Lottery Ticket Hypothesis, Frankle & Carbin, 2019).</strong>
+  무작위 초기화된 밀집 신경망은 분리해서 학습시 원본과 동등한 성능에 도달하는 희소 부분망을 포함한다.
+  이는 과대매개변수화가 최적화를 용이하게 한다는 경험적 근거를 제공한다.
+</div>
+</section>
+
+</div>
+</section>
+
+<section id="sec4">
+<h2>4. 기계학습 이론</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 기계학습의 핵심 딜레마</h4>
+<p><strong>기계학습 = 답 알려주지 않고 예시만 많이 보여주면서 스스로 규칙 알아내게 하기.</strong></p>
+<p>가장 중요한 균형: <strong>너무 단순하면 못 맞추고(편향), 너무 복잡하면 외워버려서 시험에서 틀림(과적합).</strong></p>
+<div class="analogy">수학 문제집: ① 덧셈만 연습 → 곱셈 못 풀어(편향 큼) ② 문제 답 달달 외움 → 숫자 바뀌면 틀림(분산 큼) ③ 원리 이해 → 새 문제도 풀어냄(정답).</div>
+<div class="example"><strong>정규화</strong>는 모델에게 "너무 복잡해지지 마"라고 살짝 불이익을 주는 것. Dropout = 훈련 중 뉴런 몇 개를 랜덤으로 꺼버려서, 일부만 의존하지 못하게 함.</div>
+</div></div>
+<div class="paper-version">
+
+
+<section id="sec4-1">
+<h3>4.1 학습 문제의 형식화</h3>
+<p>
+입력공간 $\mathcal{X}$, 출력공간 $\mathcal{Y}$, 그리고 데이터 생성 분포 $\mathcal{D}$가 주어진다.
+가설공간 $\mathcal{H} = \{h_\theta : \mathcal{X} \to \mathcal{Y}\}$에서 <strong>진위험(true risk)</strong>
+\[
+R(h) = \mathbb{E}_{(\mathbf{x},y)\sim\mathcal{D}}[\ell(h(\mathbf{x}), y)]
+\]
+을 최소화하는 $h^* = \arg\min_{h\in\mathcal{H}}R(h)$을 찾는 것이 목표이다.
+그러나 $\mathcal{D}$는 미지이므로, 훈련집합 $S = \{(\mathbf{x}_i, y_i)\}_{i=1}^n$에 대한
+<strong>경험위험(empirical risk)</strong> $\hat{R}_S(h) = \frac{1}{n}\sum_i \ell(h(\mathbf{x}_i), y_i)$을 최소화한다(ERM 원리).
+</p>
+</section>
+
+<section id="sec4-2">
+<h3>4.2 편향-분산 분해</h3>
+<p>
+제곱오차 손실의 기댓값은 다음과 같이 분해된다:
+\[
+\mathbb{E}[(y - \hat{f}(\mathbf{x}))^2] = \underbrace{(\mathbb{E}[\hat{f}] - f)^2}_{\text{편향}^2} + \underbrace{\mathrm{Var}(\hat{f})}_{\text{분산}} + \underbrace{\sigma^2}_{\text{노이즈}} \tag{4.1}
+\]
+고전적 관점에서 모델 복잡도 증가는 편향을 줄이고 분산을 키운다(U-자 곡선).
+그러나 현대 과대매개변수화 체계에서는 <strong>이중 하강(double descent)</strong>(Belkin et al., 2019)이 관찰되어,
+파라미터 수가 보간 임계값을 넘어서면 테스트 오차가 다시 감소한다. 이는 통계학과 딥러닝의 일반화 이론 사이의 긴장을 만든다.
+</p>
+</section>
+
+<section id="sec4-3">
+<h3>4.3 PAC 학습과 일반화 한계</h3>
+<div class="theorem">
+  <strong>정리 4.1 (VC 일반화 한계).</strong> VC 차원이 $d$인 가설공간에 대해, 확률 $1-\delta$ 이상으로
+  \[
+  R(h) \leq \hat{R}_S(h) + \sqrt{\frac{d(\log(2n/d)+1) + \log(4/\delta)}{n}}
+  \]
+  가 성립한다.
+</div>
+<p>
+이 한계는 고전적 기계학습을 정당화하지만, 수십억 파라미터의 딥러닝 모델에는 직접 적용되지 않는다.
+PAC-Bayes 경계, 라데마허 복잡도, 그리고 암묵적 정규화(implicit regularization) 이론이 딥러닝 일반화 연구의 현대적 도구이다.
+</p>
+</section>
+
+<section id="sec4-4">
+<h3>4.4 정규화와 귀납 편향</h3>
+<p>
+정규화는 다음과 같이 분류된다:
+</p>
+<ul>
+  <li><strong>명시적 정규화</strong>: $\ell_2$ (ridge), $\ell_1$ (lasso), dropout (Srivastava et al., 2014), data augmentation.</li>
+  <li><strong>암묵적 정규화</strong>: SGD 자체가 평평한 극소점(flat minima)을 선호하는 경향; 이는 일반화와 상관관계가 관찰된다(Hochreiter & Schmidhuber, 1997; Keskar et al., 2017).</li>
+  <li><strong>아키텍처적 귀납 편향</strong>: CNN의 이동 등변성, Transformer의 순열 등변성, GNN의 그래프 구조 등.</li>
+</ul>
+</section>
+
+</div>
+</section>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="01-history.html" style="text-decoration:none;">← 서론·역사</a><a href="03-neural.html" style="text-decoration:none;">신경망 →</a></div>
+</main>
+</div>
+</body>
+</html>

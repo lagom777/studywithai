@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5장. 신경망과 딥러닝</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="sec5">
+<h2>5. 신경망과 딥러닝</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 신경망이란?</h4>
+<p><strong>뉴런 = 스위치 하나.</strong> 입력 몇 개 받아서 그게 충분히 크면 "on", 작으면 "off". 이걸 수천만 개 쌓으면 고양이 사진도 알아본다.</p>
+<div class="analogy">뉴런 = 소문 퍼뜨리는 사람. 친구 3명 말을 종합해서 판단 후 다음 사람에게 전달. 이 체인이 수백 층.</div>
+<div class="example"><strong>역전파</strong> = 게임에서 졌을 때 "어느 단계부터 잘못됐지?" 거꾸로 추적하며 고치기. AI가 학습하는 방법.</div>
+<div class="analogy"><strong>ReLU 활성함수</strong> = "음수는 그냥 0으로 해버리자" (양수만 살림). 단순한데 엄청 잘 먹힌다.</div>
+<p>💡 <strong>CNN</strong>은 이미지용 (작은 윈도우로 스캔하며 패턴 찾기 = 돋보기). <strong>LSTM</strong>은 시퀀스용 (기억 게이트로 중요한 것만 간직).</p>
+</div></div>
+<div class="paper-version">
+
+
+<div class="nn-stack">
+  <div class="nn-layers">
+    <div class="nn-layer l1">입력층<br>Input<br>x ∈ ℝᵈ</div>
+    <div class="nn-layer l2">은닉 1<br>Hidden<br>ReLU</div>
+    <div class="nn-layer l3">은닉 2<br>Hidden<br>ReLU</div>
+    <div class="nn-layer l4">은닉 3<br>Hidden<br>ReLU</div>
+    <div class="nn-layer l5">출력층<br>Softmax</div>
+  </div>
+</div>
+<p class="fig-title">그림 2. 다층 퍼셉트론(MLP)의 3D 구조. 각 층은 선형 변환 Wx+b 후 비선형 활성화를 적용한다.</p>
+
+<section id="sec5-1">
+<h3>5.1 다층 퍼셉트론 (MLP)</h3>
+<p>
+$L$층 MLP는 다음 합성으로 정의된다:
+\[
+\mathbf{h}^{(l)} = \sigma(\mathbf{W}^{(l)}\mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}), \quad l=1,\dots,L
+\]
+여기서 $\sigma$는 비선형 활성함수이다. 주요 활성함수:
+</p>
+
+<svg class="svg-figure" viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="neuronGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a4b8f"/>
+      <stop offset="100%" stop-color="#6428a0"/>
+    </linearGradient>
+  </defs>
+  <!-- inputs -->
+  <circle cx="60" cy="50"  r="22" fill="#fff" stroke="#1a4b8f" stroke-width="2"/>
+  <text x="60" y="55" text-anchor="middle" font-family="serif" font-size="14">x₁</text>
+  <circle cx="60" cy="130" r="22" fill="#fff" stroke="#1a4b8f" stroke-width="2"/>
+  <text x="60" y="135" text-anchor="middle" font-family="serif" font-size="14">x₂</text>
+  <circle cx="60" cy="210" r="22" fill="#fff" stroke="#1a4b8f" stroke-width="2"/>
+  <text x="60" y="215" text-anchor="middle" font-family="serif" font-size="14">x₃</text>
+  <!-- edges with weights -->
+  <line x1="82" y1="50"  x2="278" y2="130" stroke="#888" stroke-width="1.5"/>
+  <line x1="82" y1="130" x2="278" y2="130" stroke="#888" stroke-width="1.5"/>
+  <line x1="82" y1="210" x2="278" y2="130" stroke="#888" stroke-width="1.5"/>
+  <text x="160" y="80"  font-size="12" fill="#a02864" font-family="serif">w₁</text>
+  <text x="160" y="125" font-size="12" fill="#a02864" font-family="serif">w₂</text>
+  <text x="160" y="185" font-size="12" fill="#a02864" font-family="serif">w₃</text>
+  <!-- sum node -->
+  <circle cx="300" cy="130" r="32" fill="url(#neuronGrad)"/>
+  <text x="300" y="137" text-anchor="middle" fill="#fff" font-size="20" font-family="serif">Σ</text>
+  <!-- activation -->
+  <rect x="370" y="100" width="90" height="60" fill="#fff" stroke="#a02864" stroke-width="2" rx="6"/>
+  <text x="415" y="125" text-anchor="middle" font-size="13" font-family="serif">활성함수</text>
+  <text x="415" y="148" text-anchor="middle" font-size="15" font-family="serif" fill="#a02864">σ(·)</text>
+  <!-- output -->
+  <circle cx="530" cy="130" r="22" fill="#c85028"/>
+  <text x="530" y="135" text-anchor="middle" fill="#fff" font-size="14" font-family="serif">y</text>
+  <!-- arrows -->
+  <line x1="332" y1="130" x2="368" y2="130" stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="462" y1="130" x2="506" y2="130" stroke="#333" stroke-width="2" marker-end="url(#arr)"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <!-- formula -->
+  <text x="300" y="245" text-anchor="middle" font-family="serif" font-size="14" font-style="italic">y = σ(w₁x₁ + w₂x₂ + w₃x₃ + b)</text>
+</svg>
+<p class="fig-title">그림 3. 단일 인공 뉴런의 구조. 입력의 가중합을 계산한 뒤 비선형 활성함수를 통과시킨다.</p>
+
+<svg class="svg-figure" viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+  <!-- activation functions -->
+  <g transform="translate(0,0)">
+    <text x="75" y="20" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold">Sigmoid</text>
+    <line x1="10" y1="120" x2="140" y2="120" stroke="#aaa"/>
+    <line x1="75" y1="50" x2="75" y2="190" stroke="#aaa"/>
+    <path d="M10,180 Q 60,180 75,120 Q 90,60 140,60" stroke="#1a4b8f" fill="none" stroke-width="2.5"/>
+  </g>
+  <g transform="translate(150,0)">
+    <text x="75" y="20" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold">Tanh</text>
+    <line x1="10" y1="120" x2="140" y2="120" stroke="#aaa"/>
+    <line x1="75" y1="50" x2="75" y2="190" stroke="#aaa"/>
+    <path d="M10,185 Q 60,185 75,120 Q 90,55 140,55" stroke="#6428a0" fill="none" stroke-width="2.5"/>
+  </g>
+  <g transform="translate(300,0)">
+    <text x="75" y="20" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold">ReLU</text>
+    <line x1="10" y1="120" x2="140" y2="120" stroke="#aaa"/>
+    <line x1="75" y1="50" x2="75" y2="190" stroke="#aaa"/>
+    <path d="M10,120 L 75,120 L 140,55" stroke="#a02864" fill="none" stroke-width="2.5"/>
+  </g>
+  <g transform="translate(450,0)">
+    <text x="75" y="20" text-anchor="middle" font-family="serif" font-size="13" font-weight="bold">GELU</text>
+    <line x1="10" y1="120" x2="140" y2="120" stroke="#aaa"/>
+    <line x1="75" y1="50" x2="75" y2="190" stroke="#aaa"/>
+    <path d="M10,122 Q 50,125 70,125 Q 85,115 140,55" stroke="#c85028" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>
+<p class="fig-title">그림 4. 주요 활성함수의 모양. Sigmoid·Tanh는 양 끝에서 포화(기울기 소실), ReLU는 음수 영역 0, GELU는 ReLU의 부드러운 변형.</p>
+
+<div class="landscape">
+  <span class="landscape-label" style="top:20px; left:20px;">손실 지형 (Loss Landscape)</span>
+  <span class="landscape-label" style="bottom:20px; right:20px;">∇θ ℒ(θ)</span>
+  <span class="landscape-label" style="top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(200,80,40,0.8);">극소점 찾기</span>
+</div>
+<p class="fig-title">그림 5. 신경망의 비볼록 손실 지형. SGD는 고차원 공간에서 평평한 극소점을 찾아간다.</p>
+<ul>
+  <li><strong>Sigmoid</strong>: $\sigma(x) = 1/(1+e^{-x})$. 포화로 인한 기울기 소실(vanishing gradient) 문제.</li>
+  <li><strong>Tanh</strong>: $\tanh(x)$. 0-중심이나 여전히 포화함.</li>
+  <li><strong>ReLU</strong>(Nair & Hinton, 2010): $\max(0, x)$. 희소 활성화와 비포화로 표준이 됨.</li>
+  <li><strong>GELU</strong>(Hendrycks & Gimpel, 2016): $x\Phi(x)$, 여기서 $\Phi$는 표준정규 CDF. Transformer에서 주로 사용.</li>
+  <li><strong>SwiGLU</strong>(Shazeer, 2020): $\text{Swish}(xW) \odot (xV)$. 현재 최신 LLM의 기본 활성함수.</li>
+</ul>
+
+<div class="theorem">
+  <strong>정리 5.1 (보편근사정리, Cybenko 1989; Hornik 1991).</strong>
+  단일 은닉층 MLP는 유한한 뉴런 수로 $\mathbb{R}^n$의 임의의 컴팩트 부분집합 위에서 연속함수를 임의의 정밀도로 근사할 수 있다.
+</div>
+<p>
+그러나 이 정리는 <em>존재성</em>만을 보장할 뿐, 학습 가능성이나 효율적 표현 크기를 보장하지 않는다.
+깊이(depth)는 폭(width)보다 지수적으로 효율적일 수 있음이 알려져 있다(Telgarsky, 2016).
+</p>
+</section>
+
+<section id="sec5-2">
+<h3>5.2 역전파 (Backpropagation)</h3>
+<p>
+손실 $\mathcal{L}$의 파라미터 $\mathbf{W}^{(l)}$에 대한 그래디언트는 연쇄법칙으로 계산된다:
+\[
+\frac{\partial \mathcal{L}}{\partial \mathbf{W}^{(l)}} = \frac{\partial \mathcal{L}}{\partial \mathbf{h}^{(l)}} \cdot \frac{\partial \mathbf{h}^{(l)}}{\partial \mathbf{W}^{(l)}}
+\]
+여기서 $\delta^{(l)} = \partial \mathcal{L}/\partial \mathbf{h}^{(l)}$을 <strong>오차 신호</strong>라 부르며,
+다음 점화식을 따른다:
+\[
+\delta^{(l)} = (\mathbf{W}^{(l+1)})^\top \delta^{(l+1)} \odot \sigma'(\mathbf{z}^{(l)})
+\]
+역전파는 자동 미분(automatic differentiation)의 역방향 모드(reverse-mode)에 해당하며,
+현대 프레임워크(PyTorch, JAX)는 이를 계산 그래프(computational graph) 위에서 자동화한다.
+</p>
+</section>
+
+<section id="sec5-3">
+<h3>5.3 합성곱 신경망 (CNN)</h3>
+<p>
+CNN(LeCun et al., 1989; 1998)은 이미지의 공간 구조에 맞춘 귀납 편향을 내장한다. 핵심 연산은 이산 합성곱:
+\[
+(\mathbf{I} * \mathbf{K})(i, j) = \sum_{m}\sum_{n}\mathbf{I}(i+m, j+n)\mathbf{K}(m, n)
+\]
+CNN의 세 가지 특성:
+</p>
+<ol>
+  <li><strong>지역 연결성</strong>: 각 뉴런은 입력의 지역적 패치만 본다(수용장, receptive field).</li>
+  <li><strong>파라미터 공유</strong>: 동일한 커널이 공간 전체에서 재사용됨 → 이동 등변성.</li>
+  <li><strong>풀링</strong>: 공간 해상도 축소와 이동 불변성 강화.</li>
+</ol>
+<p>
+주요 아키텍처: LeNet-5(1998), AlexNet(2012), VGG(2014), GoogLeNet/Inception(2014),
+<strong>ResNet</strong>(2015)은 $\mathbf{h}_{l+1} = \mathbf{h}_l + F(\mathbf{h}_l)$의 항등 지름길을 통해 매우 깊은 네트워크의 훈련을 가능하게 했다.
+ConvNeXt(2022)는 Transformer의 설계 원칙을 CNN에 적용하여 경쟁력을 회복시켰다.
+</p>
+</section>
+
+<section id="sec5-4">
+<h3>5.4 순환 신경망 (RNN, LSTM, GRU)</h3>
+<p>
+RNN은 시퀀스 $\mathbf{x}_1, \dots, \mathbf{x}_T$를 은닉상태 $\mathbf{h}_t$로 처리한다:
+\[
+\mathbf{h}_t = \sigma(\mathbf{W}_{hh}\mathbf{h}_{t-1} + \mathbf{W}_{xh}\mathbf{x}_t + \mathbf{b})
+\]
+그러나 단순 RNN은 시간을 통한 역전파(BPTT)에서 기울기 소실/폭발 문제를 겪는다.
+<strong>LSTM</strong>(Hochreiter & Schmidhuber, 1997)은 게이팅 메커니즘으로 이를 완화한다:
+\[
+\begin{aligned}
+\mathbf{f}_t &= \sigma(\mathbf{W}_f[\mathbf{h}_{t-1}, \mathbf{x}_t]) \quad (\text{망각 게이트})\\
+\mathbf{i}_t &= \sigma(\mathbf{W}_i[\mathbf{h}_{t-1}, \mathbf{x}_t]) \quad (\text{입력 게이트})\\
+\mathbf{o}_t &= \sigma(\mathbf{W}_o[\mathbf{h}_{t-1}, \mathbf{x}_t]) \quad (\text{출력 게이트})\\
+\mathbf{c}_t &= \mathbf{f}_t \odot \mathbf{c}_{t-1} + \mathbf{i}_t \odot \tanh(\mathbf{W}_c[\mathbf{h}_{t-1}, \mathbf{x}_t])\\
+\mathbf{h}_t &= \mathbf{o}_t \odot \tanh(\mathbf{c}_t)
+\end{aligned}
+\]
+그러나 RNN 계열은 본질적으로 순차적이므로 병렬화가 제한되며, 긴 의존성에 약하다. 이 한계는 Transformer의 등장 동기가 되었다.
+</p>
+</section>
+
+<section id="sec5-5">
+<h3>5.5 표현학습 (Representation Learning)</h3>
+<p>
+딥러닝의 가치는 수작업 특징 공학을 자동화된 <em>특징 학습</em>으로 대체한 것에 있다.
+Bengio et al.(2013)의 "Representation Learning" 리뷰는 좋은 표현의 조건으로
+매니폴드 가설, 분산 표현, 위계적 추상화를 제시하였다.
+자기지도학습(SimCLR, MoCo, DINO, MAE)은 레이블 없이 강력한 표현을 학습하여,
+파운데이션 모델 패러다임의 토대를 제공했다.
+</p>
+</section>
+
+</div>
+</section>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="02-foundations.html" style="text-decoration:none;">← 수학·ML 이론</a><a href="04-transformer.html" style="text-decoration:none;">Transformer →</a></div>
+</main>
+</div>
+</body>
+</html>

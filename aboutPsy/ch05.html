@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>기억 | 심리학 기초</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<aside>
+  <a href="../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h1><a href="index.html">심리학 기초</a></h1>
+  <div class="sub">PSYCHOLOGY FROM ZERO</div>
+  <nav>
+    <ol>
+      <li><a href="index.html" class="chap">🏠 목차</a></li>
+      <li><a href="ch01.html" class="chap">1. 심리학이란?</a></li>
+      <li><a href="ch02.html" class="chap">2. 뇌와 신경계</a></li>
+      <li><a href="ch03.html" class="chap">3. 감각과 지각</a></li>
+      <li><a href="ch04.html" class="chap">4. 학습</a></li>
+      <li><a href="ch05.html" class="chap">5. 기억</a></li>
+      <li><a href="ch06.html" class="chap">6. 발달</a></li>
+      <li><a href="ch07.html" class="chap">7. 성격</a></li>
+      <li><a href="ch08.html" class="chap">8. 사회심리학</a></li>
+      <li><a href="ch09.html" class="chap">9. 이상심리·치료</a></li>
+      <li><a href="ch10.html" class="chap">10. 동기와 정서</a></li>
+      <li><a href="quiz.html" class="chap">📝 확인 퀴즈</a></li>
+    </ol>
+  </nav>
+  <button id="theme-btn" onclick="toggleTheme()">다크 모드 전환</button>
+</aside>
+
+<main>
+  <div class="page-nav">
+    <a href="index.html">← 목차로</a>
+  </div>
+
+  <section class="chapter" id="ch5">
+    <div class="chap-num">CHAPTER 05</div>
+    <h2>기억 — 어떻게 저장되고 왜 잊히는가</h2>
+    <div class="en">Memory</div>
+
+    <p>기억은 하나의 '저장소'가 아닙니다. 심리학에서 가장 널리 쓰이는 모델은 <strong>앳킨슨과 시프린(1968)</strong>의 3단계 모델입니다. 정보가 감각기관을 거쳐 장기기억에 저장되기까지, 세 개의 방을 통과하는 셈이죠.</p>
+
+    <h3>5.1 기억의 3단계 모델</h3>
+
+    <figure class="figure">
+      <svg viewBox="0 0 680 260" xmlns="http://www.w3.org/2000/svg">
+        <text x="30" y="105" font-size="11" fill="#6b6b6b">자극</text>
+        <path d="M 58 100 L 85 100" stroke="#5b4b8a" stroke-width="2" marker-end="url(#mArr)"/>
+
+        <rect x="90" y="60" width="140" height="85" rx="8" fill="#dce9f5" stroke="#4a7ba6" stroke-width="2.5"/>
+        <text x="160" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#4a7ba6">감각기억</text>
+        <text x="160" y="105" text-anchor="middle" font-size="10" fill="#6b6b6b">1초 이내</text>
+        <text x="160" y="120" text-anchor="middle" font-size="10" fill="#6b6b6b">거의 무한 용량</text>
+        <text x="160" y="135" text-anchor="middle" font-size="10" fill="#6b6b6b">모든 감각 정보</text>
+
+        <path d="M 235 102 L 270 102" stroke="#5b4b8a" stroke-width="2" marker-end="url(#mArr)"/>
+        <text x="253" y="94" text-anchor="middle" font-size="9" fill="#5b4b8a">주의</text>
+
+        <rect x="275" y="60" width="145" height="85" rx="8" fill="#fff0cc" stroke="#c9a227" stroke-width="2.5"/>
+        <text x="348" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#c9a227">단기기억</text>
+        <text x="348" y="105" text-anchor="middle" font-size="10" fill="#6b6b6b">7±2 항목, 20초</text>
+        <text x="348" y="120" text-anchor="middle" font-size="10" fill="#6b6b6b">'작업 공간'</text>
+        <text x="348" y="135" text-anchor="middle" font-size="10" fill="#6b6b6b">의식적 처리</text>
+
+        <path d="M 425 102 L 460 102" stroke="#5b4b8a" stroke-width="2" marker-end="url(#mArr)"/>
+        <text x="442" y="94" text-anchor="middle" font-size="9" fill="#5b4b8a">부호화</text>
+
+        <rect x="465" y="60" width="180" height="85" rx="8" fill="#e0f0dc" stroke="#5e8b5e" stroke-width="2.5"/>
+        <text x="555" y="85" text-anchor="middle" font-size="13" font-weight="bold" fill="#5e8b5e">장기기억</text>
+        <text x="555" y="105" text-anchor="middle" font-size="10" fill="#6b6b6b">사실상 무한 용량</text>
+        <text x="555" y="120" text-anchor="middle" font-size="10" fill="#6b6b6b">영구 저장</text>
+        <text x="555" y="135" text-anchor="middle" font-size="10" fill="#6b6b6b">수년~평생</text>
+
+        <path d="M 555 148 Q 450 210 348 148" stroke="#d97757" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#mArr2)"/>
+        <text x="450" y="210" text-anchor="middle" font-size="10" font-weight="bold" fill="#d97757">인출</text>
+
+        <path d="M 310 60 Q 280 25 335 25 Q 380 25 355 60" stroke="#5b4b8a" stroke-width="2" fill="none" marker-end="url(#mArr)"/>
+        <text x="335" y="40" text-anchor="middle" font-size="9" fill="#5b4b8a">시연 (반복)</text>
+
+        <path d="M 160 148 L 160 185" stroke="#d97757" stroke-width="2" marker-end="url(#mArr2)"/>
+        <text x="175" y="175" font-size="10" fill="#d97757">소실</text>
+        <path d="M 348 148 L 348 185" stroke="#d97757" stroke-width="2" marker-end="url(#mArr2)"/>
+        <text x="362" y="175" font-size="10" fill="#d97757">망각</text>
+
+        <defs>
+          <marker id="mArr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#5b4b8a"/>
+          </marker>
+          <marker id="mArr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97757"/>
+          </marker>
+        </defs>
+      </svg>
+      <figcaption>앳킨슨-시프린 기억 모델 — 세 개의 저장소를 거치며 정보가 걸러지고 저장됩니다.</figcaption>
+    </figure>
+
+    <div class="term">
+      <span class="word">감각기억</span>
+      바로 지금 눈·귀·피부로 들어온 모든 정보. 찰나(시각 0.5초, 청각 3~4초)에 사라지지만, 그동안 <b>주의</b>를 기울인 것만 단기기억으로 넘어갑니다.
+    </div>
+    <div class="term">
+      <span class="word">단기기억 (작업기억)</span>
+      의식 속에서 '지금 붙잡고 있는' 정보. 용량은 <b>7±2 항목</b>. 시연(반복)하지 않으면 20초 안에 사라집니다. 전화번호를 외우는 동안 속으로 중얼거리는 게 바로 시연입니다.
+    </div>
+    <div class="term">
+      <span class="word">장기기억</span>
+      수분, 수년, 평생까지 저장. 용량이 사실상 무한하고, 새 지식이 들어와도 기존 기억을 밀어내지 않습니다.
+    </div>
+
+    <div class="tip">
+      <span class="label">공부 팁 — 청킹(Chunking)</span>
+      단기기억의 용량은 7±2 "항목"입니다. 그런데 '항목'을 어떻게 묶느냐에 따라 저장량이 달라집니다.<br>
+      · <b>0 1 0 1 2 3 4 5 6 7 8</b> → 11개 숫자 (외우기 어려움)<br>
+      · <b>010-1234-5678</b> → 3개 덩어리 (쉬움)<br>
+      이처럼 묶어서 단위를 줄이는 것을 <b>청킹</b>이라 합니다.
+    </div>
+
+    <h3>5.2 장기기억의 종류</h3>
+    <ul>
+      <li><strong>외현기억 (Explicit)</strong> — 의식적으로 떠올릴 수 있는 기억
+        <ul>
+          <li><b>일화기억</b>: 개인적 경험 (어제 저녁 메뉴, 첫 키스)</li>
+          <li><b>의미기억</b>: 일반 지식 (서울은 한국의 수도)</li>
+        </ul>
+      </li>
+      <li><strong>암묵기억 (Implicit)</strong> — 말로 설명하기 어려운 기억
+        <ul>
+          <li><b>절차기억</b>: 몸이 기억하는 것 (자전거 타기, 신발 끈 묶기)</li>
+          <li><b>점화</b>: 앞서 본 것이 뒤의 반응에 영향 (광고 효과)</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>5.3 망각 곡선 — 에빙하우스</h3>
+    <p>독일의 심리학자 <strong>에빙하우스</strong>는 자기 자신에게 무의미 철자를 외우게 하고 시간이 지나면서 얼마나 기억하는지 측정했습니다. 결과는 충격적이었습니다. <b>하루만 지나도 2/3를 잊는다</b>는 것.</p>
+
+    <figure class="figure">
+      <svg viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
+        <text x="250" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#5b4b8a">에빙하우스 망각 곡선</text>
+        <g stroke="#e5e1d8" stroke-width="1">
+          <line x1="60" y1="95" x2="460" y2="95"/>
+          <line x1="60" y1="145" x2="460" y2="145"/>
+          <line x1="60" y1="195" x2="460" y2="195"/>
+        </g>
+        <line x1="60" y1="250" x2="460" y2="250" stroke="#5b4b8a" stroke-width="2"/>
+        <line x1="60" y1="45" x2="60" y2="250" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="53" y="50" text-anchor="end" font-size="10" fill="#6b6b6b">100%</text>
+        <text x="53" y="100" text-anchor="end" font-size="10" fill="#6b6b6b">75%</text>
+        <text x="53" y="150" text-anchor="end" font-size="10" fill="#6b6b6b">50%</text>
+        <text x="53" y="200" text-anchor="end" font-size="10" fill="#6b6b6b">25%</text>
+        <text x="53" y="253" text-anchor="end" font-size="10" fill="#6b6b6b">0%</text>
+        <text x="25" y="145" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b4b8a" transform="rotate(-90,25,145)">기억 유지율</text>
+        <text x="80" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">직후</text>
+        <text x="140" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">20분</text>
+        <text x="210" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">1시간</text>
+        <text x="280" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">1일</text>
+        <text x="350" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">6일</text>
+        <text x="420" y="268" text-anchor="middle" font-size="10" fill="#6b6b6b">1개월</text>
+        <text x="255" y="290" text-anchor="middle" font-size="11" font-weight="bold" fill="#5b4b8a">경과 시간</text>
+        <path d="M 80 45 Q 110 105 140 138 Q 180 168 210 183 Q 260 203 280 213 Q 330 225 350 230 Q 400 238 420 242"
+              stroke="#d97757" stroke-width="3" fill="none"/>
+        <circle cx="80" cy="45" r="4" fill="#5b4b8a"/>
+        <circle cx="140" cy="138" r="4" fill="#5b4b8a"/>
+        <circle cx="210" cy="183" r="4" fill="#5b4b8a"/>
+        <circle cx="280" cy="213" r="4" fill="#5b4b8a"/>
+        <circle cx="350" cy="230" r="4" fill="#5b4b8a"/>
+        <circle cx="420" cy="242" r="4" fill="#5b4b8a"/>
+      </svg>
+      <figcaption>학습 직후부터 망각은 급격히 일어나고, 시간이 지날수록 그 속도가 느려집니다.</figcaption>
+    </figure>
+
+    <h3>5.4 기억을 잘 저장하는 법 (증거 기반)</h3>
+    <ul>
+      <li><strong>분산 학습</strong>(Spacing effect) — 한 번에 몰아서 하지 말고, 시간 간격을 두고 여러 번 반복. 같은 시간 공부해도 효과가 2배 이상.</li>
+      <li><strong>인출 연습</strong>(Testing effect) — 읽기만 하지 말고 <b>책을 덮고 떠올리기</b>. 퀴즈·자가 테스트가 핵심.</li>
+      <li><strong>정교화</strong> — 새 정보를 기존 지식과 <b>연결</b>. "왜 그럴까?" "이건 뭐랑 비슷하지?"</li>
+      <li><strong>청킹</strong> — 큰 정보를 의미 단위로 묶기.</li>
+      <li><strong>수면</strong> — 잠자는 동안 기억이 통합됩니다. 시험 전날 밤샘은 최악.</li>
+    </ul>
+  </section>
+
+  <div class="page-nav-bottom">
+    <a href="ch04.html">← 이전</a>
+    <div class="spacer"></div>
+    <a href="ch06.html">다음 →</a>
+  </div>
+
+  <footer>© Psychology from Zero · 심리학 입문 학습 사이트</footer>
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>

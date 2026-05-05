@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>참고문헌</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="refs">
+<h2>참고문헌 (Selected References)</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 참고문헌이에요</h4>
+<p>AI 발전에 기여한 주요 논문 38편. 더 깊이 공부하고 싶다면 이 논문들을 직접 찾아 읽어보세요. 특히 굵직한 것:</p>
+<ul>
+  <li><strong>Vaswani 2017</strong> — Transformer 원전 ("Attention is All You Need")</li>
+  <li><strong>Brown 2020</strong> — GPT-3</li>
+  <li><strong>Ho 2020</strong> — Diffusion Model</li>
+  <li><strong>Ouyang 2022</strong> — InstructGPT (ChatGPT의 기반)</li>
+</ul>
+</div></div>
+<div class="paper-version">
+
+<ol class="ref-list">
+<li>Bahdanau, D., Cho, K., & Bengio, Y. (2015). Neural Machine Translation by Jointly Learning to Align and Translate. <em>ICLR</em>.</li>
+<li>Bai, Y., et al. (2022). Constitutional AI: Harmlessness from AI Feedback. <em>arXiv:2212.08073</em>.</li>
+<li>Belkin, M., et al. (2019). Reconciling modern machine-learning practice and the classical bias-variance trade-off. <em>PNAS</em>.</li>
+<li>Bengio, Y., Courville, A., & Vincent, P. (2013). Representation Learning: A Review and New Perspectives. <em>TPAMI</em>.</li>
+<li>Bommasani, R., et al. (2021). On the Opportunities and Risks of Foundation Models. <em>arXiv:2108.07258</em>.</li>
+<li>Brown, T., et al. (2020). Language Models are Few-Shot Learners. <em>NeurIPS</em>.</li>
+<li>Cybenko, G. (1989). Approximation by superpositions of a sigmoidal function. <em>MCSS</em>.</li>
+<li>Dao, T., et al. (2022). FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness. <em>NeurIPS</em>.</li>
+<li>Devlin, J., et al. (2019). BERT: Pre-training of Deep Bidirectional Transformers. <em>NAACL</em>.</li>
+<li>Goodfellow, I., et al. (2014). Generative Adversarial Nets. <em>NeurIPS</em>.</li>
+<li>He, K., et al. (2016). Deep Residual Learning for Image Recognition. <em>CVPR</em>.</li>
+<li>Ho, J., Jain, A., & Abbeel, P. (2020). Denoising Diffusion Probabilistic Models. <em>NeurIPS</em>.</li>
+<li>Hochreiter, S., & Schmidhuber, J. (1997). Long Short-Term Memory. <em>Neural Computation</em>.</li>
+<li>Hoffmann, J., et al. (2022). Training Compute-Optimal Large Language Models (Chinchilla). <em>arXiv:2203.15556</em>.</li>
+<li>Kaplan, J., et al. (2020). Scaling Laws for Neural Language Models. <em>arXiv:2001.08361</em>.</li>
+<li>Kingma, D., & Ba, J. (2015). Adam: A Method for Stochastic Optimization. <em>ICLR</em>.</li>
+<li>Kingma, D., & Welling, M. (2014). Auto-Encoding Variational Bayes. <em>ICLR</em>.</li>
+<li>Krizhevsky, A., Sutskever, I., & Hinton, G. (2012). ImageNet Classification with Deep CNNs. <em>NeurIPS</em>.</li>
+<li>LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep Learning. <em>Nature</em>, 521.</li>
+<li>Lewis, P., et al. (2020). Retrieval-Augmented Generation for Knowledge-Intensive NLP. <em>NeurIPS</em>.</li>
+<li>Lipman, Y., et al. (2023). Flow Matching for Generative Modeling. <em>ICLR</em>.</li>
+<li>McCulloch, W., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity. <em>Bull. Math. Biophys.</em></li>
+<li>Mnih, V., et al. (2015). Human-level control through deep reinforcement learning. <em>Nature</em>.</li>
+<li>Ouyang, L., et al. (2022). Training language models to follow instructions with human feedback. <em>NeurIPS</em>.</li>
+<li>Radford, A., et al. (2021). Learning Transferable Visual Models From Natural Language Supervision (CLIP). <em>ICML</em>.</li>
+<li>Rafailov, R., et al. (2023). Direct Preference Optimization. <em>NeurIPS</em>.</li>
+<li>Rombach, R., et al. (2022). High-Resolution Image Synthesis with Latent Diffusion Models. <em>CVPR</em>.</li>
+<li>Rumelhart, D., Hinton, G., & Williams, R. (1986). Learning representations by back-propagating errors. <em>Nature</em>.</li>
+<li>Russell, S., & Norvig, P. (2020). <em>Artificial Intelligence: A Modern Approach</em> (4th ed.). Pearson.</li>
+<li>Schulman, J., et al. (2017). Proximal Policy Optimization Algorithms. <em>arXiv:1707.06347</em>.</li>
+<li>Silver, D., et al. (2016). Mastering the game of Go with deep neural networks and tree search. <em>Nature</em>.</li>
+<li>Song, Y., et al. (2021). Score-Based Generative Modeling through Stochastic Differential Equations. <em>ICLR</em>.</li>
+<li>Srivastava, N., et al. (2014). Dropout: A Simple Way to Prevent Neural Networks from Overfitting. <em>JMLR</em>.</li>
+<li>Su, J., et al. (2021). RoFormer: Enhanced Transformer with Rotary Position Embedding. <em>arXiv:2104.09864</em>.</li>
+<li>Turing, A. (1950). Computing Machinery and Intelligence. <em>Mind</em>.</li>
+<li>Vapnik, V. (1998). <em>Statistical Learning Theory</em>. Wiley.</li>
+<li>Vaswani, A., et al. (2017). Attention Is All You Need. <em>NeurIPS</em>.</li>
+<li>Wei, J., et al. (2022). Chain-of-Thought Prompting Elicits Reasoning in Large Language Models. <em>NeurIPS</em>.</li>
+<li>Wei, J., et al. (2022). Emergent Abilities of Large Language Models. <em>TMLR</em>.</li>
+</ol>
+
+</div>
+</section>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="08-safety-frontiers.html" style="text-decoration:none;">← 안전성·프런티어</a><span></span></div>
+</main>
+</div>
+</body>
+</html>

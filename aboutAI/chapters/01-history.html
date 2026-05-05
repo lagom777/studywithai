@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1-2장. 서론과 역사</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="sec1">
+<h2>1. 서론</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 AI가 뭐야?</h4>
+<p><strong>AI = 스스로 판단하고 행동하는 똑똑한 프로그램.</strong> 예전엔 사람이 규칙을 일일이 짜줬지만, 요즘은 <strong>데이터로 배우게</strong> 만든다.</p>
+<div class="analogy">요리책 외우게 하지 말고, 엄마 요리 10,000번 보여주고 스스로 따라 하게 하는 것. 이게 "기계학습".</div>
+<div class="example">"이 사진이 고양이인가?" → 규칙("털 있고 귀 삼각형이면 고양이"): 실패 많음 / 학습(고양이 사진 100만 장): 성공. 그래서 요즘 AI는 전부 학습 방식이다.</div>
+</div></div>
+<div class="paper-version">
+
+<p>
+인공지능이란 "지능적 행동을 수행하는 기계를 만드는 과학과 공학"(McCarthy, 1955)으로 정의된다.
+그러나 "지능"의 정의 자체가 철학적으로 열려 있기 때문에, 현대 AI 연구는 보다 조작적인 정의를 채택한다.
+즉, <em>주어진 환경에서 목표를 달성하도록 최적의 행동을 선택하는 능력</em>(Russell & Norvig, 2020)이다.
+이 정의는 네 가지 접근을 포괄한다: (i) 인간처럼 생각하기, (ii) 인간처럼 행동하기,
+(iii) 합리적으로 생각하기, (iv) 합리적으로 행동하기. 오늘날 주류 연구는 (iv)번 접근,
+즉 <strong>합리적 에이전트(rational agent)</strong> 패러다임을 따른다.
+</p>
+
+<p>
+이러한 에이전트는 형식적으로 함수 $f: \mathcal{P}^* \to \mathcal{A}$로 정의되며, 여기서 $\mathcal{P}^*$는 지각열의 집합,
+$\mathcal{A}$는 행동의 집합이다. 학습하는 에이전트는 이 함수 자체를 데이터로부터 유도한다.
+기계학습(machine learning)은 따라서 AI의 부분집합이 아니라, 현대 AI의 <em>지배적 방법론</em>이 되었다.
+</p>
+
+<p>
+본 문서의 범위는 상징주의 AI와 고전 탐색 알고리즘보다는, 현재의 대부분의 산업적·학문적 진보를 견인하고 있는
+<strong>데이터 기반 학습 시스템</strong>에 집중한다. 따라서 논리 프로그래밍, 전문가 시스템, A* 탐색 등은
+역사적 맥락에서만 언급되며, 본론은 통계적 학습과 딥러닝, 그리고 파운데이션 모델에 할당된다.
+</p>
+
+</div>
+</section>
+
+<section id="sec2">
+<h2>2. 역사적 전개</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 AI 80년 역사 한 줄 요약</h4>
+<p><strong>규칙 넣어주기 → 통계로 배우기 → 신경망으로 배우기 → 엄청 크게 키워서 배우기</strong>. 중간에 두 번 망했다(AI 겨울). 핵심 분기점 세 개:</p>
+<ul>
+  <li><strong>2012 AlexNet</strong> — "딥러닝이 진짜 되는구나!" (이미지 인식)</li>
+  <li><strong>2017 Transformer</strong> — "어텐션만으로 충분해" (현재 모든 AI의 뼈대)</li>
+  <li><strong>2022 ChatGPT</strong> — "일반 사람도 AI 쓰는 시대"</li>
+</ul>
+<div class="analogy">AI 발전 = 아이가 말 배우는 과정. 문법책 외우기(규칙) → 많이 듣고 감 잡기(통계) → 엄청 많이 읽기(딥러닝) → 이제 말 잘함(ChatGPT).</div>
+</div></div>
+<div class="paper-version">
+
+
+<div class="timeline">
+  <div class="tl-event"><div class="tl-year">1943</div><div class="tl-dot"></div><div class="tl-content"><strong>McCulloch-Pitts 뉴런</strong> — 최초의 수학적 뉴런 모델</div></div>
+  <div class="tl-event"><div class="tl-year">1950</div><div class="tl-dot"></div><div class="tl-content"><strong>Turing Test</strong> — "기계는 생각할 수 있는가?"</div></div>
+  <div class="tl-event"><div class="tl-year">1956</div><div class="tl-dot"></div><div class="tl-content"><strong>Dartmouth 회의</strong> — "Artificial Intelligence" 용어 탄생</div></div>
+  <div class="tl-event"><div class="tl-year">1958</div><div class="tl-dot"></div><div class="tl-content"><strong>Perceptron</strong> (Rosenblatt) — 최초의 학습 알고리즘</div></div>
+  <div class="tl-event"><div class="tl-year">1969</div><div class="tl-dot"></div><div class="tl-content"><strong>XOR 한계</strong> (Minsky & Papert) — 1차 AI 겨울</div></div>
+  <div class="tl-event"><div class="tl-year">1986</div><div class="tl-dot"></div><div class="tl-content"><strong>역전파 재발견</strong> (Rumelhart, Hinton, Williams)</div></div>
+  <div class="tl-event"><div class="tl-year">1989</div><div class="tl-dot"></div><div class="tl-content"><strong>LeNet</strong> (LeCun) — CNN의 원형</div></div>
+  <div class="tl-event"><div class="tl-year">1997</div><div class="tl-dot"></div><div class="tl-content"><strong>LSTM</strong> (Hochreiter & Schmidhuber) / Deep Blue vs Kasparov</div></div>
+  <div class="tl-event"><div class="tl-year">2012</div><div class="tl-dot"></div><div class="tl-content"><strong>AlexNet</strong> — ImageNet 혁명, 딥러닝 시대 개막</div></div>
+  <div class="tl-event"><div class="tl-year">2014</div><div class="tl-dot"></div><div class="tl-content"><strong>GAN</strong> (Goodfellow) / <strong>Word2Vec</strong> / <strong>Seq2Seq</strong></div></div>
+  <div class="tl-event"><div class="tl-year">2015</div><div class="tl-dot"></div><div class="tl-content"><strong>ResNet</strong> — 152층, 인간 수준 이미지 분류</div></div>
+  <div class="tl-event"><div class="tl-year">2016</div><div class="tl-dot"></div><div class="tl-content"><strong>AlphaGo</strong> — 이세돌 4:1 승</div></div>
+  <div class="tl-event"><div class="tl-year">2017</div><div class="tl-dot"></div><div class="tl-content"><strong>Transformer</strong> — "Attention is All You Need"</div></div>
+  <div class="tl-event"><div class="tl-year">2018</div><div class="tl-dot"></div><div class="tl-content"><strong>BERT</strong> / <strong>GPT-1</strong> — 사전학습+파인튜닝 패러다임</div></div>
+  <div class="tl-event"><div class="tl-year">2020</div><div class="tl-dot"></div><div class="tl-content"><strong>GPT-3</strong> (175B) / <strong>DDPM</strong> / <strong>AlphaFold 2</strong></div></div>
+  <div class="tl-event"><div class="tl-year">2022</div><div class="tl-dot"></div><div class="tl-content"><strong>ChatGPT</strong> / <strong>Stable Diffusion</strong> — 대중 AI 원년</div></div>
+  <div class="tl-event"><div class="tl-year">2023</div><div class="tl-dot"></div><div class="tl-content"><strong>GPT-4</strong> / <strong>Claude</strong> / <strong>Llama 2</strong> — 멀티모달 확산</div></div>
+  <div class="tl-event"><div class="tl-year">2024</div><div class="tl-dot"></div><div class="tl-content"><strong>o1</strong> / <strong>Sora</strong> — 테스트-타임 스케일링, 영상 생성</div></div>
+  <div class="tl-event"><div class="tl-year">2025</div><div class="tl-dot"></div><div class="tl-content"><strong>DeepSeek-R1</strong> — 오픈소스 추론 모델</div></div>
+</div>
+<p class="fig-title">그림 1. 인공지능 80년 연대기. 상징주의(1950s–80s) → 통계학습(90s–00s) → 딥러닝(2012–) → 파운데이션 모델(2017–).</p>
+
+<section id="sec2-1">
+<h3>2.1 상징주의 (Symbolic AI, 1956–1980)</h3>
+<p>
+1956년 다트머스 회의에서 McCarthy, Minsky, Shannon, Rochester에 의해 "artificial intelligence"라는 용어가 공식화되었다.
+이 시기의 가정은 <strong>물리적 기호체계 가설(Physical Symbol System Hypothesis)</strong>(Newell & Simon, 1976)로 요약된다:
+"물리적 기호체계는 일반 지능 행동을 위한 필요충분 수단을 갖는다."
+대표적 성과로는 Logic Theorist, GPS(General Problem Solver), SHRDLU, MYCIN 등 전문가 시스템이 있다.
+이들은 사실(facts)과 규칙(rules)으로 구성된 지식 베이스에 대해 연역적 추론을 수행했다.
+</p>
+<p>
+그러나 상징주의는 <em>지식 획득 병목</em>(knowledge acquisition bottleneck)과
+<em>기호 접지 문제</em>(symbol grounding problem, Harnad, 1990)에 직면했다.
+현실 세계의 연속성·불확실성·상식을 수작업 규칙으로 포착하는 것이 불가능하다는 사실이 점차 명백해졌고,
+1973년 Lighthill 보고서와 1987년 LISP 머신 시장 붕괴로 두 번의 "AI 겨울"이 도래했다.
+</p>
+</section>
+
+<section id="sec2-2">
+<h3>2.2 연결주의 (Connectionism, 1943–1990)</h3>
+<p>
+연결주의의 기원은 McCulloch와 Pitts(1943)의 이진 뉴런 모델이다.
+Rosenblatt(1958)의 퍼셉트론은 선형 분리가능한 문제에 대해 수렴이 보장되는 학습 규칙을 제시했으나,
+Minsky와 Papert(1969)는 XOR 문제를 통해 단층 퍼셉트론의 근본적 한계를 증명하여 연구가 정체되었다.
+</p>
+<p>
+부활은 Rumelhart, Hinton, Williams(1986)의 <strong>역전파(backpropagation)</strong> 알고리즘 재발견으로 이루어졌다.
+이 알고리즘은 연쇄법칙(chain rule)을 이용해 다층 신경망의 파라미터에 대한 손실함수의 경사를
+$O(|\theta|)$ 시간에 계산함으로써, 비선형 가설의 학습을 가능하게 했다.
+LeCun et al.(1989)의 LeNet은 필기 숫자 인식에 합성곱 신경망을 적용한 최초의 성공 사례였다.
+</p>
+</section>
+
+<section id="sec2-3">
+<h3>2.3 통계적 학습 (1990–2010)</h3>
+<p>
+1990년대에는 PAC 학습(Valiant, 1984), VC 차원(Vapnik & Chervonenkis), 그리고
+서포트 벡터 머신(Cortes & Vapnik, 1995) 등 통계적 학습 이론이 체계화되었다.
+이 시기의 지배적 방법론은 <strong>수작업 특징 + 얕은 분류기</strong>였다:
+SIFT/HOG와 같은 특징 추출기로 이미지를 벡터화한 후, SVM이나 Random Forest로 분류하였다.
+Naive Bayes, HMM, CRF는 자연어 처리의 표준 도구였다.
+</p>
+</section>
+
+<section id="sec2-4">
+<h3>2.4 딥러닝 혁명 (2012–2017)</h3>
+<p>
+2012년 Krizhevsky, Sutskever, Hinton의 <strong>AlexNet</strong>이 ImageNet Large Scale Visual Recognition Challenge에서
+top-5 error를 26.2%에서 15.3%로 급감시키며 딥러닝 시대의 개막을 알렸다.
+이 혁명을 가능하게 한 삼요소는 다음과 같다:
+(i) GPU의 병렬 연산 능력, (ii) ImageNet과 같은 대규모 레이블 데이터셋, (iii) ReLU, Dropout 등 훈련 기법.
+이후 VGG(2014), GoogLeNet(2014), ResNet(2015, He et al.)이 차례로 state-of-the-art를 경신하였다.
+특히 ResNet의 잔차 연결(residual connection) $h(x) = F(x) + x$는 1000층 이상의 네트워크 훈련을 가능하게 했다.
+</p>
+<p>
+자연어 처리에서는 Mikolov et al.(2013)의 <strong>Word2Vec</strong>이 분산 의미 표현(distributional semantics)의 시대를 열었다.
+$\text{king} - \text{man} + \text{woman} \approx \text{queen}$과 같은 벡터 산술이 단어 의미 관계를 포착함을 보였다.
+</p>
+</section>
+
+<section id="sec2-5">
+<h3>2.5 파운데이션 모델 시대 (2017–현재)</h3>
+<p>
+Vaswani et al.(2017) "Attention is All You Need"는 순환 연결을 완전히 제거한 <strong>Transformer</strong> 아키텍처를 도입했다.
+이는 병렬화 가능하며 긴 의존성을 직접 모델링할 수 있었다. 이 아키텍처를 기반으로
+BERT(Devlin et al., 2018), GPT(Radford et al., 2018; 2019; Brown et al., 2020)가 차례로 등장하였다.
+특히 GPT-3(175B 파라미터)는 <strong>few-shot in-context learning</strong>을 보임으로써
+"스케일이 질적 변화를 만들어낸다"는 주장에 경험적 근거를 제공했다.
+</p>
+<p>
+2022년 11월 ChatGPT 출시, 2023년 GPT-4, Claude, Gemini, Llama 2의 공개,
+그리고 Stable Diffusion과 DALL·E 3의 등장은 AI를 연구실에서 일반 대중의 일상으로 이동시켰다.
+Bommasani et al.(2021)이 명명한 <strong>파운데이션 모델(foundation model)</strong>이라는 개념,
+즉 대규모로 사전학습되어 다양한 하위 작업에 적응 가능한 모델이 새로운 패러다임이 되었다.
+</p>
+</section>
+
+</div>
+</section>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="../index.html" style="text-decoration:none;">← 표지</a><a href="02-foundations.html" style="text-decoration:none;">수학적 기초 →</a></div>
+</main>
+</div>
+</body>
+</html>

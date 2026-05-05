@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9-10장. 강화학습과 멀티모달 AI</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="sec9">
+<h2>9. 강화학습</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 강화학습 = 강아지 훈련</h4>
+<p><strong>잘하면 간식(보상), 잘못하면 무보상.</strong> 계속 시도 → 스스로 최적 전략을 찾는다.</p>
+<div class="analogy">
+<ul>
+  <li><strong>AlphaGo</strong> = 수백만 번 자기 자신과 바둑 두며 실력 쌓기</li>
+  <li><strong>게임 AI</strong> = 마리오 1억 번 플레이하며 클리어법 터득</li>
+  <li><strong>Q값</strong> = "이 상황에서 이 행동하면 미래에 얼마나 좋아지는가?" 기대 점수</li>
+</ul>
+</div>
+<div class="example"><strong>AlphaFold</strong>는 강화학습은 아니지만, "50년 난제"였던 단백질 구조 예측을 풀어낸 역사적 사건. 신약 개발 속도를 획기적으로 올림.</div>
+</div></div>
+<div class="paper-version">
+
+<p>
+강화학습(RL)은 에이전트가 환경과의 상호작용을 통해 누적 보상을 최대화하는 정책을 학습하는 패러다임이다.
+Markov Decision Process (MDP) $(\mathcal{S}, \mathcal{A}, P, r, \gamma)$에서 목표는:
+\[
+\pi^* = \arg\max_\pi \mathbb{E}\left[\sum_{t=0}^\infty \gamma^t r_t\right]
+\]
+</p>
+
+<h3>9.1 가치 함수와 Bellman 방정식</h3>
+<p>
+상태가치 $V^\pi(s) = \mathbb{E}^\pi[G_t | s_t = s]$, 행동가치 $Q^\pi(s,a)$는 다음을 만족한다:
+\[
+Q^\pi(s,a) = \mathbb{E}[r + \gamma \mathbb{E}_{a'\sim\pi}[Q^\pi(s',a')]]
+\]
+최적 가치는 Bellman 최적방정식의 고정점이다.
+</p>
+
+<h3>9.2 주요 알고리즘</h3>
+<ul>
+  <li><strong>Q-Learning</strong>: $Q(s,a) \leftarrow Q(s,a) + \alpha[r + \gamma \max_{a'}Q(s',a') - Q(s,a)]$. Tabular 설정에서 최적으로 수렴.</li>
+  <li><strong>DQN</strong>(Mnih et al., 2015): 신경망으로 $Q$ 근사, 경험 재현과 타겟 네트워크로 안정화. Atari에서 인간 수준 달성.</li>
+  <li><strong>REINFORCE</strong>: $\nabla_\theta J(\theta) = \mathbb{E}[\nabla_\theta \log \pi_\theta(a|s) \cdot G_t]$. 정책 그래디언트의 기본형.</li>
+  <li><strong>Actor-Critic</strong>: 정책(actor)과 가치(critic)를 동시 학습. A2C, A3C.</li>
+  <li><strong>PPO</strong>(Schulman et al., 2017): 클리핑된 대리 목적함수로 안정적 업데이트. LLM 정렬에 사용.</li>
+  <li><strong>SAC</strong>(Haarnoja et al., 2018): 최대 엔트로피 RL. 연속 제어의 표준.</li>
+</ul>
+
+<h3>9.3 주요 성과</h3>
+<p>
+AlphaGo(Silver et al., 2016)는 MCTS와 딥러닝을 결합해 이세돌을 이겼다.
+AlphaZero(2017)는 인간 기보 없이 자기대국만으로 바둑·체스·쇼기를 초인 수준으로 정복했다.
+AlphaStar, OpenAI Five는 실시간 전략·MOBA 게임에서 프로를 이겼다.
+AlphaFold 2(Jumper et al., 2021)는 단백질 구조 예측의 "50년 문제"를 해결하였다.
+</p>
+
+</div>
+</section>
+
+<section id="sec10">
+<h2>10. 멀티모달 AI</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 멀티모달 = 여러 감각을 하나로</h4>
+<p><strong>이미지·텍스트·소리를 다 이해하는 AI.</strong> 핵심 아이디어: 모두 같은 "벡터 공간"에 놓기.</p>
+<div class="analogy">여러 나라 말(이미지어, 글자어, 소리어)을 하나의 <strong>"번역기 언어"</strong>로 통일. 그 언어로는 고양이 사진 = "고양이"라는 글자 = "야옹" 소리.</div>
+<div class="example">
+<ul>
+  <li><strong>CLIP</strong>: "이 사진이 '강아지 달리기'라는 설명과 얼마나 어울리나?" 계산기</li>
+  <li><strong>GPT-4V / Claude 3</strong>: 사진 보여주면 설명하고 질문에 답하는 AI</li>
+  <li><strong>Sora / Veo</strong>: 글 쓰면 영상을 만들어줌</li>
+</ul>
+</div>
+</div></div>
+<div class="paper-version">
+
+
+<svg class="svg-figure" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg">
+  <!-- Image side -->
+  <rect x="20" y="30" width="100" height="60" fill="#1a4b8f" rx="4"/>
+  <text x="70" y="65" text-anchor="middle" fill="#fff" font-size="12">🖼 이미지</text>
+  <rect x="20" y="100" width="100" height="60" fill="#1a4b8f" rx="4"/>
+  <text x="70" y="135" text-anchor="middle" fill="#fff" font-size="12">🖼 이미지</text>
+  <rect x="20" y="170" width="100" height="60" fill="#1a4b8f" rx="4"/>
+  <text x="70" y="205" text-anchor="middle" fill="#fff" font-size="12">🖼 이미지</text>
+  <!-- vision encoder -->
+  <rect x="140" y="70" width="70" height="150" fill="#6428a0" rx="6"/>
+  <text x="175" y="140" text-anchor="middle" fill="#fff" font-size="12" transform="rotate(-90 175 140)">Vision Encoder (ViT)</text>
+  <!-- Text side -->
+  <rect x="480" y="30" width="100" height="60" fill="#c85028" rx="4"/>
+  <text x="530" y="55" text-anchor="middle" fill="#fff" font-size="11">"고양이"</text>
+  <text x="530" y="75" text-anchor="middle" fill="#fff" font-size="11">"a photo of cat"</text>
+  <rect x="480" y="100" width="100" height="60" fill="#c85028" rx="4"/>
+  <text x="530" y="130" text-anchor="middle" fill="#fff" font-size="11">"강아지"</text>
+  <rect x="480" y="170" width="100" height="60" fill="#c85028" rx="4"/>
+  <text x="530" y="200" text-anchor="middle" fill="#fff" font-size="11">"자동차"</text>
+  <!-- text encoder -->
+  <rect x="390" y="70" width="70" height="150" fill="#a02864" rx="6"/>
+  <text x="425" y="140" text-anchor="middle" fill="#fff" font-size="12" transform="rotate(-90 425 140)">Text Encoder</text>
+  <!-- shared embedding space -->
+  <ellipse cx="300" cy="145" rx="80" ry="60" fill="none" stroke="#080" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="300" y="100" text-anchor="middle" font-size="12" font-weight="bold" fill="#080">공유 임베딩 공간</text>
+  <!-- dots -->
+  <circle cx="270" cy="130" r="6" fill="#1a4b8f"/>
+  <circle cx="275" cy="135" r="6" fill="#c85028"/>
+  <circle cx="310" cy="160" r="6" fill="#1a4b8f"/>
+  <circle cx="315" cy="165" r="6" fill="#c85028"/>
+  <circle cx="290" cy="175" r="6" fill="#1a4b8f"/>
+  <circle cx="340" cy="140" r="6" fill="#c85028"/>
+  <!-- arrows to shared -->
+  <path d="M 210,145 L 225,145" stroke="#333" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <path d="M 390,145 L 375,145" stroke="#333" stroke-width="1.5" marker-end="url(#arr5)"/>
+  <defs>
+    <marker id="arr5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <!-- InfoNCE bottom -->
+  <rect x="120" y="250" width="360" height="50" fill="#f5f4ef" stroke="#ccc" rx="6"/>
+  <text x="300" y="272" text-anchor="middle" font-size="12" font-family="serif" font-weight="bold">InfoNCE: 쌍 맞추기 게임</text>
+  <text x="300" y="290" text-anchor="middle" font-size="11" font-style="italic" fill="#555">올바른 이미지↔텍스트 쌍의 유사도 극대화, 오답 쌍은 분리</text>
+</svg>
+<p class="fig-title">그림 13. CLIP의 대조학습. 4억 쌍의 (이미지, 텍스트)를 공유 벡터공간에 매핑하여 제로샷 분류·검색·생성 조건 부여를 가능하게 했다.</p>
+
+<h3>10.1 CLIP과 대조 학습</h3>
+<p>
+Radford et al.(2021)의 <strong>CLIP</strong>은 4억 쌍의 (이미지, 텍스트)에 대해 InfoNCE 손실로 공동 임베딩 공간을 학습하였다:
+\[
+\mathcal{L} = -\log \frac{\exp(\mathrm{sim}(I_i, T_i)/\tau)}{\sum_{j}\exp(\mathrm{sim}(I_i, T_j)/\tau)}
+\]
+결과 모델은 제로샷 분류, 텍스트-이미지 검색, 그리고 Stable Diffusion의 텍스트 조건부여에서 핵심 구성요소가 되었다.
+</p>
+
+<h3>10.2 시각-언어 모델 (VLM)</h3>
+<p>
+GPT-4V, Claude 3, Gemini, LLaVA는 이미지를 LLM의 입력 공간으로 사영하는 어댑터를 두어 멀티모달 대화를 가능하게 한다.
+전형적 구조: CLIP/SigLIP 비전 인코더 → MLP 또는 Q-Former → LLM.
+</p>
+
+<h3>10.3 텍스트-투-비디오와 세계 모델</h3>
+<p>
+Sora(2024), Veo, Kling 등은 잠재 확산과 Transformer 백본을 결합한 텍스트-투-비디오 모델이다.
+이들이 <em>암묵적 세계 모델</em>을 학습하는지에 대한 논쟁이 있으며, 물리적 일관성은 여전히 활발한 연구 주제이다.
+</p>
+
+</div>
+</section>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="06-generative.html" style="text-decoration:none;">← 생성모델</a><a href="08-safety-frontiers.html" style="text-decoration:none;">안전성·프런티어 →</a></div>
+</main>
+</div>
+</body>
+</html>

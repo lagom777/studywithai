@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8장. 생성모델</title>
+<link rel="stylesheet" href="../styles.css">
+<script>
+  MathJax = {
+    tex: { inlineMath: [['$', '$'], ['\\(', '\\)']], displayMath: [['$$','$$'], ['\\[','\\]']] },
+    svg: { fontCache: 'global' }
+  };
+</script>
+<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script defer src="../toggle.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 초록</a></li>
+    <li><a href="01-history.html">1–2. 서론 · 역사</a></li>
+    <li><a href="02-foundations.html">3–4. 수학 · ML 이론</a></li>
+    <li><a href="03-neural.html">5. 신경망과 딥러닝</a></li>
+    <li><a href="04-transformer.html">6. Attention · Transformer</a></li>
+    <li><a href="05-llm.html">7. 대규모 언어모델</a></li>
+    <li><a href="06-generative.html">8. 생성모델</a></li>
+    <li><a href="07-rl-multimodal.html">9–10. 강화학습 · 멀티모달</a></li>
+    <li><a href="08-safety-frontiers.html">11–13. 안전성 · 프런티어 · 결론</a></li>
+    <li><a href="09-references.html">참고문헌</a></li>
+  </ol>
+</aside>
+<main>
+<section id="sec8">
+<h2>8. 생성모델</h2>
+<div class="easy-version"><div class="easy-box">
+<h4>🧒 새 이미지·영상을 만드는 AI</h4>
+<ul>
+  <li><strong>VAE</strong> = 사진을 "숫자 몇 개"로 압축한 뒤 다시 풀어내기 (잠재공간 학습)</li>
+  <li><strong>GAN</strong> = 위조지폐범(생성기) vs 경찰(판별기)가 싸우며 둘 다 고수가 됨</li>
+  <li><strong>Diffusion</strong> = 사진에 노이즈 점점 넣었다가, 다시 지우며 복원하는 법 배우기</li>
+</ul>
+<div class="analogy"><strong>GAN</strong> = 짝퉁 가방 만드는 사람과 명품 감정사의 끝없는 대결. 시간이 지나면 짝퉁이 진짜 수준이 됨.</div>
+<div class="analogy"><strong>Stable Diffusion</strong> = 흐릿한 사진을 포토샵으로 되살리는 기술. 단, 원본이 아니라 "고양이 그려줘"라는 <strong>글자 설명</strong>만 주면 거기서부터 복원.</div>
+<div class="example">확산 모델은 먼저 "완전 노이즈"로 시작 → 천천히 정돈하면서 이미지로 변함. 마치 지우개로 뿌연 유리를 닦아내는 느낌.</div>
+</div></div>
+<div class="paper-version">
+
+
+<p>
+생성모델의 목표는 데이터 분포 $p_{\text{data}}(\mathbf{x})$를 근사하여 새 표본을 생성하는 것이다. 주요 계통:
+</p>
+
+<section id="sec8-1">
+<h3>8.1 변분 오토인코더 (VAE)</h3>
+<p>
+Kingma & Welling(2014)의 VAE는 잠재변수 $\mathbf{z}$에 대한 베이즈적 생성모델 $p_\theta(\mathbf{x}, \mathbf{z}) = p_\theta(\mathbf{x}|\mathbf{z})p(\mathbf{z})$을
+변분 추론으로 학습한다. 마진 우도의 하한인 <strong>ELBO</strong>:
+\[
+\log p_\theta(\mathbf{x}) \geq \mathbb{E}_{q_\phi(\mathbf{z}|\mathbf{x})}[\log p_\theta(\mathbf{x}|\mathbf{z})] - D_{\text{KL}}(q_\phi(\mathbf{z}|\mathbf{x})\|p(\mathbf{z}))
+\]
+<strong>재매개변수화 기법</strong> $\mathbf{z} = \mu + \sigma \odot \epsilon$, $\epsilon \sim \mathcal{N}(0,I)$은 확률적 노드를 통한 역전파를 가능하게 했다.
+VAE의 표본은 흐릿한 경향이 있으나 잠재공간이 매끄럽고 해석 가능하다.
+</p>
+</section>
+
+<section id="sec8-2">
+<h3>8.2 생성적 적대 신경망 (GAN)</h3>
+<p>
+Goodfellow et al.(2014)의 GAN은 생성기 $G$와 판별기 $D$의 미니맥스 게임으로 훈련된다:
+\[
+\min_G \max_D \; \mathbb{E}_{\mathbf{x}\sim p_{\text{data}}}[\log D(\mathbf{x})] + \mathbb{E}_{\mathbf{z}\sim p_{\mathbf{z}}}[\log(1-D(G(\mathbf{z})))]
+\]
+최적 판별기 하에서 이 목적은 $p_{\text{data}}$와 $p_G$ 사이의 Jensen-Shannon 발산 최소화와 동치이다.
+DCGAN, StyleGAN, BigGAN 등은 고품질 이미지 생성을 가능하게 했으나,
+모드 붕괴(mode collapse)와 훈련 불안정성이 고질적 문제였다.
+Wasserstein GAN(Arjovsky et al., 2017)은 Earth-Mover 거리를 사용해 이를 완화했다.
+</p>
+</section>
+
+<section id="sec8-3">
+<h3>8.3 확산 모델 (Diffusion Models)</h3>
+<p>
+Ho et al.(2020) DDPM은 현재 이미지·비디오·오디오 생성의 지배적 패러다임이다.
+순방향 과정은 데이터에 가우시안 노이즈를 점진적으로 추가한다:
+\[
+q(\mathbf{x}_t | \mathbf{x}_{t-1}) = \mathcal{N}(\mathbf{x}_t; \sqrt{1-\beta_t}\mathbf{x}_{t-1}, \beta_t \mathbf{I})
+\]
+역방향 과정 $p_\theta(\mathbf{x}_{t-1}|\mathbf{x}_t)$를 신경망으로 학습한다. 단순화된 훈련 목표:
+\[
+\mathcal{L}_{\text{simple}} = \mathbb{E}_{t, \mathbf{x}_0, \epsilon}\left[\|\epsilon - \epsilon_\theta(\mathbf{x}_t, t)\|^2\right]
+\]
+즉, 네트워크 $\epsilon_\theta$는 어떤 노이즈가 더해졌는지를 예측한다.
+</p>
+<p>
+<div class="diffusion-strip">
+  <div class="diff-container">
+    <div class="diff-step" style="background: radial-gradient(circle at 40% 60%, #c85028, #a02864 40%, #6428a0 70%, #1a4b8f);"></div>
+    <div class="diff-label">t=0 · 원본</div>
+  </div>
+  <div class="diff-container">
+    <div class="diff-step" style="background: radial-gradient(circle at 45% 55%, #c85028aa, #a02864aa 40%, #6428a0aa 60%, #555 90%);"></div>
+    <div class="diff-label">t=200</div>
+  </div>
+  <div class="diff-container">
+    <div class="diff-step" style="background: radial-gradient(circle at 50% 50%, #c8502866, #6428a066 40%, #444 80%);"></div>
+    <div class="diff-label">t=500</div>
+  </div>
+  <div class="diff-container">
+    <div class="diff-step" style="background: radial-gradient(circle at 55% 45%, #88888833, #555 60%, #333);"></div>
+    <div class="diff-label">t=800</div>
+  </div>
+  <div class="diff-container">
+    <div class="diff-step" style="background: repeating-conic-gradient(#555 0deg 10deg, #888 10deg 20deg, #444 20deg 30deg, #777 30deg 40deg);"></div>
+    <div class="diff-label">t=T · 노이즈</div>
+  </div>
+</div>
+<p class="fig-title">그림 11. 확산 과정의 순방향 (→): 이미지에 점진적으로 노이즈 추가. 역방향 (←): 신경망이 노이즈를 예측해 제거. Stable Diffusion은 후자를 학습한다.</p>
+
+<p>
+Song et al.(2021)은 이를 <strong>스코어 기반</strong> 관점에서 통합하였다: $\nabla_\mathbf{x} \log p(\mathbf{x})$를 학습하는 것과 동치임을 보임.
+Rombach et al.(2022)의 <strong>Latent Diffusion Model (Stable Diffusion)</strong>은 VAE로 압축된 잠재공간에서 확산을 수행해 효율을 크게 높였다.
+조건부 생성은 <strong>Classifier-Free Guidance</strong>(Ho & Salimans, 2022):
+\[
+\tilde\epsilon_\theta(\mathbf{x}_t, c) = \epsilon_\theta(\mathbf{x}_t, \varnothing) + w[\epsilon_\theta(\mathbf{x}_t, c) - \epsilon_\theta(\mathbf{x}_t, \varnothing)]
+\]
+로 달성된다.
+</p>
+</section>
+
+<section id="sec8-4">
+<h3>8.4 Flow Matching과 Rectified Flow</h3>
+<p>
+Lipman et al.(2023)의 Flow Matching과 Liu et al.(2023)의 Rectified Flow는 확산 모델을 연속 정규화 흐름(CNF) 관점에서 일반화한다.
+데이터와 노이즈 사이를 잇는 벡터장을 직접 학습하며, 훈련이 단순하고 샘플링이 효율적이다.
+Stable Diffusion 3(2024)와 Flux는 이 프레임워크를 채택하였다.
+</p>
+</section>
+
+</div>
+</section>
+
+<svg class="svg-figure" viewBox="0 0 600 280" xmlns="http://www.w3.org/2000/svg">
+  <!-- Generator -->
+  <rect x="30" y="80" width="140" height="120" fill="#1a4b8f" rx="8"/>
+  <text x="100" y="110" text-anchor="middle" fill="#fff" font-family="serif" font-size="14" font-weight="bold">Generator G</text>
+  <text x="100" y="145" text-anchor="middle" fill="#fff" font-size="11">z ~ N(0, I)</text>
+  <text x="100" y="165" text-anchor="middle" fill="#fff" font-size="11">→ 가짜 이미지</text>
+  <!-- fake data -->
+  <path d="M 170,140 L 230,140" stroke="#333" stroke-width="2" marker-end="url(#arr4)"/>
+  <defs>
+    <marker id="arr4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#333"/>
+    </marker>
+  </defs>
+  <rect x="230" y="100" width="100" height="80" fill="none" stroke="#888" stroke-dasharray="3,3" rx="4"/>
+  <text x="280" y="135" text-anchor="middle" font-size="11" fill="#555">가짜 (Fake)</text>
+  <text x="280" y="160" text-anchor="middle" font-size="11" fill="#555">실제 (Real)</text>
+  <!-- real data arrow -->
+  <path d="M 280,40 L 280,95" stroke="#080" stroke-width="2" marker-end="url(#arr4)"/>
+  <text x="280" y="30" text-anchor="middle" font-size="11" fill="#080">훈련 데이터셋</text>
+  <!-- discriminator -->
+  <path d="M 330,140 L 390,140" stroke="#333" stroke-width="2" marker-end="url(#arr4)"/>
+  <rect x="390" y="80" width="180" height="120" fill="#c85028" rx="8"/>
+  <text x="480" y="110" text-anchor="middle" fill="#fff" font-family="serif" font-size="14" font-weight="bold">Discriminator D</text>
+  <text x="480" y="140" text-anchor="middle" fill="#fff" font-size="11">"진짜일 확률 → [0,1]"</text>
+  <text x="480" y="170" text-anchor="middle" fill="#fff" font-size="11">ℒ = log D(x) + log(1−D(G(z)))</text>
+  <!-- adversarial loop -->
+  <path d="M 480,200 Q 480,250 300,250 Q 100,250 100,200" stroke="#a02864" stroke-width="2" fill="none" stroke-dasharray="5,3" marker-end="url(#arr4)"/>
+  <text x="290" y="245" text-anchor="middle" font-size="11" fill="#a02864" font-weight="bold">적대적 학습 (min-max game)</text>
+</svg>
+<p class="fig-title">그림 12. GAN의 적대적 학습 구조. G는 D를 속이려 하고, D는 진위를 구별하려 한다. 두 네트워크가 경쟁하며 균형점(Nash Equilibrium)에 도달.</p>
+<div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="05-llm.html" style="text-decoration:none;">← 대규모 언어모델</a><a href="07-rl-multimodal.html" style="text-decoration:none;">강화학습·멀티모달 →</a></div>
+</main>
+</div>
+</body>
+</html>

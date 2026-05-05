@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>성격 | 심리학 기초</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<aside>
+  <a href="../index.html" class="hub-back-link" style="display:block;padding:10px 14px;margin-bottom:18px;background:linear-gradient(120deg,#7b5cff,#00d4ff);color:#fff;text-decoration:none;border-radius:10px;font-size:13px;font-weight:600;letter-spacing:0.04em;text-align:center;box-shadow:0 6px 18px -6px rgba(123,92,255,0.5);transition:transform .2s ease;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">↑ 통합 허브</a>
+  <h1><a href="index.html">심리학 기초</a></h1>
+  <div class="sub">PSYCHOLOGY FROM ZERO</div>
+  <nav>
+    <ol>
+      <li><a href="index.html" class="chap">🏠 목차</a></li>
+      <li><a href="ch01.html" class="chap">1. 심리학이란?</a></li>
+      <li><a href="ch02.html" class="chap">2. 뇌와 신경계</a></li>
+      <li><a href="ch03.html" class="chap">3. 감각과 지각</a></li>
+      <li><a href="ch04.html" class="chap">4. 학습</a></li>
+      <li><a href="ch05.html" class="chap">5. 기억</a></li>
+      <li><a href="ch06.html" class="chap">6. 발달</a></li>
+      <li><a href="ch07.html" class="chap">7. 성격</a></li>
+      <li><a href="ch08.html" class="chap">8. 사회심리학</a></li>
+      <li><a href="ch09.html" class="chap">9. 이상심리·치료</a></li>
+      <li><a href="ch10.html" class="chap">10. 동기와 정서</a></li>
+      <li><a href="quiz.html" class="chap">📝 확인 퀴즈</a></li>
+    </ol>
+  </nav>
+  <button id="theme-btn" onclick="toggleTheme()">다크 모드 전환</button>
+</aside>
+
+<main>
+  <div class="page-nav">
+    <a href="index.html">← 목차로</a>
+  </div>
+
+  <section class="chapter" id="ch7">
+    <div class="chap-num">CHAPTER 07</div>
+    <h2>성격 — 사람마다 다른 이유</h2>
+    <div class="en">Personality</div>
+
+    <p>같은 상황에서도 사람마다 반응이 다릅니다. 왜 그럴까요? 심리학자들은 이 질문에 네 가지 주요 관점으로 답해왔습니다: 정신분석, 특성이론, 인본주의, 사회인지.</p>
+
+    <h3>7.1 프로이트의 마음 빙산 모델</h3>
+    <p><strong>프로이트</strong>는 마음을 빙산에 비유했습니다. 우리가 의식하는 건 수면 위의 작은 부분일 뿐, 대부분은 물 밑에 숨겨져 있다는 것이죠.</p>
+
+    <figure class="figure">
+      <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+        <text x="250" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#5b4b8a">프로이트의 마음 빙산 모델</text>
+        <rect x="0" y="175" width="500" height="225" fill="#dce9f5" opacity="0.5"/>
+        <line x1="0" y1="175" x2="500" y2="175" stroke="#4a7ba6" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="460" y="170" font-size="10" fill="#4a7ba6" font-style="italic">수면</text>
+
+        <path d="M 250 45 L 370 175 L 430 370 L 70 370 L 130 175 Z"
+              fill="#f3efe6" stroke="#5b4b8a" stroke-width="2"/>
+        <path d="M 250 45 L 370 175 L 130 175 Z" fill="#ede9f5" stroke="#5b4b8a" stroke-width="2"/>
+
+        <text x="250" y="100" text-anchor="middle" font-size="14" font-weight="bold" fill="#5b4b8a">의식</text>
+        <text x="250" y="118" text-anchor="middle" font-size="10" fill="#6b6b6b">Conscious</text>
+        <text x="250" y="135" text-anchor="middle" font-size="9" fill="#6b6b6b">지금 알고 있는 것</text>
+
+        <text x="250" y="205" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b4b8a">전의식 (Preconscious)</text>
+        <text x="250" y="222" text-anchor="middle" font-size="9" fill="#6b6b6b">떠올리면 생각나는 것</text>
+
+        <text x="250" y="260" text-anchor="middle" font-size="14" font-weight="bold" fill="#d97757">무의식 (Unconscious)</text>
+        <text x="250" y="280" text-anchor="middle" font-size="10" fill="#6b6b6b">숨겨진 욕망·두려움·기억</text>
+
+        <text x="80" y="145" font-size="11" font-weight="bold" fill="#5b4b8a">초자아</text>
+        <text x="80" y="160" font-size="9" fill="#6b6b6b">도덕·양심</text>
+        <line x1="115" y1="152" x2="175" y2="145" stroke="#5b4b8a" stroke-width="1.5"/>
+
+        <text x="395" y="205" font-size="11" font-weight="bold" fill="#5b4b8a">자아</text>
+        <text x="395" y="220" font-size="9" fill="#6b6b6b">현실 조율</text>
+        <line x1="393" y1="210" x2="355" y2="200" stroke="#5b4b8a" stroke-width="1.5"/>
+
+        <text x="370" y="335" font-size="11" font-weight="bold" fill="#d97757">원초아</text>
+        <text x="370" y="350" font-size="9" fill="#6b6b6b">쾌락 추구</text>
+        <line x1="368" y1="338" x2="320" y2="320" stroke="#d97757" stroke-width="1.5"/>
+      </svg>
+      <figcaption>의식은 빙산의 일각. 대부분의 마음은 의식되지 않는 곳에 있다는 것이 프로이트의 핵심 주장입니다.</figcaption>
+    </figure>
+
+    <div class="term">
+      <span class="word">원초아 (Id)</span>
+      태어날 때부터 있는 '본능'의 덩어리. <b>쾌락 원리</b>에 따라 움직임. "지금 당장 원해!"
+    </div>
+    <div class="term">
+      <span class="word">자아 (Ego)</span>
+      현실을 고려하는 '조율자'. <b>현실 원리</b>에 따라 원초아의 욕구를 현실적 방법으로 해소. "나중에 하자, 지금은 때가 아냐."
+    </div>
+    <div class="term">
+      <span class="word">초자아 (Superego)</span>
+      양심과 도덕. <b>도덕 원리</b>에 따라 "그건 잘못됐어"라고 판단. 부모·사회의 규범을 내면화한 것.
+    </div>
+
+    <h3>7.2 방어기제 — 자아를 지키는 무의식적 장치</h3>
+    <p>자아가 원초아·초자아·현실 사이에서 감당하기 힘든 불안을 느낄 때, 무의식적으로 쓰는 방어 전략입니다. 누구나 쓰고, 다 나쁜 것도 아닙니다.</p>
+    <table class="compare">
+      <tr><th>방어기제</th><th>설명</th><th>예시</th></tr>
+      <tr><td><b>억압</b></td><td>고통스런 기억을 무의식으로</td><td>어릴 적 학대를 기억 못함</td></tr>
+      <tr><td><b>부인</b></td><td>현실을 통째로 거부</td><td>"내가 암일 리 없어"</td></tr>
+      <tr><td><b>투사</b></td><td>내 감정을 남의 탓으로</td><td>내가 싫어하면서 "쟤가 날 싫어해"</td></tr>
+      <tr><td><b>합리화</b></td><td>그럴싸한 이유 만들기</td><td>"안 뽑혔지만 어차피 별로였어"</td></tr>
+      <tr><td><b>전치</b></td><td>화를 엉뚱한 대상에</td><td>상사에 혼나고 부하에 화풀이</td></tr>
+      <tr><td><b>승화</b></td><td>충동을 건설적 방식으로</td><td>공격성 → 격투기 선수</td></tr>
+      <tr><td><b>퇴행</b></td><td>어린 시절 행동으로 돌아감</td><td>스트레스 받으면 엄지 빨기</td></tr>
+      <tr><td><b>반동형성</b></td><td>반대 감정으로 표현</td><td>좋아하면서 괴롭히기</td></tr>
+    </table>
+
+    <h3>7.3 Big Five (OCEAN) — 현대 성격 모델</h3>
+    <p>수십 년의 연구 끝에, 현대 성격심리학은 사람의 성격이 <strong>5가지 큰 차원</strong>으로 설명된다고 봅니다. 영어 머리글자를 따서 <b>OCEAN</b>이라고 외웁니다.</p>
+
+    <figure class="figure">
+      <svg viewBox="0 0 560 320" xmlns="http://www.w3.org/2000/svg">
+        <text x="280" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#5b4b8a">Big Five 성격 요인 (OCEAN)</text>
+        <g font-size="11">
+          <text x="20" y="65" font-weight="bold" fill="#5b4b8a">O</text>
+          <text x="40" y="65" fill="#2b2b2b">개방성 (Openness)</text>
+          <text x="40" y="80" fill="#6b6b6b" font-size="10">상상력·호기심·예술 감수성</text>
+          <rect x="230" y="55" width="300" height="18" fill="#f3efe6" stroke="#5b4b8a"/>
+          <rect x="230" y="55" width="240" height="18" fill="#5b4b8a"/>
+
+          <text x="20" y="115" font-weight="bold" fill="#5b4b8a">C</text>
+          <text x="40" y="115" fill="#2b2b2b">성실성 (Conscientiousness)</text>
+          <text x="40" y="130" fill="#6b6b6b" font-size="10">계획성·책임감·자기통제</text>
+          <rect x="230" y="105" width="300" height="18" fill="#f3efe6" stroke="#5b4b8a"/>
+          <rect x="230" y="105" width="210" height="18" fill="#d97757"/>
+
+          <text x="20" y="165" font-weight="bold" fill="#5b4b8a">E</text>
+          <text x="40" y="165" fill="#2b2b2b">외향성 (Extraversion)</text>
+          <text x="40" y="180" fill="#6b6b6b" font-size="10">사교성·활동성·긍정 정서</text>
+          <rect x="230" y="155" width="300" height="18" fill="#f3efe6" stroke="#5b4b8a"/>
+          <rect x="230" y="155" width="180" height="18" fill="#5e8b5e"/>
+
+          <text x="20" y="215" font-weight="bold" fill="#5b4b8a">A</text>
+          <text x="40" y="215" fill="#2b2b2b">우호성 (Agreeableness)</text>
+          <text x="40" y="230" fill="#6b6b6b" font-size="10">공감·협력·신뢰</text>
+          <rect x="230" y="205" width="300" height="18" fill="#f3efe6" stroke="#5b4b8a"/>
+          <rect x="230" y="205" width="255" height="18" fill="#4a7ba6"/>
+
+          <text x="20" y="265" font-weight="bold" fill="#5b4b8a">N</text>
+          <text x="40" y="265" fill="#2b2b2b">신경성 (Neuroticism)</text>
+          <text x="40" y="280" fill="#6b6b6b" font-size="10">정서 불안정·걱정·민감</text>
+          <rect x="230" y="255" width="300" height="18" fill="#f3efe6" stroke="#5b4b8a"/>
+          <rect x="230" y="255" width="120" height="18" fill="#c77b9e"/>
+
+          <text x="280" y="305" text-anchor="middle" font-size="10" fill="#6b6b6b" font-style="italic">
+            각 요인은 이분법이 아니라 연속적 점수입니다 — 어느 지점에 있는지의 차이.
+          </text>
+        </g>
+      </svg>
+      <figcaption>Big 5는 <b>유형 분류</b>가 아니라 <b>5개 축 위의 점수 조합</b>으로 성격을 설명합니다.</figcaption>
+    </figure>
+
+    <div class="warn">
+      <span class="label">MBTI vs Big 5</span>
+      MBTI는 16개 '유형'으로 사람을 분류하지만, 심리학계에서는 신뢰도·타당도 문제로 <b>Big 5를 표준으로</b> 사용합니다. Big 5는 재미는 없지만 훨씬 안정적이고 예측력이 높습니다.
+    </div>
+
+    <h3>7.4 매슬로우의 욕구 위계 (인본주의)</h3>
+    <p><strong>매슬로우</strong>는 '사람은 원래 성장하려는 존재'라고 봤습니다. 인간의 욕구에는 순서가 있어서, 아래 단계가 충족돼야 위로 올라갈 수 있다고 말했죠.</p>
+
+    <figure class="figure">
+      <svg viewBox="0 0 540 400" xmlns="http://www.w3.org/2000/svg">
+        <text x="270" y="22" text-anchor="middle" font-size="14" font-weight="bold" fill="#5b4b8a">매슬로우의 욕구 위계</text>
+        <polygon points="40,360 500,360 445,310 95,310" fill="#ffd6d6" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="270" y="340" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b4b8a">1. 생리적 욕구</text>
+        <text x="270" y="355" text-anchor="middle" font-size="10" fill="#6b6b6b">음식·물·수면·호흡</text>
+
+        <polygon points="95,305 445,305 400,255 140,255" fill="#fde8dc" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="270" y="285" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b4b8a">2. 안전 욕구</text>
+        <text x="270" y="300" text-anchor="middle" font-size="10" fill="#6b6b6b">안정·건강·재산 보호</text>
+
+        <polygon points="140,250 400,250 360,200 180,200" fill="#fff0cc" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="270" y="230" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b4b8a">3. 소속·애정 욕구</text>
+        <text x="270" y="245" text-anchor="middle" font-size="10" fill="#6b6b6b">가족·친구·사랑</text>
+
+        <polygon points="180,195 360,195 320,145 220,145" fill="#e0f0dc" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="270" y="175" text-anchor="middle" font-size="13" font-weight="bold" fill="#5b4b8a">4. 존중 욕구</text>
+        <text x="270" y="190" text-anchor="middle" font-size="10" fill="#6b6b6b">자존감·성취·인정</text>
+
+        <polygon points="220,140 320,140 270,70" fill="#ede9f5" stroke="#5b4b8a" stroke-width="2"/>
+        <text x="270" y="115" text-anchor="middle" font-size="12" font-weight="bold" fill="#5b4b8a">5. 자아실현</text>
+        <text x="270" y="130" text-anchor="middle" font-size="9" fill="#6b6b6b">잠재력 발휘</text>
+
+        <text x="30" y="85" font-size="10" font-weight="bold" fill="#d97757">성장 욕구</text>
+        <text x="30" y="200" font-size="10" font-weight="bold" fill="#d97757">결핍 욕구</text>
+      </svg>
+      <figcaption>아래 4단계는 '결핍되면 문제가 되는' 욕구, 맨 위는 '채워질수록 더 원하는' 성장 욕구입니다.</figcaption>
+    </figure>
+  </section>
+
+  <div class="page-nav-bottom">
+    <a href="ch06.html">← 이전</a>
+    <div class="spacer"></div>
+    <a href="ch08.html">다음 →</a>
+  </div>
+
+  <footer>© Psychology from Zero · 심리학 입문 학습 사이트</footer>
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>
