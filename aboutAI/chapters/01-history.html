@@ -187,6 +187,101 @@ Bommasani et al.(2021)이 명명한 <strong>파운데이션 모델(foundation mo
 </div>
 </section>
 <div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="../index.html" style="text-decoration:none;">← 표지</a><a href="02-foundations.html" style="text-decoration:none;">수학적 기초 →</a></div>
+
+<h2>📚 난이도별 학습</h2>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
+
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>AI의 역사는 "사람이 규칙을 일일이 짜주던 시대"에서 "데이터로 스스로 배우는 시대"로 넘어온 80년의 여정이에요. 1956년 다트머스 회의에서 "인공지능"이라는 말이 처음 쓰였고, 2012년 이미지 인식 대회에서 딥러닝이 압도적인 성적을 내면서 모든 게 달라졌습니다.</p>
+  <h3>왜 중요한가?</h3>
+  <p>역사를 알면 지금의 AI가 왜 이렇게 발전했는지 이해할 수 있어요. 일상 사례를 보면, ① 스마트폰 사진 앱이 자동으로 얼굴을 인식해 앨범을 정리하는 건 2012년 AlexNet 이후의 딥러닝 덕분입니다. ② 유튜브가 내가 좋아할 영상을 추천하는 것도 데이터 기반 학습의 결과예요. ③ ChatGPT 같은 챗봇이 자연스럽게 대화하는 건 2017년 Transformer라는 아키텍처가 나온 이후의 일입니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul>
+    <li><strong>인공지능(AI)</strong>: 사람처럼 판단하고 행동하는 컴퓨터 프로그램</li>
+    <li><strong>기계학습(ML)</strong>: 데이터를 보여주면서 컴퓨터가 스스로 패턴을 익히게 하는 방법</li>
+    <li><strong>딥러닝</strong>: 사람 뇌의 신경망을 흉내 낸 여러 층의 모델로 학습하는 기법</li>
+    <li><strong>AI 겨울</strong>: 기대만큼 성과가 안 나와서 연구비가 끊긴 시기 (1970년대, 1980년대 두 번)</li>
+    <li><strong>파운데이션 모델</strong>: 엄청 큰 데이터로 한 번 훈련해두고 여러 일에 두루 쓰는 모델 (GPT, Claude 등)</li>
+  </ul></div>
+  <h3>핵심 개념 풀어쓰기</h3>
+  <p>AI를 아이가 자라는 과정에 비유해볼게요. 처음에는 부모가 "이건 사과, 저건 바나나"라고 일일이 알려줬어요(상징주의). 그러다 아이에게 그림책을 잔뜩 보여주니까 스스로 알게 되었죠(통계적 학습). 그 다음에는 아이가 직접 도서관에 가서 책을 백만 권 읽었더니 글도 쓰고 그림도 그릴 수 있게 됐어요(딥러닝, 파운데이션 모델). 중간에 두 번이나 "이 방법은 안 되겠다"며 포기한 시기(AI 겨울)가 있었지만, 컴퓨터 성능과 데이터가 충분해지자 폭발적으로 발전했습니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 연도와 인물 이름을 외우려 하지 말고, "1956 다트머스 → 2012 AlexNet → 2017 Transformer → 2022 ChatGPT" 이 네 개의 분기점만 머릿속 지도에 박아두세요. 나머지는 이 사이의 점들로 자연스럽게 연결됩니다.</div>
+  <h3>한 페이지 요약</h3>
+  <ul>
+    <li>AI는 "지능적 행동을 하는 기계"를 만드는 학문</li>
+    <li>1956년 다트머스 회의에서 "인공지능"이라는 용어가 탄생</li>
+    <li>규칙 기반(상징주의) → 통계 기반 → 딥러닝 → 파운데이션 모델 순으로 진화</li>
+    <li>2012년 AlexNet이 이미지 인식 혁명을 일으킴</li>
+    <li>2017년 Transformer가 등장해 현재 모든 거대 AI의 뼈대가 됨</li>
+    <li>2022년 ChatGPT 출시로 AI가 일반인의 일상으로 들어옴</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이 들어가기</h3>
+  <p>현대 AI는 Russell & Norvig가 정의한 합리적 에이전트 패러다임을 따릅니다. 즉 함수 f: P* → A 로서, 지각열(perception sequence)을 받아 행동을 출력하는 시스템이죠. 학습하는 에이전트는 이 함수 자체를 데이터에서 유도합니다. 1956년부터 1980년대까지의 상징주의는 Newell과 Simon의 물리적 기호체계 가설에 기반했습니다. 즉 사실과 규칙으로 지식을 표현하면 지능을 구현할 수 있다는 가정이었죠. MYCIN, SHRDLU 같은 전문가 시스템이 대표 사례입니다. 그러나 지식 획득 병목(knowledge acquisition bottleneck)과 기호 접지 문제로 한계에 부딪혔고, 1973년 Lighthill 보고서, 1987년 LISP 머신 시장 붕괴로 두 번의 AI 겨울을 맞았습니다. 1986년 Rumelhart, Hinton, Williams의 역전파(backpropagation) 재발견으로 연결주의가 부활했고, 1989년 LeCun의 LeNet은 CNN의 원형이 되었습니다. 1990년대는 통계적 학습 이론(VC 차원, PAC 학습)과 SVM이 지배했고, 2012년 AlexNet의 ImageNet 우승(top-5 에러 26.2% → 15.3%)으로 딥러닝 시대가 열렸습니다. 이를 가능하게 한 삼요소는 GPU, 대규모 레이블 데이터, ReLU·Dropout 등 훈련 기법입니다.</p>
+  <h3>핵심 개념과 코드</h3>
+  <pre><code># 1958년 Rosenblatt 퍼셉트론 (단층 학습 규칙)
+import numpy as np
+
+def perceptron_train(X, y, lr=0.1, epochs=10):
+    w = np.zeros(X.shape[1])
+    b = 0
+    for _ in range(epochs):
+        for xi, yi in zip(X, y):
+            pred = np.sign(np.dot(w, xi) + b)
+            if pred != yi:
+                w += lr * yi * xi
+                b += lr * yi
+    return w, b
+
+# XOR은 선형 분리 불가능 → Minsky-Papert(1969)의 한계
+# 다층 신경망 + 역전파(1986)로 해결</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>💻 예제 1 — AlexNet의 충격</h4><p>2012년 이전 ImageNet 챌린지의 우승 모델은 SIFT/HOG 같은 수작업 특징 + SVM 조합이었습니다. AlexNet은 5개의 합성곱층과 3개의 완전연결층, ReLU 활성화, Dropout 정규화, 두 개의 GPU 병렬 학습을 도입해 단번에 10%p 이상 에러율을 낮췄습니다. 이는 단순한 성능 개선이 아니라 "딥러닝이 진짜 작동한다"는 패러다임 전환의 신호였습니다.</p></div>
+  <div class="info-card"><h4>💻 예제 2 — Word2Vec의 벡터 산술</h4><p>Mikolov(2013)는 단어를 고차원 벡터로 임베딩하면 의미 관계가 산술 연산으로 표현됨을 보였습니다. king − man + woman ≈ queen, Paris − France + Italy ≈ Rome 같은 식이죠. 이는 분산 의미 표현(distributional semantics) 시대의 개막을 알렸고, 이후 BERT, GPT 같은 문맥 임베딩으로 발전합니다.</p></div>
+  <h3>응용 사례</h3>
+  <p>역사적 흐름은 현재 산업에 직접 연결됩니다. ① 의료 영상(X-ray, MRI) 자동 판독은 ResNet 계열 CNN의 직접적 후예로, 2015년 ResNet의 잔차 연결 h(x)=F(x)+x 덕에 152층까지 학습이 가능해진 결과입니다. ② 자율주행은 CNN(인식) + RL(제어) + Transformer(계획)의 조합이며, 2016년 AlphaGo의 MCTS+딥러닝 융합 기법이 직접적 영감이 되었습니다. ③ AlphaFold 2(2020)는 단백질 구조 예측에서 CASP14 대회 우승을 차지했고, 이는 50년 묵은 생물학 난제를 푼 사건이었습니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> "딥러닝이 모든 걸 해결한다"고 오해하기 쉽지만, 작은 데이터셋·해석가능성이 중요한 의료/금융·실시간 임베디드 환경에서는 여전히 SVM, Random Forest, 규칙 기반 시스템이 우월할 때가 많습니다. 또 "AI = 신경망"이 아니라, 신경망은 AI의 한 방법론일 뿐임을 기억하세요.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨 이해</h3>
+  <p>AI 역사를 메타적으로 분석하면, 핵심 동인은 "표현(representation)" 패러다임의 전환입니다. 상징주의는 명시적·이산적 기호로 지식을 표현했고, 연결주의는 분산적·연속적 벡터로 표현했습니다. 1986년 역전파 알고리즘은 미분가능한 계산 그래프 위의 chain rule 적용으로, 매개변수 θ에 대한 손실 ∂L/∂θ를 O(|θ|) 시간에 계산함으로써 gradient-based 최적화를 가능하게 했습니다. 그러나 1990년대 후반에는 vanishing gradient, 과적합, 컴퓨팅 부족으로 RBF 네트워크와 SVM이 우세했습니다. 2006년 Hinton의 Deep Belief Network와 layer-wise pretraining, 2010년 GPU와 대규모 데이터셋, 2012년 AlexNet의 ReLU·Dropout 조합이 결합되어 딥러닝이 부활합니다. 2017년 Transformer는 RNN의 순차 의존성을 완전히 제거하고 self-attention의 O(n²) 행렬 연산으로 대체함으로써, 학습의 병렬화와 long-range 의존성 모델링을 동시에 해결했습니다. 2020년 GPT-3의 175B 파라미터, in-context learning의 emergent property는 Kaplan et al.(2020)의 scaling law L ∝ N^(−α) · D^(−β)와 결합되어 "스케일이 질을 만든다"는 명제를 정량화했습니다. Bommasani et al.(2021)의 foundation model 명명, Wei et al.(2022)의 emergent abilities, OpenAI o1(2024)의 test-time scaling은 이 흐름의 최신 연장선입니다.</p>
+  <h3>수학적 기초</h3>
+  <div class="formula">$$\text{역전파: } \frac{\partial L}{\partial \theta_i} = \sum_{j} \frac{\partial L}{\partial z_j} \cdot \frac{\partial z_j}{\partial \theta_i}$$
+  $$\text{Scaling Law (Kaplan, 2020): } L(N, D) = \left(\frac{N_c}{N}\right)^{\alpha_N} + \left(\frac{D_c}{D}\right)^{\alpha_D}$$
+  $$\text{ResNet 잔차: } h(x) = F(x, \{W_i\}) + x$$</div>
+  <h3>최신 연구와 frontier</h3>
+  <p>① <strong>Test-time scaling</strong>: OpenAI o1과 DeepSeek-R1(2025)은 추론 시 "생각하는 시간(chain-of-thought)"을 늘려 성능을 향상시키며, 학습 스케일링과 다른 차원의 자원을 활용합니다. ② <strong>Mixture of Experts(MoE)</strong>: GPT-4, Mixtral, DeepSeek-V3가 채택한 sparse activation 아키텍처로, 동일 추론 비용에서 더 큰 파라미터를 활용합니다. ③ <strong>World Models</strong>: Sora, Genie 등은 시공간적 일관성을 가진 비디오 생성으로 물리 법칙의 암묵적 학습을 시도합니다. 이는 Yann LeCun이 주장하는 JEPA(Joint-Embedding Predictive Architecture)와 연결되며, 차세대 AGI의 후보 경로로 거론됩니다.</p>
+  <h3>관련 분야 연결</h3>
+  <ul>
+    <li><strong>인지과학</strong>: 연결주의의 PDP 모델은 Rumelhart, McClelland의 인지 모델링과 직접 연결</li>
+    <li><strong>통계물리학</strong>: Hopfield 네트워크, Boltzmann machine은 Ising 모델과 동형</li>
+    <li><strong>정보이론</strong>: Shannon 엔트로피, KL divergence가 손실함수의 기반</li>
+    <li><strong>최적화 이론</strong>: SGD, Adam, AdamW 같은 1차 최적화 기법의 수렴성 분석</li>
+    <li><strong>철학(심리철학)</strong>: 기호 접지 문제, 중국어 방, 의식의 hard problem과의 연결</li>
+  </ul>
+  <h3>추가 학습 자료</h3>
+  <ul>
+    <li>📖 Russell & Norvig, <em>Artificial Intelligence: A Modern Approach</em> (4판, 2020)</li>
+    <li>📖 Goodfellow, Bengio, Courville, <em>Deep Learning</em> (MIT Press, 2016)</li>
+    <li>📖 Nilsson, <em>The Quest for Artificial Intelligence</em> (역사 통사)</li>
+    <li>📺 Stanford CS221 / CS229 / CS224N / CS231N (YouTube 공개)</li>
+    <li>📺 3Blue1Brown — Neural Networks 시리즈</li>
+    <li>🔬 키워드: foundation model, scaling law, emergent abilities, AGI, alignment</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 1956년 다트머스 제안서 원문(McCarthy, Minsky, Rochester, Shannon)을 읽고, 그들이 제시한 "10명의 과학자가 한 여름 동안 풀 수 있다"고 본 7개 문제를 현재 어떤 AI 기술이 해결했고, 어떤 것이 여전히 미해결 문제인지 표로 정리해보세요. 이 작업만으로도 AI사의 거시 흐름이 한눈에 들어옵니다.</div>
+</div>
 </main>
 </div>
 </body>

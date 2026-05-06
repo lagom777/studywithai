@@ -576,6 +576,149 @@ function evaluateCondition(row, condition) {
   <a href="03-normalization.html" style="text-decoration:none;">정규화 →</a>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>SQL은 데이터베이스에 "이런 데이터를 보여줘", "이렇게 바꿔줘"라고 부탁하는 영어 비슷한 언어입니다.</p>
+
+  <h3>왜 중요한가?</h3>
+  <p>SQL은 50년 넘게 살아남은 "데이터 세계의 영어"입니다. 첫째, 매출 데이터에서 어제 가장 많이 팔린 상품을 단 한 줄의 SELECT로 뽑을 수 있습니다. 둘째, 회원가입 폼이 INSERT 문 한 줄로 데이터베이스에 저장됩니다. 셋째, 잘못 입력된 전화번호를 UPDATE 한 번으로 수만 건 일괄 수정할 수 있습니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>SELECT</strong>: 데이터를 꺼내 보는 명령. "보여줘"의 뜻.</li>
+      <li><strong>INSERT</strong>: 새로운 행을 추가하는 명령.</li>
+      <li><strong>UPDATE</strong>: 기존 행의 값을 바꾸는 명령.</li>
+      <li><strong>DELETE</strong>: 행을 지우는 명령. WHERE 없이 쓰면 다 지워집니다.</li>
+      <li><strong>WHERE</strong>: 조건절. "이런 행만"을 지정합니다.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>SQL은 마치 식당에서 주문서를 쓰는 것과 같습니다. 종업원에게 "오늘의 메뉴 중 매콤한 것만 보여 주세요. 가격은 1만 원 이하로요. 그리고 매운 정도 순으로 정렬해 주세요"라고 말하는 것과 SQL의 SELECT 문은 거의 같은 구조입니다. 무엇을 가져올지(SELECT 절), 어디서 가져올지(FROM 절), 어떤 조건인지(WHERE 절), 어떻게 정렬할지(ORDER BY 절)를 차례로 적습니다. 처음에는 영어 단어가 낯설어 보이지만, 사실 자연스러운 부탁의 순서입니다. INSERT는 새 손님을 명단에 적는 것, UPDATE는 적은 값을 고치는 것, DELETE는 명단에서 지우는 것입니다. 가장 중요한 점은 "한 번에 여러 행을 처리한다"는 것입니다. 한 줄을 일일이 고치는 게 아니라 "20세 미만 회원 모두"라는 식으로 묶음 단위로 명령합니다. 그래서 빠르고 안전합니다. 처음엔 SELECT 한 가지만 자유롭게 다룰 수 있어도 회사에서 요구하는 데이터 분석의 70%는 해낼 수 있습니다.</p>
+
+  <div class="study-tip">
+    <strong>💡 학습 TIP:</strong> SQL은 책으로 배우기보다 직접 쳐 보는 게 가장 빠릅니다. SQLite나 온라인 SQL 연습 사이트에 작은 테이블 하나 만들고 SELECT를 50번만 쳐 보세요.
+  </div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>SQL은 DB에 명령을 내리는 언어입니다.</li>
+    <li>SELECT는 조회, INSERT/UPDATE/DELETE는 변경.</li>
+    <li>WHERE 절로 대상을 좁힙니다.</li>
+    <li>ORDER BY로 정렬, LIMIT로 개수 제한.</li>
+    <li>한 번에 여러 행을 묶음 처리하는 것이 강점입니다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>SQL은 선언적 언어입니다. "어떻게" 가져올지가 아니라 "무엇을" 가져올지를 기술하면, 옵티마이저가 가장 효율적인 실행계획을 만들어 냅니다. 따라서 같은 결과를 만드는 쿼리도 작성 방식에 따라 성능이 천차만별입니다. SQL 표준은 ANSI SQL로 정의되며 ISO에서도 관리하지만, 각 RDBMS는 자체 방언을 갖습니다. SQL의 큰 줄기는 DDL(Data Definition Language: CREATE, ALTER, DROP), DML(Data Manipulation Language: SELECT, INSERT, UPDATE, DELETE), DCL(Data Control Language: GRANT, REVOKE), TCL(Transaction Control: COMMIT, ROLLBACK)로 나뉩니다. 조인은 INNER, LEFT, RIGHT, FULL 네 가지가 표준이며, 자기 자신을 조인하는 셀프 조인은 조직도나 카테고리 트리 같은 계층 구조 표현에 쓰입니다. 그룹화는 GROUP BY와 HAVING이 핵심이고, 윈도우 함수(OVER 절)는 그룹화하지 않고도 누적·순위·이동평균을 계산하게 해 줍니다.</p>
+
+  <h3>실전 SQL/쿼리</h3>
+  <pre><code>-- 카테고리별 매출 상위 3위까지 추출 (윈도우 함수)
+WITH ranked AS (
+  SELECT category,
+         product_name,
+         SUM(amount) AS total_sales,
+         RANK() OVER (
+           PARTITION BY category
+           ORDER BY SUM(amount) DESC
+         ) AS rnk
+  FROM   sales
+  WHERE  sold_at >= '2025-01-01'
+  GROUP  BY category, product_name
+)
+SELECT category, product_name, total_sales
+FROM   ranked
+WHERE  rnk <= 3
+ORDER  BY category, rnk;
+
+-- 외부 조인으로 주문이 없는 회원도 포함
+SELECT m.member_id, m.name, COUNT(o.order_id) AS order_cnt
+FROM   member m
+LEFT   JOIN orders o ON m.member_id = o.member_id
+GROUP  BY m.member_id, m.name;</code></pre>
+
+  <h3>예제</h3>
+  <div class="info-card">
+    <h4>💻 예제 1: 월별 활성 사용자(MAU) 계산</h4>
+    <p>로그 테이블에서 DATE_TRUNC('month', logged_at)로 월 단위 그룹을 만들고 COUNT(DISTINCT user_id)로 중복을 제거합니다. 마케팅 대시보드의 가장 기본 지표입니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 코호트 잔존율</h4>
+    <p>가입 월별 회원을 묶고, 이후 N개월차에 활동한 비율을 계산합니다. CASE WHEN과 GROUP BY 조합으로 코호트 매트릭스를 만들 수 있습니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>광고 분석 시스템에서는 일별 로그가 수억 건 쌓이며, GROUP BY와 윈도우 함수가 ETL 파이프라인의 중심이 됩니다. 또한 결제 정산 시스템은 트랜잭션 안에서 INSERT와 UPDATE를 함께 실행해 일관성을 보장합니다. BI 도구(Looker, Metabase)는 SQL을 자동 생성해 비개발자도 분석할 수 있게 해 주며, 데이터 엔지니어는 dbt로 SQL 모델을 버전 관리합니다.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ 자주 하는 실수:</strong> WHERE 절에 함수를 씌우면 인덱스를 못 타는 경우가 많습니다. WHERE DATE(created_at) = '2025-01-01' 대신 범위 비교(BETWEEN)를 쓰세요. 또한 SELECT *는 운영 환경에서 피해야 할 1순위 습관입니다.
+  </div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>SQL 옵티마이저는 파서, 리라이터, 플래너, 익스큐터 단계로 쿼리를 처리합니다. 플래너는 통계(pg_statistic, dba_tab_columns)를 바탕으로 비용 모델을 계산해 Nested Loop, Hash Join, Merge Join 중 최적을 선택합니다. 옵티마이저 힌트(Oracle의 /*+ INDEX(...) */, MySQL의 USE INDEX)는 마지막 보루이며, 본질적으로는 통계 갱신과 인덱스 설계가 우선입니다. 실행계획에서 자주 마주치는 함정으로는 함수 인덱스 미사용, 암묵적 형변환으로 인한 풀스캔, 카디널리티 추정 오류가 있습니다. CTE(Common Table Expression)는 PostgreSQL 12 이전에는 옵티마이저 펜스로 작용해 별도 임시결과를 만들었지만, 12 이후로는 인라이닝이 기본입니다. 윈도우 함수의 프레임 절(ROWS, RANGE, GROUPS)은 정확한 의미가 다르며, 시계열 분석에서는 GROUPS 모드가 동률을 묶어 처리합니다. 재귀 CTE는 그래프 탐색과 BOM(자재 명세서) 전개에 강력하며, UNION ALL 형태로 종료 조건을 반드시 명시해야 무한 루프를 피할 수 있습니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>-- 재귀 CTE로 조직도 계층 탐색
+WITH RECURSIVE org_tree AS (
+  SELECT employee_id, manager_id, name, 1 AS depth
+  FROM   employee
+  WHERE  manager_id IS NULL  -- CEO
+  UNION  ALL
+  SELECT e.employee_id, e.manager_id, e.name, t.depth + 1
+  FROM   employee e
+  JOIN   org_tree t ON e.manager_id = t.employee_id
+)
+SELECT depth, name FROM org_tree ORDER BY depth, name;
+
+-- LATERAL 조인으로 회원별 최근 주문 N건
+SELECT m.member_id, m.name, recent.order_id, recent.amount
+FROM   member m
+CROSS  JOIN LATERAL (
+  SELECT order_id, amount
+  FROM   orders o
+  WHERE  o.member_id = m.member_id
+  ORDER  BY o.created_at DESC
+  LIMIT  3
+) recent;</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>BigQuery, Snowflake, Databricks는 SQL을 분산 분석 엔진의 표준 인터페이스로 채택했습니다. 또한 DuckDB는 단일 노드에서 컬럼나 분석을 수행하는 임베디드 OLAP 엔진으로 데이터 사이언스 영역에서 빠르게 확산 중입니다. SQL/JSON 표준은 JSON 데이터를 1급 시민으로 다루며, PostgreSQL의 JSONB와 jsonpath가 대표 구현입니다. LLM 기반 Text-to-SQL(예: Vanna, sqlcoder)도 떠오르는 분야로, 자연어 질의를 SQL로 변환합니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>쿼리 옵티마이저 이론(Volcano/Cascades 프레임워크).</li>
+    <li>컬럼나 스토리지와 벡터화 실행.</li>
+    <li>스트리밍 SQL(Flink SQL, ksqlDB).</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"SQL Performance Explained" — Markus Winand.</li>
+    <li>"Use The Index, Luke!" 사이트.</li>
+    <li>PostgreSQL Wiki의 SlowQueryQuestions 페이지.</li>
+  </ul>
+
+  <div class="success-box">
+    <strong>🎓 도전 과제:</strong> 1억 행 규모의 주문 테이블에서 월별 고객 코호트 잔존율을 윈도우 함수와 재귀 CTE를 모두 사용하지 않고 계산하는 SQL을 작성해 보세요. 이후 윈도우 함수 버전을 만들어 두 실행계획을 비교 분석합니다.
+  </div>
+</div>
+
 </main>
 </div>
 </body>

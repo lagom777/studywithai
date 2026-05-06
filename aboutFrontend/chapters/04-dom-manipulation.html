@@ -460,6 +460,117 @@
           </ul>
         </div>
       </section>
+
+      <h2>📚 난이도별 학습</h2>
+      <p>본인 수준에 맞춰 탭 선택. 우측 상단 언어 토글로 영어/일본어/중국어 학습 가능.</p>
+      <div class="difficulty-tabs">
+        <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+        <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+        <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+      </div>
+      <div class="difficulty-content" data-level="easy">
+        <span class="difficulty-badge easy">하 · 입문</span>
+        <h3>한 줄로 이해하기</h3>
+        <p>DOM은 브라우저가 HTML을 읽어 메모리에 만든 "조작 가능한 객체 트리"이고, JS는 이 트리를 바꿔 화면을 갱신합니다.</p>
+        <h3>왜 배워야 하나?</h3>
+        <p>실무 사례로 (1) "좋아요" 버튼을 누르면 하트 색이 즉시 바뀌고 카운트가 1 증가, (2) 모달 창을 열고 닫는 클릭 인터랙션, (3) 폼 입력값을 검증해 에러 메시지를 빨갛게 표시하는 등 거의 모든 동적 UI가 DOM 조작으로 만들어집니다. React·Vue도 결국 내부에서 DOM을 조작하므로 원리 이해는 필수입니다.</p>
+        <div class="info-card">
+          <h4>🌱 핵심 용어</h4>
+          <ul>
+            <li><strong>노드(Node)</strong>: DOM 트리의 한 점 — 요소·텍스트·주석</li>
+            <li><strong>요소(Element)</strong>: 태그로 만들어진 노드</li>
+            <li><strong>이벤트</strong>: 클릭·입력 같은 사용자/시스템 알림</li>
+            <li><strong>리스너</strong>: 이벤트가 일어났을 때 실행할 함수</li>
+            <li><strong>리플로우/리페인트</strong>: 레이아웃·픽셀을 다시 그리는 비싼 작업</li>
+          </ul>
+        </div>
+        <h3>개념 풀어쓰기</h3>
+        <p>HTML이 도면이라면 DOM은 그 도면대로 지어 놓은 모형이고, JavaScript는 그 모형을 만지작거리는 손입니다. <code>document.querySelector('.btn')</code>은 "BTN이라는 이름표가 붙은 부품을 찾아줘"라는 명령이고, 찾은 부품에 <code>.textContent = '저장됨'</code>이라고 쓰면 글자만 바뀌고, <code>.style.color = 'red'</code>이라고 쓰면 색만 바뀝니다. 이벤트는 모형에 달린 작은 벨과 같아서, <code>addEventListener('click', 함수)</code>로 "이 벨이 울리면 이 함수를 실행해 줘"라고 약속해 둡니다. 부품을 새로 만들고 싶을 때는 <code>createElement</code>로 부품을 빚고 <code>appendChild</code>로 모형에 붙입니다. 단, 부품을 한꺼번에 100개씩 자주 바꾸면 모형 전체를 다시 그리느라 느려질 수 있으니, 한 번에 묶어서 바꾸는 습관이 중요합니다.</p>
+        <div class="study-tip">
+          <strong>💡 학습 TIP:</strong> 크롬 개발자 도구(F12) → Elements 탭에서 직접 노드를 클릭하고 <code>$0</code>로 콘솔에서 조작해보면 즉시 반응을 볼 수 있어 이해가 빠릅니다.
+        </div>
+        <h3>한 페이지 요약</h3>
+        <ul>
+          <li>DOM = HTML의 객체 트리, JS로 동적 변경</li>
+          <li>조회: <code>querySelector</code>·<code>getElementById</code></li>
+          <li>변경: <code>textContent</code>·<code>classList</code>·<code>setAttribute</code></li>
+          <li>이벤트: <code>addEventListener('click', fn)</code></li>
+          <li>변경은 묶어서 — 빈번한 조작은 성능 저하 원인</li>
+        </ul>
+      </div>
+      <div class="difficulty-content" data-level="medium">
+        <span class="difficulty-badge medium">중 · 응용</span>
+        <h3>이론 깊이</h3>
+        <p>DOM 조작 비용은 (1) 자바스크립트 실행 → (2) 스타일 재계산 → (3) 레이아웃(리플로우) → (4) 페인트 → (5) 컴포지트 단계를 차례로 발생시킵니다. <code>offsetHeight</code>·<code>getBoundingClientRect()</code>처럼 레이아웃 정보를 읽는 동작은 강제 동기 레이아웃(Forced Synchronous Layout)을 유발할 수 있어, 읽기와 쓰기를 섞으면 같은 프레임에서 레이아웃이 여러 번 일어납니다. 이를 막으려면 모든 읽기를 먼저 묶고 그 다음 쓰기를 모아 처리하거나(Read/Write 분리), <code>DocumentFragment</code>·<code>requestAnimationFrame</code>·<code>IntersectionObserver</code> 등 비동기/배치 API를 활용해야 합니다. 이벤트는 캡처링→타깃→버블링 3단계로 흐르며, 위임(Event Delegation)은 부모 한 곳에서 자식들의 이벤트를 받는 패턴으로 동적으로 생성되는 항목에 특히 유용합니다.</p>
+        <h3>핵심 코드 패턴</h3>
+        <pre><code>// 이벤트 위임 + DocumentFragment 배치 추가
+const list = document.querySelector('#todo-list');
+
+list.addEventListener('click', (e) => {
+  const li = e.target.closest('li[data-id]');
+  if (!li) return;
+  if (e.target.matches('.delete')) li.remove();
+});
+
+const frag = document.createDocumentFragment();
+items.forEach(item => {
+  const li = document.createElement('li');
+  li.dataset.id = item.id;
+  li.textContent = item.title;
+  frag.appendChild(li);
+});
+list.appendChild(frag); // 한 번의 리플로우</code></pre>
+        <h3>대표 예제</h3>
+        <div class="info-card">
+          <h4>💻 예제 1: 토스트 알림 시스템</h4>
+          <p>여러 알림을 큐에 쌓고 일정 시간 후 자동 제거하는 패턴은 이벤트 위임과 <code>animationend</code> 리스너를 조합해 구현하면 메모리 누수 없이 깔끔합니다.</p>
+        </div>
+        <div class="info-card">
+          <h4>💻 예제 2: 드래그 앤 드롭 카드</h4>
+          <p>HTML5 Drag & Drop API(<code>dragstart</code>·<code>dragover</code>·<code>drop</code>)와 <code>dataTransfer</code>를 활용해 칸반 보드를 구현할 수 있고, 라이브러리 없이도 충분합니다.</p>
+        </div>
+        <h3>실무 응용</h3>
+        <p>실무에서는 (1) <code>MutationObserver</code>로 외부 스크립트가 삽입한 요소를 감지해 자동 처리, (2) <code>ResizeObserver</code>로 컨테이너 크기 변화에 반응, (3) <code>scrollIntoView({ behavior: 'smooth' })</code>로 부드러운 스크롤을 JS 한 줄로 구현합니다.</p>
+        <div class="warning-box">
+          <strong>⚠️ 자주 하는 실수:</strong> <code>innerHTML</code>에 사용자 입력을 그대로 넣으면 XSS 공격 위험. 텍스트는 <code>textContent</code>를, HTML 삽입이 필요할 땐 sanitize 거치기. 또한 이벤트 리스너를 추가하고 제거하지 않으면 메모리 누수 발생.
+        </div>
+      </div>
+      <div class="difficulty-content" data-level="hard">
+        <span class="difficulty-badge hard">상 · 심화</span>
+        <h3>전문가 레벨</h3>
+        <p>가상 DOM(Virtual DOM)은 React가 도입해 유명해진 패턴으로, 매 렌더 시 JSX 트리를 객체로 만들고 이전 트리와 diff한 뒤 최소 변경 사항만 실제 DOM에 반영합니다. 그러나 가상 DOM은 공짜가 아니어서, Diffing 비용·메모리 사용·재조정(Reconciliation)이라는 오버헤드가 있습니다. 그래서 Solid·Svelte·Vue 3의 컴파일러 기반 접근, 그리고 Signal 패러다임은 "필요한 부분만 직접 갱신"하는 방향으로 회귀했습니다. 브라우저 내부 렌더 엔진(Blink·WebKit·Gecko)은 DOM 트리와 별개로 Render Tree·Layer Tree를 유지하며, 합성(compositing) 단계에서 GPU 텍스처로 합쳐 화면에 표시합니다. <code>contain: layout paint</code>·<code>content-visibility: auto</code> 같은 격리 힌트를 주면 브라우저가 변경 영향 범위를 좁혀 성능을 끌어올릴 수 있습니다.</p>
+        <h3>고급 패턴</h3>
+        <pre><code>// 미니 가상 DOM diffing
+function diff(oldNode, newNode) {
+  if (!oldNode) return { type: 'CREATE', newNode };
+  if (!newNode) return { type: 'REMOVE' };
+  if (oldNode.tag !== newNode.tag) return { type: 'REPLACE', newNode };
+  const propPatches = diffProps(oldNode.props, newNode.props);
+  const childrenPatches = [];
+  const len = Math.max(oldNode.children.length, newNode.children.length);
+  for (let i = 0; i &lt; len; i++) {
+    childrenPatches.push(diff(oldNode.children[i], newNode.children[i]));
+  }
+  return { type: 'UPDATE', propPatches, childrenPatches };
+}</code></pre>
+        <h3>최신 트렌드</h3>
+        <p>(1) <strong>Signals 기반 세밀 반응성</strong>(Solid, Vue 3.4 Vapor): 가상 DOM 없이 직접 DOM 노드에 의존성을 연결해 업데이트, (2) <strong>Web Components + Lit</strong>: 프레임워크 독립적으로 재사용 가능한 DOM 컴포넌트 표준화, (3) <strong>HTML Streaming + Islands Architecture</strong>(Astro, Qwik): SSR 결과를 빠르게 보내고 인터랙티브한 부분만 점진적 hydration.</p>
+        <h3>관련 분야</h3>
+        <ul>
+          <li>브라우저 렌더링 엔진(Blink, Gecko, WebKit) 내부</li>
+          <li>웹 성능 측정(Core Web Vitals, Performance API)</li>
+          <li>접근성 자동화(axe-core, Lighthouse)</li>
+        </ul>
+        <h3>추가 자료</h3>
+        <ul>
+          <li>📖 "How Browsers Work" (Tali Garsiel)</li>
+          <li>📺 React 내부 동작 — Lin Clark "A Cartoon Intro to Fiber"</li>
+          <li>🔬 Chrome DevTools Performance 패널 + Frame chart</li>
+        </ul>
+        <div class="success-box">
+          <strong>🎓 도전 과제:</strong> 가상 DOM 없이 Signal만으로 반응성 시스템을 구축하고, 1만 개 노드 리스트에서 60fps 업데이트가 가능한지 측정해보세요.
+        </div>
+      </div>
     </main>
   </div>
 

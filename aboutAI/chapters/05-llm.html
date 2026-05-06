@@ -254,6 +254,101 @@ RAG의 구성요소: 임베딩 모델, 벡터 데이터베이스(FAISS, Milvus),
 </div>
 </section>
 <div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="04-transformer.html" style="text-decoration:none;">← Transformer</a><a href="06-generative.html" style="text-decoration:none;">생성모델 →</a></div>
+
+<h2>📚 난이도별 학습</h2>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
+
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>대규모 언어모델(LLM)은 인터넷 규모의 텍스트를 읽고 "다음 단어 맞히기" 게임을 수십억 번 반복해서 언어와 세상을 익힌 거대한 신경망이에요. ChatGPT, Claude, Gemini가 모두 LLM이고, 이름의 "Large"는 매개변수가 보통 수십억 ~ 수조 개라는 뜻이에요.</p>
+  <h3>왜 중요한가?</h3>
+  <p>① 학생이 보고서 초안을 쓸 때, 회사원이 이메일을 작성할 때 LLM은 시간을 절약해줍니다. ② 프로그래머는 GitHub Copilot, Cursor 같은 도구로 코드를 자동완성받아 생산성이 2~3배 올라가요. ③ 의사·법조인은 방대한 문서를 LLM에게 요약시키고 사례를 검색하는 데 활용합니다. ④ 외국어 학습자는 LLM과 자연스러운 대화를 통해 회화 연습을 합니다. 한마디로 LLM은 21세기의 "사고 보조 도구"예요.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul>
+    <li><strong>토큰</strong>: 모델이 처리하는 텍스트 조각 (단어 또는 단어의 일부)</li>
+    <li><strong>매개변수</strong>: 모델이 학습한 "기억"의 단위 (예: GPT-3은 175B개)</li>
+    <li><strong>사전학습(pretraining)</strong>: 인터넷 텍스트로 다음 토큰 맞히기 훈련</li>
+    <li><strong>미세조정(fine-tuning)</strong>: 특정 작업·스타일에 맞춰 추가 학습</li>
+    <li><strong>RLHF</strong>: 사람의 피드백으로 모델을 정렬하는 강화학습</li>
+    <li><strong>프롬프트</strong>: 모델에게 주는 입력 지시문</li>
+    <li><strong>할루시네이션</strong>: 그럴듯하지만 사실이 아닌 답을 만들어내는 현상</li>
+  </ul></div>
+  <h3>핵심 개념 풀어쓰기</h3>
+  <p>LLM이 "다음 단어 맞히기"를 어떻게 배우는지 비유로 설명해볼게요. 어린이에게 빈칸이 뚫린 책 1조 권을 주고 "여기 들어갈 단어가 뭘까?"를 계속 물어봐요. 처음에는 아무 단어나 찍지만, 수억 번 반복하면 문맥에 어울리는 단어를 점점 잘 맞히게 됩니다. 이 과정에서 어린이는 문법, 상식, 역사, 과학, 코딩, 농담, 시 쓰기까지 자연스럽게 익히죠. 이게 LLM이에요. 다만 LLM은 "이해"하는 게 아니라 "통계적 패턴을 익힌" 것이라서, 가끔 그럴듯한 거짓말(할루시네이션)을 하기도 합니다. 그래서 사실 확인이 중요해요.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> LLM을 "백과사전 + 비서 + 토론 상대"로 생각하세요. 단순 검색은 구글이 더 좋고, 복잡한 글쓰기·요약·번역·코딩은 LLM이 더 좋습니다. 그리고 중요한 답은 항상 출처 확인을 해야 한다는 점을 잊지 마세요.</div>
+  <h3>한 페이지 요약</h3>
+  <ul>
+    <li>LLM = 거대한 Transformer + 인터넷 텍스트로 사전학습</li>
+    <li>학습 목표는 단순히 "다음 토큰 예측"</li>
+    <li>스케일이 커질수록 새로운 능력(추론, 코드, 번역)이 emergent하게 발현</li>
+    <li>RLHF·DPO로 사람 선호에 맞춰 정렬</li>
+    <li>한계: 할루시네이션, 학습 데이터 시점 한계, 편향, 추론 비용</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이 들어가기</h3>
+  <p>LLM의 학습 파이프라인은 (1) 사전학습(pretraining), (2) 지도 미세조정(SFT), (3) 선호 정렬(RLHF/DPO), (4) 평가·배포로 구성됩니다. 사전학습은 next-token prediction objective L = −Σ log p(x_t | x_(<t))로 진행되며, 이 단순한 목표만으로도 모델이 문법·상식·코드·번역까지 학습합니다. Brown et al.(2020)의 GPT-3는 175B 매개변수로 in-context learning과 few-shot 능력을 emergent property로 보였습니다. Wei et al.(2022)는 chain-of-thought prompting이 추론 능력을 촉발함을 보였고, Kaplan et al.(2020)과 Hoffmann et al.(Chinchilla, 2022)은 매개변수와 데이터의 최적 스케일링 비율을 도출했습니다. RLHF(Ouyang 2022)는 (1) SFT 모델 학습, (2) 보상 모델(RM) 학습 — 사람이 선호한 응답에 높은 점수, (3) PPO로 RM 보상을 최대화하면서 KL(π||π_SFT)을 정칙화. DPO(Rafailov 2023)는 RM 없이 직접 선호 쌍으로 학습하여 단순화했습니다. 추론 시 sampling 전략(temperature, top-k, top-p, beam search)이 출력 다양성/품질을 결정합니다.</p>
+  <h3>핵심 개념과 코드</h3>
+  <pre><code># Hugging Face transformers로 LLM 사용
+from transformers import AutoTokenizer, AutoModelForCausalLM
+import torch
+
+tok = AutoTokenizer.from_pretrained("meta-llama/Llama-3-8B-Instruct")
+model = AutoModelForCausalLM.from_pretrained(
+    "meta-llama/Llama-3-8B-Instruct",
+    torch_dtype=torch.bfloat16, device_map="auto"
+)
+prompt = "한국 수도는 어디인가? 한 문장으로."
+inputs = tok(prompt, return_tensors="pt").to(model.device)
+out = model.generate(**inputs, max_new_tokens=64,
+                     temperature=0.7, top_p=0.9)
+print(tok.decode(out[0], skip_special_tokens=True))</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>💻 예제 1 — In-Context Learning</h4><p>모델 가중치를 업데이트하지 않고 프롬프트 안에 예시 몇 개만 보여주면 새 작업을 수행합니다. "프랑스 → Paris, 한국 → ?" 처럼요. GPT-3의 emergent 능력으로 발견되었고, induction head가 그 메커니즘으로 추정됩니다(Olsson 2022).</p></div>
+  <div class="info-card"><h4>💻 예제 2 — Chain-of-Thought</h4><p>"단계별로 생각해봐"를 프롬프트에 추가하면 산수·논리 문제 정답률이 급상승합니다. Wei(2022)는 8-shot CoT가 GSM8K에서 정확도를 18% → 57%로 끌어올림을 보였습니다. o1, R1 같은 reasoning 모델은 이를 자동화·내재화했습니다.</p></div>
+  <h3>응용 사례</h3>
+  <p>① RAG(Retrieval-Augmented Generation): 외부 문서를 벡터 검색으로 가져와 LLM이 참조하게 함. 사내 지식, 최신 뉴스 등 학습 데이터에 없는 정보 활용. ② 에이전트 시스템(AutoGPT, LangChain, Claude tool use): LLM이 도구(검색, 계산기, 코드 실행)를 호출해 복잡 작업 수행. ③ 코드 어시스턴트(Copilot, Cursor, Cline): IDE 내부에서 코드 생성·디버깅·리팩터링. ④ 의료/법률 특화 모델: Med-PaLM, Harvey AI는 도메인 특화 사전학습 + RLHF로 전문가 수준에 도달.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> LLM 출력을 사실로 그대로 신뢰하면 위험합니다. 특히 인용·통계·법률·의학 정보는 반드시 검증하세요. 또 prompt injection으로 외부 데이터의 악성 지시가 모델 행동을 바꿀 수 있으니, 시스템 프롬프트와 사용자 프롬프트의 분리, output sanitization이 필요합니다.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨 이해</h3>
+  <p>Scaling laws의 함수형은 L(N, D) = E + A/N^α + B/D^β로, 매개변수 N, 데이터 D에 대해 멱함수 감쇠를 보입니다. Chinchilla(Hoffmann 2022)는 compute-optimal frontier에서 N과 D가 거의 같은 비율로 증가해야 함을 도출했고, GPT-3(175B + 300B토큰)가 데이터 부족 상태였음을 보였습니다. 이후 Llama 2/3, Mistral, DeepSeek는 훨씬 많은 데이터(1T~15T)를 사용합니다. Emergent abilities(Wei 2022)는 일정 스케일을 넘어서야 능력이 갑자기 나타나는 현상으로, 일부는 평가 메트릭의 비연속성으로 인한 착시(Schaeffer 2023)이지만 in-context learning, multi-step reasoning은 진짜 emergent로 보입니다. RLHF의 한계는 RM의 over-optimization(Goodhart's law), reward hacking, mode collapse입니다. DPO는 closed-form 손실 −log σ(β log(π(y_w)/π_ref(y_w)) − β log(π(y_l)/π_ref(y_l)))로 단순화했지만 base model 품질에 더 민감합니다. Constitutional AI(Anthropic, Bai 2022)는 사람 라벨 대신 AI가 헌법 원칙으로 자기 비판·재작성하는 RLAIF를 제안했습니다. Inference 측면에서 KV cache, speculative decoding, FlashAttention, paged attention(vLLM), continuous batching이 throughput을 좌우합니다. Test-time scaling(o1, R1)은 inference compute를 늘려 reasoning 성능을 향상시키며, train-time scaling과 직교하는 새 차원입니다.</p>
+  <h3>수학적 기초</h3>
+  <div class="formula">$$\text{Pretraining: } \mathcal{L} = -\sum_{t} \log p_\theta(x_t \mid x_{<t})$$
+  $$\text{Chinchilla scaling: } L(N, D) = E + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}},\; \alpha \approx 0.34,\; \beta \approx 0.28$$
+  $$\text{RLHF (PPO): } \max_\pi \mathbb{E}_{x \sim D, y \sim \pi}[r_\phi(x, y)] - \beta \cdot D_{KL}(\pi \| \pi_{SFT})$$
+  $$\text{DPO loss: } \mathcal{L}_{DPO} = -\log \sigma\!\left(\beta \log \frac{\pi_\theta(y_w|x)}{\pi_{ref}(y_w|x)} - \beta \log \frac{\pi_\theta(y_l|x)}{\pi_{ref}(y_l|x)}\right)$$</div>
+  <h3>최신 연구와 frontier</h3>
+  <p>① <strong>Reasoning 모델</strong>: OpenAI o1·o3, DeepSeek-R1, Claude 3.5 Sonnet의 extended thinking은 RL로 chain-of-thought를 직접 학습하여 수학·코딩에서 인간 전문가 수준에 근접. ② <strong>MoE 스케일링</strong>: DeepSeek-V3(671B 총/37B 활성), Mixtral, GLaM이 동일 inference 비용에서 더 큰 capacity. ③ <strong>Long context + retrieval</strong>: Gemini 2M context, NIAH(needle in a haystack) 평가, RAG의 진화. ④ <strong>Mechanistic interpretability</strong>: Anthropic의 Sparse Autoencoder로 16M개 features 추출, Golden Gate Claude 같은 feature steering 데모.</p>
+  <h3>관련 분야 연결</h3>
+  <ul>
+    <li><strong>강화학습</strong>: PPO, REINFORCE, GRPO(R1) 알고리즘과 reward shaping</li>
+    <li><strong>분산 시스템</strong>: 3D parallelism (data, tensor, pipeline), ZeRO, FSDP</li>
+    <li><strong>인지과학</strong>: dual-process theory(System 1/2)와 fast/slow thinking 모델</li>
+    <li><strong>경제학·게임이론</strong>: alignment를 principal-agent problem으로 분석</li>
+    <li><strong>철학</strong>: Searle 중국어방, 의미·이해의 본질, AI 의식 논쟁</li>
+  </ul>
+  <h3>추가 학습 자료</h3>
+  <ul>
+    <li>📖 Brown et al. <em>Language Models are Few-Shot Learners</em> (GPT-3, 2020)</li>
+    <li>📖 Hoffmann et al. <em>Training Compute-Optimal LLMs</em> (Chinchilla, 2022)</li>
+    <li>📖 Ouyang et al. <em>Training LMs to follow instructions with human feedback</em> (RLHF)</li>
+    <li>📖 Anthropic, <em>Constitutional AI</em>, <em>Towards Monosemanticity</em> 논문 시리즈</li>
+    <li>📺 Karpathy, <em>State of GPT</em> / <em>Let's reproduce GPT-2</em></li>
+    <li>🔬 키워드: scaling laws, RLHF, DPO, MoE, RAG, mechanistic interpretability</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Karpathy의 nanoGPT를 fork해서 TinyStories 데이터셋(약 500MB)으로 작은 LLM을 처음부터 학습시키고, SFT용 instruction 데이터를 생성한 뒤 LoRA로 미세조정해보세요. 이 한 사이클을 직접 경험하면 산업용 LLM 파이프라인의 본질이 손에 잡힙니다.</div>
+</div>
 </main>
 </div>
 </body>

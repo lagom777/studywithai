@@ -276,6 +276,105 @@ Pre-LayerNorm(Xiong et al., 2020)은 훈련 안정성을 크게 향상시켜 GPT
 </div>
 </section>
 <div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="03-neural.html" style="text-decoration:none;">← 신경망</a><a href="05-llm.html" style="text-decoration:none;">대규모 언어모델 →</a></div>
+
+<h2>📚 난이도별 학습</h2>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
+
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>Transformer는 "문장의 모든 단어가 서로를 바라보면서" 어떤 단어가 어떤 단어와 관련이 있는지를 동시에 계산하는 신경망이에요. 2017년 구글의 "Attention is All You Need" 논문에서 처음 등장했고, 지금 GPT, Claude, Gemini 등 모든 거대 AI의 뼈대가 됐습니다.</p>
+  <h3>왜 중요한가?</h3>
+  <p>① ChatGPT와 대화할 때 앞에서 한 말을 기억하는 건 Transformer의 self-attention이 모든 토큰을 동시에 보기 때문이에요. ② 구글 번역이 자연스럽게 한국어 ↔ 영어를 번역하는 것도 2017년 이후 Transformer 기반으로 바뀐 결과입니다. ③ DALL·E나 Midjourney가 그림을 그리는 것도 Transformer 위에 디퓨전 모델을 얹은 구조예요. 한마디로 현대 AI의 모든 신기한 능력은 Transformer가 출발점입니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul>
+    <li><strong>Attention</strong>: 어떤 단어에 얼마나 집중할지 결정하는 메커니즘</li>
+    <li><strong>Self-Attention</strong>: 같은 문장 안의 단어들끼리 서로 주목</li>
+    <li><strong>Q, K, V</strong>: 질의(Query), 열쇠(Key), 값(Value) — 도서관 검색 비유로 설명</li>
+    <li><strong>토큰</strong>: 단어 또는 단어의 일부 (모델이 한 번에 처리하는 최소 단위)</li>
+    <li><strong>Positional Encoding</strong>: 단어 순서 정보를 더해주는 신호</li>
+    <li><strong>Encoder/Decoder</strong>: 입력을 이해하는 부분 / 출력을 생성하는 부분</li>
+  </ul></div>
+  <h3>핵심 개념 풀어쓰기</h3>
+  <p>Self-attention을 도서관에 비유해볼게요. 여러분이 "사과의 색깔이 뭐지?"라는 질문(Query)을 들고 도서관에 갔어요. 모든 책에는 제목 카드(Key)와 내용(Value)이 있죠. 여러분의 질문과 가장 비슷한 제목 카드를 가진 책을 찾아 그 내용을 읽으면 됩니다. Transformer는 문장 속 모든 단어가 이런 식으로 서로의 책을 동시에 검색해요. 예를 들어 "그녀가 사과를 들고 빨갛다고 말했다"에서 "빨갛다"는 "사과"를 강하게 참조하고 "그녀"는 약하게 참조하는 식이죠. 이걸 한 번에 계산하니까 RNN처럼 한 단어씩 차례차례 처리하는 것보다 훨씬 빠르고, 멀리 떨어진 단어 간의 관계도 잘 잡아냅니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> "Attention이 어렵다"고 느낄 땐 직접 작은 행렬로 손으로 계산해보세요. 4개 단어 × 차원 4의 Q, K, V를 만들고 softmax(QKᵀ/√d)V를 종이에 적어보면, 신비롭게 느껴졌던 어텐션이 단순한 가중평균임이 보입니다.</div>
+  <h3>한 페이지 요약</h3>
+  <ul>
+    <li>2017년 Vaswani et al. "Attention is All You Need"가 시작</li>
+    <li>RNN의 순차 처리를 self-attention으로 대체 → 병렬화·long-range 의존성 해결</li>
+    <li>Multi-Head Attention으로 여러 관점의 관계를 동시에 학습</li>
+    <li>Encoder-Decoder, Encoder-only(BERT), Decoder-only(GPT) 세 변종</li>
+    <li>현대의 LLM, ViT, 디퓨전 모델까지 모두 Transformer 기반</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이 들어가기</h3>
+  <p>Vaswani et al.(2017)의 핵심 통찰은 "RNN의 순환 구조 없이도 시퀀스 모델링이 가능하다"였습니다. Self-attention은 입력 시퀀스 X ∈ R^(n×d)에 대해 세 개의 선형 변환 Q = XW_Q, K = XW_K, V = XW_V를 만들고, Attention(Q, K, V) = softmax(QK^T/√d_k)V로 가중합을 계산합니다. √d_k 스케일링은 dot-product의 분산 폭주를 막아 softmax의 그래디언트 안정성을 확보합니다. Multi-Head Attention은 h개의 attention을 병렬로 수행한 뒤 concat하고 선형변환합니다. 각 head가 서로 다른 관계 패턴(문법, 의미, 공참조 등)을 학습하도록 유도하는 효과가 있습니다. Position 정보는 sin/cos 기반 절대 인코딩(원논문) 또는 RoPE(Rotary Position Embedding, Su et al., 2021), ALiBi 같은 상대 인코딩으로 주입합니다. Transformer 블록은 (1) Multi-Head Self-Attention, (2) Position-wise Feed-Forward Network(FFN), 그리고 각각의 Residual + LayerNorm으로 구성됩니다. FFN은 dim_model → 4·dim_model → dim_model로 확장-축소되며, 사실 매개변수의 약 2/3가 여기 있습니다.</p>
+  <h3>핵심 개념과 코드</h3>
+  <pre><code>import torch, math
+import torch.nn as nn
+import torch.nn.functional as F
+
+class SelfAttention(nn.Module):
+    def __init__(self, d_model, n_heads):
+        super().__init__()
+        self.h, self.d = n_heads, d_model // n_heads
+        self.qkv = nn.Linear(d_model, 3*d_model)
+        self.proj = nn.Linear(d_model, d_model)
+    def forward(self, x):
+        B, T, D = x.shape
+        q, k, v = self.qkv(x).chunk(3, dim=-1)
+        q = q.view(B, T, self.h, self.d).transpose(1,2)
+        k = k.view(B, T, self.h, self.d).transpose(1,2)
+        v = v.view(B, T, self.h, self.d).transpose(1,2)
+        att = (q @ k.transpose(-2,-1)) / math.sqrt(self.d)
+        att = F.softmax(att, dim=-1)
+        out = (att @ v).transpose(1,2).contiguous().view(B, T, D)
+        return self.proj(out)</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>💻 예제 1 — BERT vs GPT</h4><p>BERT(2018)는 Encoder-only로 양방향 마스킹 언어 모델링(MLM)을 수행합니다. 문장 이해, 분류, NER에 강합니다. GPT(2018~)는 Decoder-only로 인과적 마스킹을 사용해 다음 토큰을 예측합니다. 생성 작업에 강하며, 현재의 ChatGPT, Claude는 모두 GPT 계열 구조입니다.</p></div>
+  <div class="info-card"><h4>💻 예제 2 — Vision Transformer (ViT)</h4><p>이미지를 16x16 패치로 잘라 토큰화하고, CLS 토큰과 함께 Transformer Encoder에 넣으면 분류기가 됩니다. JFT-300M 같은 대규모 데이터에서 학습할 때 CNN을 능가하며, 현재 비전 백본의 표준 중 하나입니다.</p></div>
+  <h3>응용 사례</h3>
+  <p>① 코드 생성(GitHub Copilot, Cursor)은 GPT 계열 디코더로 다음 토큰을 예측해 코드를 자동완성합니다. ② 단백질 구조 예측 AlphaFold 2의 Evoformer는 Transformer의 변종으로 MSA(Multiple Sequence Alignment)와 pair representation을 동시에 처리합니다. ③ 음성 합성(VALL-E, Bark)은 오디오 토큰화 후 Transformer로 생성합니다. ④ 추천 시스템에서도 SASRec, BERT4Rec 같이 사용자의 클릭 시퀀스를 Transformer로 모델링합니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> Self-attention의 시간·메모리 복잡도는 O(n²d)입니다. 시퀀스 길이가 8K, 32K가 되면 메모리가 폭증하므로 FlashAttention, sliding window, Mamba 같은 효율 기법이 필요합니다. 또 Layer Norm 위치(pre-LN vs post-LN)에 따라 학습 안정성이 크게 달라집니다.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨 이해</h3>
+  <p>Self-attention은 dynamic weight를 가진 그래프 신경망의 한 형태로 해석할 수 있습니다. 각 토큰이 노드이고, attention 가중치가 동적으로 결정되는 edge weight입니다. 이론적으로 Transformer는 Universal Approximator이며(Yun et al., 2020), 충분한 깊이와 폭이 주어지면 임의의 sequence-to-sequence 함수를 근사할 수 있습니다. Mechanistic interpretability 관점에서 Anthropic의 Transformer Circuits 연구(Elhage 2021, Olsson 2022)는 attention head를 induction head, copying head, name mover head 등으로 분해하고, in-context learning이 induction head에 의해 구현됨을 보였습니다. RoPE(Rotary Position Embedding)는 회전 행렬 R_(θm)을 Q, K에 곱하여 상대 위치 m-n을 내적에 자연스럽게 삽입합니다. 이는 long context 일반화의 핵심이 되었고, NTK-aware scaling, YaRN, Position Interpolation 같은 후속 기법으로 RoPE 기반 모델의 컨텍스트 확장이 가능해졌습니다. FlashAttention(Dao 2022, 2023)은 SRAM 친화적 타일링으로 attention의 IO 복잡도를 O(n²d/M)에서 O(n²d²/M)로 개선해 실효 속도를 2-4배 높였습니다. Sparse attention(Longformer, BigBird), linear attention(Performer, Linformer), 그리고 SSM(Mamba, S5)는 quadratic complexity를 우회하는 다른 접근들입니다.</p>
+  <h3>수학적 기초</h3>
+  <div class="formula">$$\text{Scaled Dot-Product Attention: } \text{Attn}(Q, K, V) = \text{softmax}\!\left(\frac{QK^T}{\sqrt{d_k}}\right) V$$
+  $$\text{Multi-Head: } \text{MHA}(X) = \text{Concat}(\text{head}_1, \ldots, \text{head}_h) W^O$$
+  $$\text{RoPE: } R_{\theta_m} q \cdot R_{\theta_n} k = q \cdot R_{\theta_{m-n}} k$$
+  $$\text{FFN: } \text{FFN}(x) = W_2 \cdot \text{GeLU}(W_1 x + b_1) + b_2$$</div>
+  <h3>최신 연구와 frontier</h3>
+  <p>① <strong>Long context</strong>: Gemini 2M, Claude 200K, GPT-4 128K 등이 RoPE 보간, Ring Attention, ALiBi로 컨텍스트를 확장 중입니다. ② <strong>Sub-quadratic 대안</strong>: Mamba, RWKV, RetNet, Hyena가 long-context에서 Transformer와 경쟁하며 일부 작업에서 더 우수합니다. ③ <strong>MoE Transformer</strong>: Mixtral, DeepSeek-MoE는 routing function으로 토큰을 expert에 분배해 활성 매개변수를 줄입니다. ④ <strong>Diffusion Transformer(DiT)</strong>: Sora, Stable Diffusion 3는 U-Net 대신 Transformer를 디퓨전 백본으로 채택했습니다.</p>
+  <h3>관련 분야 연결</h3>
+  <ul>
+    <li><strong>그래프 신경망</strong>: Transformer = fully-connected graph + dynamic attention</li>
+    <li><strong>커널 방법</strong>: Performer는 attention을 random feature kernel로 근사</li>
+    <li><strong>제어이론</strong>: SSM(Mamba)는 linear time-invariant system의 직접 근사</li>
+    <li><strong>정보이론</strong>: attention entropy 분석, head 중요도 측정</li>
+    <li><strong>컴파일러·시스템</strong>: FlashAttention, Triton, CUDA 커널 최적화</li>
+  </ul>
+  <h3>추가 학습 자료</h3>
+  <ul>
+    <li>📖 Vaswani et al., <em>Attention is All You Need</em> (2017, 원논문)</li>
+    <li>📖 Phuong & Hutter, <em>Formal Algorithms for Transformers</em> (2022)</li>
+    <li>📖 Anthropic, <em>A Mathematical Framework for Transformer Circuits</em></li>
+    <li>📺 Jay Alammar, "Illustrated Transformer" / Karpathy, "Let's build GPT"</li>
+    <li>🔬 키워드: RoPE, FlashAttention, MoE, induction head, in-context learning</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Karpathy의 nanoGPT(약 300줄)를 읽고 직접 작은 corpus(예: 셰익스피어, 한국어 위키)에서 처음부터 학습시켜보세요. 그 후 attention 가중치를 시각화해 어떤 head가 어떤 패턴을 학습했는지 분석하면, Transformer의 내부가 더 이상 블랙박스로 보이지 않게 됩니다.</div>
+</div>
 </main>
 </div>
 </body>

@@ -230,6 +230,146 @@ updateDisplay();
   <a href="06-nosql.html" style="text-decoration:none;">NoSQL →</a>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>트랜잭션은 "다 같이 성공하거나, 다 같이 실패하거나" 묶음으로 처리되는 데이터 변경 단위입니다.</p>
+
+  <h3>왜 중요한가?</h3>
+  <p>트랜잭션이 없으면 돈이 사라집니다. 첫째, 송금 중 통신이 끊겨 출금만 되고 입금은 안 되면 큰 사고죠. 둘째, 동시에 같은 좌석을 두 명이 예매하면 한 명만 성공해야 합니다. 셋째, 결제와 재고 차감은 한 묶음이어야 하며, 둘 중 하나라도 실패하면 처음으로 되돌려야 합니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>트랜잭션(Transaction)</strong>: 여러 명령을 묶어 하나처럼 처리하는 단위.</li>
+      <li><strong>COMMIT</strong>: 묶음을 성공 확정.</li>
+      <li><strong>ROLLBACK</strong>: 묶음을 통째로 되돌림.</li>
+      <li><strong>ACID</strong>: 원자성·일관성·고립성·지속성의 약속.</li>
+      <li><strong>락(Lock)</strong>: 동시 접근을 막는 자물쇠.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>은행 송금을 떠올려 봅시다. 내 계좌에서 5만 원이 빠지고, 친구 계좌에 5만 원이 들어가는 두 개의 작업이 있습니다. 만약 첫 번째만 성공하고 두 번째가 실패한다면, 5만 원이 공중으로 사라진 셈이 됩니다. 트랜잭션은 이런 비극을 막기 위해 두 작업을 한 봉투에 묶습니다. 봉투를 봉인(COMMIT)하면 둘 다 영구 반영되고, 도중에 문제가 생기면 봉투를 뜯고 처음으로 되돌립니다(ROLLBACK). 이 묶음 처리에는 네 가지 약속이 있는데 그것이 ACID입니다. 원자성(Atomicity)은 봉투 안 작업이 전부거나 전무, 일관성(Consistency)은 봉투를 열기 전후 데이터의 규칙이 깨지지 않음, 고립성(Isolation)은 다른 봉투의 작업과 섞이지 않음, 지속성(Durability)은 한 번 봉인되면 정전이 와도 사라지지 않음을 보장합니다. 데이터베이스는 이 네 약속을 지키기 위해 락과 로그라는 기술을 씁니다. 락은 다른 봉투가 같은 데이터를 동시에 만지지 못하게 잠그는 것이고, 로그는 봉인된 작업 내용을 미리 디스크에 기록해 정전 후에도 복구할 수 있게 해 줍니다.</p>
+
+  <div class="study-tip">
+    <strong>💡 학습 TIP:</strong> 처음에는 BEGIN/COMMIT/ROLLBACK을 직접 쳐 보고, 일부러 ROLLBACK을 일으켜 데이터가 원상복구되는 것을 눈으로 확인하세요.
+  </div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>트랜잭션은 작업의 묶음입니다.</li>
+    <li>COMMIT으로 확정, ROLLBACK으로 되돌리기.</li>
+    <li>ACID 네 가지 속성을 보장합니다.</li>
+    <li>락과 로그로 동시성과 복구를 처리합니다.</li>
+    <li>금융, 예매, 재고 시스템의 필수 기능입니다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>SQL 표준은 4단계 격리 수준을 정의합니다. READ UNCOMMITTED는 더티 리드를 허용하며, READ COMMITTED는 커밋된 값만 읽지만 같은 트랜잭션 내 두 번 읽었을 때 값이 바뀌는 Non-Repeatable Read가 발생할 수 있습니다. REPEATABLE READ는 같은 행을 다시 읽어도 같은 값이지만 팬텀 리드(범위 조건의 결과 행 수가 바뀜)가 가능하며, SERIALIZABLE은 모든 이상을 막지만 성능 비용이 큽니다. PostgreSQL의 기본은 READ COMMITTED, MySQL InnoDB는 REPEATABLE READ가 기본입니다. 동시성 제어는 비관적 락(2PL: Two-Phase Locking)과 낙관적 락(MVCC) 두 갈래로 나뉘며, MVCC는 읽기와 쓰기가 서로를 막지 않는 것이 핵심 장점입니다. 데드락은 두 트랜잭션이 서로의 락을 기다리는 상황으로, RDBMS는 그래프 기반 데드락 디텍터로 한쪽을 자동 롤백시킵니다. 분산 트랜잭션은 2PC(Two-Phase Commit)로 구현하지만, 코디네이터 단일 장애점과 블로킹 문제로 실무에서는 사가(Saga) 패턴이 더 자주 채택됩니다.</p>
+
+  <h3>실전 SQL/쿼리</h3>
+  <pre><code>-- 송금 트랜잭션
+BEGIN;
+UPDATE account SET balance = balance - 50000
+  WHERE account_id = 'A' AND balance >= 50000;
+-- 행이 갱신되지 않으면 잔고 부족
+UPDATE account SET balance = balance + 50000
+  WHERE account_id = 'B';
+COMMIT;
+-- 어디서든 오류 발생 시 ROLLBACK;
+
+-- 격리 수준 변경
+SET TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+
+-- SELECT FOR UPDATE: 예매 좌석 잠금
+BEGIN;
+SELECT * FROM seat
+  WHERE event_id = 99 AND seat_no = 'A12'
+  FOR UPDATE;
+-- 잠금 후 예매 처리
+UPDATE seat SET status = 'BOOKED', booker_id = 1001
+  WHERE event_id = 99 AND seat_no = 'A12';
+COMMIT;</code></pre>
+
+  <h3>예제</h3>
+  <div class="info-card">
+    <h4>💻 예제 1: 재고 차감 패턴</h4>
+    <p>UPDATE stock SET qty = qty - 1 WHERE product_id = ? AND qty > 0; 처럼 조건을 함께 두면 재고가 음수로 떨어지는 것을 막습니다. 영향 받은 행이 0이면 매진으로 처리합니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 낙관적 락(버전 컬럼)</h4>
+    <p>row에 version 컬럼을 두고 UPDATE ... SET version = version + 1 WHERE id = ? AND version = ? 형식으로 변경합니다. 다른 사용자가 먼저 수정했다면 영향 행이 0이고, 애플리케이션은 재시도하거나 충돌을 알립니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>이커머스 결제는 결제 PG 호출과 주문 상태 변경을 단일 트랜잭션으로 묶을 수 없으므로, 메시지 큐와 사가 패턴으로 보상 트랜잭션을 설계합니다. 또한 게임 인벤토리 거래는 두 플레이어의 인벤토리를 같은 트랜잭션에서 잠가 동시 거래 충돌을 막습니다. 항공권 예매는 좌석 단위 락과 짧은 트랜잭션으로 실시간 점유율을 관리합니다.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ 자주 하는 실수:</strong> 트랜잭션을 너무 길게 끌면 락이 오래 잡혀 시스템 전체가 느려집니다. 외부 API 호출은 트랜잭션 밖에서 처리하는 게 원칙입니다. 또 격리 수준을 무작정 올리는 것은 데드락을 늘립니다.
+  </div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>MVCC(Multi-Version Concurrency Control)는 각 트랜잭션에 스냅샷을 부여하고, 행마다 xmin/xmax 같은 버전 메타데이터로 가시성을 판단합니다. PostgreSQL은 dead tuple을 VACUUM이 정리하고, MySQL InnoDB는 언두 로그를 통해 과거 버전을 복원합니다. SSI(Serializable Snapshot Isolation)는 PostgreSQL 9.1부터 도입된 직렬화 보장 알고리즘으로, 위험한 종속성 사이클을 감지해 한쪽을 abort합니다. WAL(Write-Ahead Logging)은 변경을 먼저 로그에 적고 데이터 페이지에 반영하기 전에 동기화해 충돌 복구의 정확성을 보장하며, 체크포인트와 함께 동작합니다. 분산 트랜잭션의 2PC는 블로킹과 코디네이터 단일 장애점 문제가 있어 Spanner는 TrueTime API를, CockroachDB는 HLC(Hybrid Logical Clock)를 활용해 외부 일관성을 구현합니다. 사가는 보상 트랜잭션 시퀀스로 분산 일관성을 달성하지만, 보상의 멱등성과 순서 보장이 필수입니다. 결정성 데이터베이스(Calvin, FaunaDB)는 트랜잭션 순서를 사전에 결정해 락 경쟁을 줄이며, HTAP는 OLTP와 OLAP을 한 시스템에서 처리하기 위한 격리·복제 기술이 핵심입니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>-- 직렬화 가능 격리 수준에서 사이클 감지
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN;
+SELECT SUM(amount) FROM ledger WHERE account_id = 'A';
+INSERT INTO ledger (account_id, amount) VALUES ('A', -100);
+-- 다른 SERIALIZABLE 트랜잭션과 충돌하면 SQLSTATE 40001로 abort
+-- 애플리케이션은 재시도 루프 필요
+COMMIT;
+
+-- Outbox 패턴: 비즈니스 변경과 이벤트 발행을 한 트랜잭션
+BEGIN;
+INSERT INTO orders (...) VALUES (...);
+INSERT INTO outbox (event_type, payload, created_at)
+  VALUES ('OrderCreated', '{...}', NOW());
+COMMIT;
+-- 별도 워커가 outbox를 폴링해 메시지 큐로 발행
+
+-- Advisory Lock으로 분산 잡 단일 실행
+SELECT pg_try_advisory_lock(hashtext('daily_settlement'));
+-- 락 획득 시에만 작업 수행, 완료 후 pg_advisory_unlock</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Google Spanner는 TrueTime을 활용한 외부 일관성 분산 트랜잭션으로 글로벌 ACID를 실현했습니다. 또한 CockroachDB와 YugabyteDB는 오픈소스 NewSQL 영역에서 동일한 모델을 발전시키고 있습니다. FoundationDB는 결정성 시뮬레이션 테스팅으로 분산 트랜잭션의 정확성을 검증하는 패러다임을 보여 주었으며, 서버리스 데이터베이스(Neon, Aurora Serverless v2)는 트랜잭션 격리와 자동 스케일링의 결합을 새로 정의하고 있습니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 합의 알고리즘(Paxos, Raft)과 일관성 모델.</li>
+    <li>이벤트 소싱과 사가 오케스트레이션.</li>
+    <li>WAL 기반 복제와 PITR(Point-In-Time Recovery).</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Designing Data-Intensive Applications" — Martin Kleppmann (트랜잭션 챕터).</li>
+    <li>"A Critique of ANSI SQL Isolation Levels" — Hal Berenson 외.</li>
+    <li>Jepsen 분석 보고서들.</li>
+  </ul>
+
+  <div class="success-box">
+    <strong>🎓 도전 과제:</strong> 두 마이크로서비스(주문, 결제) 간 사가 패턴을 설계하되, Outbox 패턴과 멱등키를 결합해 메시지 중복 발행에도 비즈니스 결과가 1회만 일어나도록 보장하는 시퀀스를 그려 보세요.
+  </div>
+</div>
+
 </main>
 </div>
 </body>

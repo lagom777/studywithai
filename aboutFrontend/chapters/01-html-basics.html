@@ -534,6 +534,117 @@
                 <button class="nav-btn prev" onclick="history.back()">← 이전</button>
                 <a href="02-css-layout.html" class="nav-btn next">다음: CSS와 레이아웃 →</a>
             </div>
+
+            <h2>📚 난이도별 학습</h2>
+            <p>본인 수준에 맞춰 탭 선택. 우측 상단 언어 토글로 영어/일본어/중국어 학습 가능.</p>
+            <div class="difficulty-tabs">
+                <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+                <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+                <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+            </div>
+            <div class="difficulty-content" data-level="easy">
+                <span class="difficulty-badge easy">하 · 입문</span>
+                <h3>한 줄로 이해하기</h3>
+                <p>HTML은 웹 페이지의 "뼈대"를 만드는 언어로, 콘텐츠가 어떤 의미를 갖는지 태그로 표시합니다.</p>
+                <h3>왜 배워야 하나?</h3>
+                <p>HTML 없이는 어떤 웹 페이지도 만들 수 없습니다. 실무 사례로는 (1) 회사 홈페이지의 메인 페이지 구성, (2) 블로그 글 작성 시 제목·본문·이미지 구조 정의, (3) 쇼핑몰의 상품 상세 페이지에서 가격·설명·리뷰 영역 구분이 있습니다. 검색엔진(SEO)과 스크린리더가 콘텐츠를 이해하는 출발점이 바로 HTML입니다.</p>
+                <div class="info-card">
+                    <h4>🌱 핵심 용어</h4>
+                    <ul>
+                        <li><strong>태그(Tag)</strong>: <code>&lt;p&gt;</code>처럼 꺽쇠로 감싼 표시</li>
+                        <li><strong>요소(Element)</strong>: 시작 태그 + 내용 + 종료 태그 전체</li>
+                        <li><strong>속성(Attribute)</strong>: <code>href="..."</code>처럼 태그에 부여하는 추가 정보</li>
+                        <li><strong>시맨틱(Semantic)</strong>: 의미를 명확히 전달하는 태그 사용 방식</li>
+                        <li><strong>DOCTYPE</strong>: 문서가 HTML5 표준임을 알리는 첫 줄 선언</li>
+                    </ul>
+                </div>
+                <h3>개념 풀어쓰기</h3>
+                <p>HTML 문서를 집을 짓는 일에 비유해봅시다. 먼저 <code>&lt;!DOCTYPE html&gt;</code>은 "이 건물은 한국 건축법(HTML5)을 따른다"고 선언하는 명패입니다. <code>&lt;html&gt;</code>은 집 전체를 감싸는 외벽이고, <code>&lt;head&gt;</code>는 보이지 않는 설계 정보(제목, 글꼴, 메타데이터)를 담는 다락방입니다. 반면 <code>&lt;body&gt;</code>는 사람이 실제로 머무는 거실과 방들의 집합입니다. 그 안에서 <code>&lt;h1&gt;</code>은 큰 간판, <code>&lt;p&gt;</code>는 일반 문장, <code>&lt;a&gt;</code>는 다른 방으로 이동하는 문, <code>&lt;img&gt;</code>는 벽에 걸린 그림입니다. 이렇게 각 태그는 콘텐츠의 "역할"을 알려주기 때문에, 검색엔진과 보조 기기들이 어디가 제목이고 어디가 본문인지 정확히 파악할 수 있습니다. 처음에는 외울 태그가 많아 보이지만, 실제로 자주 쓰는 것은 20개 남짓이며 나머지는 필요할 때 검색하면 됩니다.</p>
+                <div class="study-tip">
+                    <strong>💡 학습 TIP:</strong> 메모장이나 VS Code에 <code>.html</code> 파일을 만들고 더블클릭해 브라우저에서 열어보세요. 코드를 바꾸고 새로고침하는 사이클이 가장 빠른 학습법입니다.
+                </div>
+                <h3>한 페이지 요약</h3>
+                <ul>
+                    <li>HTML은 웹 문서의 구조와 의미를 정의하는 마크업 언어</li>
+                    <li>태그는 시작/종료 쌍으로 구성되며 속성으로 부가 정보 전달</li>
+                    <li>시맨틱 태그(<code>header</code>, <code>main</code>, <code>article</code>)로 의미 명확화</li>
+                    <li>접근성을 위해 <code>alt</code>, <code>label</code>, 헤딩 순서 준수 필수</li>
+                    <li>HTML5는 폼·미디어·시맨틱이 강화된 현재 표준</li>
+                </ul>
+            </div>
+            <div class="difficulty-content" data-level="medium">
+                <span class="difficulty-badge medium">중 · 응용</span>
+                <h3>이론 깊이</h3>
+                <p>HTML 문서는 브라우저에 의해 파싱되어 DOM(Document Object Model) 트리로 변환됩니다. 파서는 토큰화(Tokenization)와 트리 구축(Tree Construction)이라는 두 단계를 거쳐 각 태그를 노드로 만들고 부모-자식 관계를 형성합니다. 이때 <code>&lt;script&gt;</code> 태그는 기본적으로 파싱을 차단하기 때문에, <code>defer</code>나 <code>async</code> 속성으로 로딩 전략을 제어해야 렌더링 성능이 떨어지지 않습니다. <code>&lt;meta charset="UTF-8"&gt;</code>은 가능한 한 head 최상단에 둬야 인코딩 오해석을 막을 수 있고, <code>&lt;meta name="viewport"&gt;</code>는 모바일 반응형의 출발점입니다. 폼은 <code>required</code>, <code>pattern</code>, <code>minlength</code>처럼 브라우저 단계에서 검증을 시도하지만, 보안상 서버 측 검증을 반드시 병행해야 합니다.</p>
+                <h3>핵심 코드 패턴</h3>
+                <pre><code>&lt;!-- 시맨틱 + 접근성을 동시에 챙긴 폼 --&gt;
+&lt;form action="/api/signup" method="post" novalidate&gt;
+  &lt;label for="email"&gt;이메일&lt;/label&gt;
+  &lt;input id="email" name="email" type="email"
+         autocomplete="email" required
+         aria-describedby="email-help"&gt;
+  &lt;small id="email-help"&gt;회사 이메일을 입력하세요&lt;/small&gt;
+
+  &lt;button type="submit"&gt;가입&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+                <h3>대표 예제</h3>
+                <div class="info-card">
+                    <h4>💻 예제 1: 블로그 글 구조</h4>
+                    <p><code>&lt;article&gt;</code> 안에 <code>&lt;header&gt;</code>(제목·작성일)와 본문 섹션, <code>&lt;footer&gt;</code>(태그·공유 버튼)를 배치하면 RSS 리더, AMP, 검색엔진이 정확히 콘텐츠 단위를 인식합니다.</p>
+                </div>
+                <div class="info-card">
+                    <h4>💻 예제 2: 이미지 반응형</h4>
+                    <p><code>&lt;picture&gt;</code> + <code>&lt;source srcset&gt;</code>으로 화면 크기·DPR에 맞춰 다른 이미지를 내려보내면 모바일 데이터 사용량을 50% 이상 줄일 수 있습니다.</p>
+                </div>
+                <h3>실무 응용</h3>
+                <p>실제 프로젝트에서는 (1) Open Graph 메타 태그로 카카오톡·페이스북 미리보기 카드를 디자인하고, (2) JSON-LD 구조화 데이터를 삽입해 구글 검색 결과의 별점·가격을 노출시키며, (3) <code>&lt;dialog&gt;</code> 요소로 자바스크립트 의존도가 낮은 모달을 구현합니다. 대형 커머스에서는 상품 페이지마다 <code>itemprop</code>(microdata)을 추가해 가격 비교 사이트에 노출되도록 합니다.</p>
+                <div class="warning-box">
+                    <strong>⚠️ 자주 하는 실수:</strong> <code>&lt;div&gt;</code>로 모든 영역을 감싸는 "div 수프"는 SEO·접근성에 치명적입니다. 또한 <code>&lt;b&gt;</code>·<code>&lt;i&gt;</code> 대신 의미를 가진 <code>&lt;strong&gt;</code>·<code>&lt;em&gt;</code>을 사용하고, 이미지 <code>alt</code>를 빈 문자열로 두는 것은 장식용 이미지일 때만 허용됩니다.
+                </div>
+            </div>
+            <div class="difficulty-content" data-level="hard">
+                <span class="difficulty-badge hard">상 · 심화</span>
+                <h3>전문가 레벨</h3>
+                <p>HTML 파서는 WHATWG 명세에 따라 상태 머신(State Machine) 기반으로 동작하며, 잘못된 태그도 가능한 한 복구(error recovery)하도록 설계되었습니다. 이 관용성 때문에 닫지 않은 태그도 렌더링되지만, 결과적으로 DOM 구조가 달라져 CSS 선택자나 JS 쿼리가 의도와 다르게 동작할 수 있습니다. 브라우저는 HTML을 받자마자 Preload Scanner를 가동해 이후 등장할 리소스를 선제 다운로드하므로, <code>rel="preload"</code>·<code>rel="modulepreload"</code>·<code>rel="preconnect"</code> 힌트를 head에 적절히 배치하는 것이 LCP(Largest Contentful Paint) 최적화의 핵심입니다. 또한 Shadow DOM과 결합한 Web Components는 스타일·구조 캡슐화를 제공해 디자인 시스템에 자주 활용되며, <code>&lt;template&gt;</code>·<code>&lt;slot&gt;</code> 요소가 그 기반입니다. 접근성 측면에서는 ARIA를 남용하지 말고 "First rule of ARIA: don't use ARIA"를 따라 네이티브 시맨틱을 우선해야 합니다.</p>
+                <h3>고급 패턴</h3>
+                <pre><code>// Custom Element + Shadow DOM
+class UserCard extends HTMLElement {
+  static observedAttributes = ['name', 'role'];
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+  connectedCallback() {
+    this.render();
+  }
+  attributeChangedCallback() { this.render(); }
+  render() {
+    this.shadowRoot.innerHTML = `
+      &lt;style&gt;:host{display:block;padding:1rem;border:1px solid #ccc}&lt;/style&gt;
+      &lt;h3&gt;${this.getAttribute('name')}&lt;/h3&gt;
+      &lt;p&gt;${this.getAttribute('role')}&lt;/p&gt;
+    `;
+  }
+}
+customElements.define('user-card', UserCard);</code></pre>
+                <h3>최신 트렌드</h3>
+                <p>(1) <strong>View Transitions API</strong>로 페이지 전환 애니메이션을 HTML/CSS만으로 구현 가능, (2) <strong>Declarative Shadow DOM</strong>은 SSR 환경에서도 Web Components 사용을 가능케 하며, (3) <strong>HTML Streaming</strong>(<code>Transfer-Encoding: chunked</code>)으로 React Server Components처럼 콘텐츠를 점진적으로 흘려보내 TTFB를 개선하는 패턴이 확산 중입니다.</p>
+                <h3>관련 분야</h3>
+                <ul>
+                    <li>SEO 엔지니어링 (구조화 데이터, Core Web Vitals)</li>
+                    <li>웹 접근성 감리(WCAG 2.2, Section 508)</li>
+                    <li>이메일 HTML(테이블 기반 레거시 마크업)</li>
+                </ul>
+                <h3>추가 자료</h3>
+                <ul>
+                    <li>📖 HTML Living Standard (WHATWG)</li>
+                    <li>📺 web.dev "Learn HTML" 코스</li>
+                    <li>🔬 Chromium Blink 렌더러 소스 코드 (HTMLParser.cpp)</li>
+                </ul>
+                <div class="success-box">
+                    <strong>🎓 도전 과제:</strong> 자바스크립트 없이 HTML/CSS만으로 다단계 폼 위저드를 구현해보세요. <code>&lt;details&gt;</code>·<code>:has()</code>·<code>:target</code> 의사클래스가 핵심 도구입니다.
+                </div>
+            </div>
         </main>
     </div>
 

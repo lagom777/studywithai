@@ -704,6 +704,123 @@ dog.speak();  // "뽀삐이 멍멍 울었습니다."
                 <a href="02-css-layout.html" class="nav-btn prev">← 이전: CSS와 레이아웃</a>
                 <a href="04-dom-manipulation.html" class="nav-btn next">다음: DOM 조작 →</a>
             </div>
+
+            <h2>📚 난이도별 학습</h2>
+            <p>본인 수준에 맞춰 탭 선택. 우측 상단 언어 토글로 영어/일본어/중국어 학습 가능.</p>
+            <div class="difficulty-tabs">
+                <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+                <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+                <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+            </div>
+            <div class="difficulty-content" data-level="easy">
+                <span class="difficulty-badge easy">하 · 입문</span>
+                <h3>한 줄로 이해하기</h3>
+                <p>JavaScript는 웹 페이지에 "동작"을 입히는 프로그래밍 언어로, 클릭·입력·통신 같은 사용자 인터랙션을 처리합니다.</p>
+                <h3>왜 배워야 하나?</h3>
+                <p>실무 사례로 (1) 쇼핑몰 장바구니의 수량 변경과 합계 자동 계산, (2) 로그인 폼의 실시간 유효성 검사, (3) 지도 위 마커를 드래그해 위치를 선택하는 기능 등 거의 모든 동적 동작이 JS의 영역입니다. 프론트엔드뿐 아니라 Node.js로 서버, React Native로 모바일 앱까지 만들 수 있어 한 언어로 많은 일을 해결할 수 있습니다.</p>
+                <div class="info-card">
+                    <h4>🌱 핵심 용어</h4>
+                    <ul>
+                        <li><strong>변수</strong>: <code>let</code>·<code>const</code>로 값을 담는 상자</li>
+                        <li><strong>함수</strong>: 재사용 가능한 코드 묶음</li>
+                        <li><strong>객체/배열</strong>: 여러 값을 묶어 다루는 자료 구조</li>
+                        <li><strong>이벤트</strong>: 클릭·키 입력 등 사용자 행동 알림</li>
+                        <li><strong>비동기</strong>: 시간이 걸리는 작업을 기다리지 않고 처리</li>
+                    </ul>
+                </div>
+                <h3>개념 풀어쓰기</h3>
+                <p>JavaScript를 부엌 도우미 로봇으로 비유해보세요. <code>let 재료 = "양파"</code>는 "재료라는 통에 양파를 담는다"는 뜻이고, <code>function 썰기() { ... }</code>는 "썰기 동작 매뉴얼"을 정의하는 일입니다. 매뉴얼을 만들어 두면 필요할 때마다 <code>썰기()</code>로 호출해 재사용할 수 있습니다. 객체는 "양파라는 카드에 색=흰색, 매운맛=강함을 같이 적은 메모"이고, 배열은 "양파 3개를 한 바구니에 담은 것"입니다. 이벤트 처리는 "주인이 종을 울리면(<code>click</code>) 로봇이 미리 약속한 일을 한다"는 식입니다. 비동기는 특히 중요해서, 라면을 끓이는 동안 도마 정리를 하듯 "기다리지 않고 다음 일을 하다가, 라면이 다 되면 알림을 받아 처리"하는 방식이 <code>async/await</code>입니다. 처음에는 어렵지만 콘솔(F12 → Console)에 직접 코드를 쳐보면 즉시 결과를 보면서 익숙해질 수 있습니다.</p>
+                <div class="study-tip">
+                    <strong>💡 학습 TIP:</strong> 책 한 권을 끝내려 하지 말고, 작은 토이 프로젝트(투두리스트, 계산기, 가위바위보)를 만들면서 필요한 문법을 그때마다 검색하세요.
+                </div>
+                <h3>한 페이지 요약</h3>
+                <ul>
+                    <li><code>const</code> 우선, 재할당 필요할 때만 <code>let</code></li>
+                    <li>함수는 일급 객체 — 변수에 담고 인자로 전달 가능</li>
+                    <li>배열·객체 메서드(<code>map</code>·<code>filter</code>·<code>reduce</code>) 익히기</li>
+                    <li>이벤트 → 리스너 함수 → 상태 변경 → UI 업데이트 흐름</li>
+                    <li>비동기는 Promise·async/await로 동기적으로 읽히게 작성</li>
+                </ul>
+            </div>
+            <div class="difficulty-content" data-level="medium">
+                <span class="difficulty-badge medium">중 · 응용</span>
+                <h3>이론 깊이</h3>
+                <p>JavaScript는 단일 스레드 이벤트 루프 기반 언어로, 콜 스택(Call Stack), 태스크 큐(Task Queue), 마이크로태스크 큐(Microtask Queue)가 협력해 비동기 작업을 처리합니다. <code>Promise.then</code>은 마이크로태스크로, <code>setTimeout</code>은 매크로태스크로 스케줄링되며 마이크로태스크가 항상 우선합니다. 클로저(Closure)는 함수가 선언될 당시의 렉시컬 환경을 기억하는 메커니즘으로 모듈 패턴, 메모이제이션, 커링의 토대가 됩니다. <code>this</code>는 호출 방식(메서드/함수/생성자/화살표)에 따라 결정되며, 화살표 함수는 자체 <code>this</code>가 없어 상위 스코프를 그대로 사용합니다. ES2015 이후 도입된 디스트럭처링·스프레드·템플릿 리터럴·옵셔널 체이닝·널리시 코얼레싱은 가독성을 크게 개선합니다.</p>
+                <h3>핵심 코드 패턴</h3>
+                <pre><code>// 디바운스: 입력 끝나고 N ms 후에만 실행
+function debounce(fn, wait = 300) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), wait);
+  };
+}
+
+// fetch + 에러 핸들링 + AbortController
+async function getJSON(url, signal) {
+  const res = await fetch(url, { signal });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}</code></pre>
+                <h3>대표 예제</h3>
+                <div class="info-card">
+                    <h4>💻 예제 1: 검색 자동완성</h4>
+                    <p>입력 이벤트에 디바운스를 걸고 AbortController로 이전 요청을 취소하면, 빠르게 타이핑해도 마지막 검색어만 서버에 도달합니다.</p>
+                </div>
+                <div class="info-card">
+                    <h4>💻 예제 2: 무한 스크롤</h4>
+                    <p><code>IntersectionObserver</code>로 마지막 카드가 화면에 보이는 순간을 감지해 다음 페이지를 로드하면, 스크롤 이벤트보다 훨씬 효율적입니다.</p>
+                </div>
+                <h3>실무 응용</h3>
+                <p>실무에서는 (1) <code>localStorage</code>·<code>IndexedDB</code>로 오프라인 캐시, (2) Web Worker로 무거운 계산을 메인 스레드에서 분리, (3) <code>structuredClone()</code>으로 깊은 복사를 안전하게 수행합니다. 대형 폼은 상태 머신(XState) 라이브러리로 모델링해 버그를 줄이는 추세입니다.</p>
+                <div class="warning-box">
+                    <strong>⚠️ 자주 하는 실수:</strong> <code>==</code> 대신 <code>===</code> 사용하기, 콜백 지옥 피하고 async/await 활용, 배열을 <code>forEach</code>로만 처리하지 말고 변환에는 <code>map</code> 사용, <code>this</code> 바인딩 문제는 화살표 함수로 해결.
+                </div>
+            </div>
+            <div class="difficulty-content" data-level="hard">
+                <span class="difficulty-badge hard">상 · 심화</span>
+                <h3>전문가 레벨</h3>
+                <p>V8 엔진은 인터프리터(Ignition)와 최적화 컴파일러(TurboFan, Maglev)로 코드를 실행하며, 모노모픽한 객체 형태(Hidden Class)를 유지할 때 가장 빠른 인라인 캐시를 사용합니다. 동일 객체에 동일 순서로 프로퍼티를 추가하고, 객체 형태를 도중에 바꾸지 않는 것이 성능에 유리합니다. 가비지 컬렉션은 세대별 마크-앤-스위프 방식으로, 짧게 사는 객체는 New Space에서, 오래 사는 객체는 Old Space에서 처리됩니다. 메모리 누수의 가장 흔한 원인은 분리된 DOM 노드를 클로저가 잡고 있는 경우와, 전역 이벤트 리스너 미해제입니다. <code>Proxy</code>·<code>Reflect</code>는 Vue·MobX 같은 반응성 시스템의 기반이며, <code>WeakMap</code>·<code>WeakRef</code>는 메모리 친화적 캐시 구현에 필수입니다. 또한 ES Modules의 정적 분석 가능 구조 덕분에 트리 셰이킹과 코드 스플리팅이 가능합니다.</p>
+                <h3>고급 패턴</h3>
+                <pre><code>// Proxy 기반 반응성 시스템 (Vue 3 핵심 아이디어 단순화)
+const targetMap = new WeakMap();
+let activeEffect = null;
+
+function reactive(obj) {
+  return new Proxy(obj, {
+    get(target, key) {
+      track(target, key);
+      const v = Reflect.get(target, key);
+      return typeof v === 'object' && v !== null ? reactive(v) : v;
+    },
+    set(target, key, value) {
+      const ok = Reflect.set(target, key, value);
+      trigger(target, key);
+      return ok;
+    }
+  });
+}
+function effect(fn) { activeEffect = fn; fn(); activeEffect = null; }
+function track(t, k) { /* deps 등록 */ }
+function trigger(t, k) { /* deps 실행 */ }</code></pre>
+                <h3>최신 트렌드</h3>
+                <p>(1) <strong>Signals</strong>(Solid·Preact·Angular): 더 세밀한 반응성으로 가상 DOM을 대체하려는 흐름, (2) <strong>Temporal API</strong>: <code>Date</code>를 대체할 표준 시간 API로 시간대·기간 처리가 단순해짐, (3) <strong>WebAssembly와의 결합</strong>: 무거운 연산을 Rust/Go로 작성해 JS와 통신하는 하이브리드 아키텍처가 확산.</p>
+                <h3>관련 분야</h3>
+                <ul>
+                    <li>컴파일러/번들러(Babel, SWC, esbuild) 내부</li>
+                    <li>런타임 최적화(V8, JavaScriptCore, SpiderMonkey)</li>
+                    <li>타입 시스템(TypeScript, Flow, hindley-milner 추론)</li>
+                </ul>
+                <h3>추가 자료</h3>
+                <ul>
+                    <li>📖 You Don't Know JS Yet (Kyle Simpson)</li>
+                    <li>📺 JSConf "What the heck is the event loop?" (Philip Roberts)</li>
+                    <li>🔬 V8 Blog — 엔진 최적화 사례</li>
+                </ul>
+                <div class="success-box">
+                    <strong>🎓 도전 과제:</strong> 100ms 안에 60fps로 동작하는 가상 스크롤 컴포넌트를 직접 구현해보세요. RequestAnimationFrame 스케줄링과 풀링 전략이 핵심입니다.
+                </div>
+            </div>
         </main>
     </div>
 

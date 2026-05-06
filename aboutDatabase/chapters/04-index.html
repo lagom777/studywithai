@@ -310,6 +310,145 @@
   <a href="05-transaction.html" style="text-decoration:none;">트랜잭션과 동시성 →</a>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>인덱스는 책의 색인처럼, 원하는 데이터를 빠르게 찾도록 도와주는 별도의 정렬된 목록입니다.</p>
+
+  <h3>왜 중요한가?</h3>
+  <p>인덱스가 없는 DB는 매번 처음부터 끝까지 페이지를 넘기는 책과 같습니다. 첫째, 회원 100만 명 중에서 이메일 하나를 찾는 데 0.001초와 5초의 차이가 인덱스 유무에서 발생합니다. 둘째, 잘못된 인덱스는 쓰기 성능을 크게 떨어뜨립니다. 셋째, 검색·정렬·조인 모두 인덱스 설계의 영향을 직접 받습니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>인덱스(Index)</strong>: 검색 속도를 빠르게 해 주는 정렬된 자료구조.</li>
+      <li><strong>풀스캔(Full Scan)</strong>: 인덱스 없이 모든 행을 훑어보는 것.</li>
+      <li><strong>유니크 인덱스</strong>: 중복 값을 막는 인덱스.</li>
+      <li><strong>복합 인덱스</strong>: 두 개 이상의 컬럼을 묶은 인덱스.</li>
+      <li><strong>실행계획(EXPLAIN)</strong>: DB가 쿼리를 어떻게 처리할지 보여 주는 설명서.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>책 한 권을 통째로 들고 있다고 생각해 봅시다. "데이터베이스"라는 단어가 어디에 나오는지 찾으려면, 색인이 있다면 알파벳 순으로 정렬된 페이지에서 D를 찾고 "Database"의 페이지 번호를 본 뒤 바로 그 페이지로 펼치면 됩니다. 색인이 없다면 첫 페이지부터 끝까지 모든 줄을 읽어야 합니다. 인덱스는 데이터베이스의 색인입니다. 보통 B-트리라는 구조로 만들어지는데, 균형 잡힌 트리라서 100만 건이든 1억 건이든 몇 단계만 내려가면 원하는 행을 찾을 수 있습니다. 다만 색인을 만드는 데 종이가 더 필요한 것처럼, 인덱스도 디스크 공간과 갱신 비용이 따릅니다. 새 데이터를 추가하거나 수정할 때 인덱스도 같이 갱신되어야 하기 때문입니다. 그래서 무조건 많이 만든다고 좋은 게 아니라, 자주 검색하는 컬럼에만 신중하게 만드는 것이 좋습니다. 가장 흔한 인덱스 후보는 기본키, 외래키, WHERE 절에 자주 등장하는 컬럼, 정렬 기준 컬럼입니다.</p>
+
+  <div class="study-tip">
+    <strong>💡 학습 TIP:</strong> EXPLAIN 명령을 매일 한 번씩 써 보세요. 처음에는 출력이 어렵게 보이지만, 인덱스를 탔는지 풀스캔인지 두 가지만 구별해도 큰 진전입니다.
+  </div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>인덱스는 책의 색인 같은 자료구조입니다.</li>
+    <li>대부분 B-트리로 구현되어 매우 빠릅니다.</li>
+    <li>읽기는 빨라지지만 쓰기는 약간 느려집니다.</li>
+    <li>모든 컬럼에 만들 필요는 없습니다.</li>
+    <li>EXPLAIN으로 인덱스 사용 여부를 확인합니다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>인덱스는 검색 시간복잡도를 O(N)에서 O(log N)으로 낮춥니다. B-트리(B+ 트리)는 디스크 I/O 친화적인 다진 균형 트리이며, 노드 한 개가 페이지(보통 16KB) 크기와 일치합니다. PostgreSQL은 B-트리, GIN, GiST, BRIN, Hash 등 다양한 인덱스를 제공합니다. 인덱스를 타려면 SARGable한 조건이어야 하며, WHERE 절에 함수가 씌워지거나 형변환이 발생하면 인덱스가 무력화됩니다. 복합 인덱스의 컬럼 순서는 매우 중요해서, 가장 선택도가 높은(distinct 값이 많은) 컬럼이 앞에 와야 효과적입니다. 다만 등호 조건과 범위 조건이 섞이면 등호→범위 순서가 일반적인 권장입니다. 커버링 인덱스(Covering Index)는 SELECT 절의 모든 컬럼을 포함해 테이블 접근을 생략하게 해 주는 최적화입니다. 부분 인덱스(Partial Index)는 WHERE 조건을 만족하는 행만 인덱싱해 크기와 비용을 줄입니다.</p>
+
+  <h3>실전 SQL/쿼리</h3>
+  <pre><code>-- 단일 인덱스
+CREATE INDEX idx_member_email ON member (email);
+
+-- 복합 인덱스 (선택도 높은 컬럼 앞에)
+CREATE INDEX idx_orders_member_date ON orders (member_id, created_at DESC);
+
+-- 커버링 인덱스 (PostgreSQL INCLUDE)
+CREATE INDEX idx_orders_cover
+  ON orders (member_id)
+  INCLUDE (order_id, amount, created_at);
+
+-- 부분 인덱스: 활성 회원만
+CREATE INDEX idx_member_active_email
+  ON member (email)
+  WHERE  status = 'ACTIVE';
+
+-- 실행계획 확인
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT order_id, amount FROM orders
+WHERE  member_id = 1001
+ORDER  BY created_at DESC
+LIMIT  10;</code></pre>
+
+  <h3>예제</h3>
+  <div class="info-card">
+    <h4>💻 예제 1: 로그인 조회 최적화</h4>
+    <p>이메일과 비밀번호 해시로 로그인하는 시스템에서, email 컬럼에 유니크 인덱스를 두면 로그인 응답이 1ms 이하로 빨라집니다. 동시에 중복 가입을 막는 효과도 있습니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 페이지네이션</h4>
+    <p>OFFSET 100000 같은 큰 오프셋은 인덱스를 타도 느립니다. 마지막 본 created_at 값을 기준으로 WHERE created_at < ? ORDER BY created_at DESC LIMIT 20 형태의 키셋 페이지네이션을 쓰면 일정한 응답 시간을 보장합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>대형 커머스의 검색 화면은 인덱스 외에 Elasticsearch 같은 역색인 검색엔진을 별도로 운영합니다. 또한 시계열 로그 시스템은 BRIN 인덱스로 대용량 데이터의 범위 조회를 효율화하며, 지리 공간 데이터는 GiST/SP-GiST로 KNN(가장 가까운 N개) 질의를 지원합니다. 인덱스 튜닝은 슬로우 쿼리 로그 → 실행계획 분석 → 인덱스 추가/조정 사이클로 진행됩니다.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ 자주 하는 실수:</strong> 모든 컬럼에 인덱스를 만들면 INSERT/UPDATE가 급격히 느려집니다. 또 LIKE '%abc%'처럼 앞쪽 와일드카드는 인덱스를 못 탑니다. 이런 경우엔 trigram 인덱스나 검색엔진을 검토해야 합니다.
+  </div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>인덱스 내부는 B+ 트리, LSM 트리, R-트리, 비트맵, 해시 등 다양한 자료구조로 구현됩니다. InnoDB는 클러스터드 인덱스(테이블 자체가 PK 순서대로 정렬)와 세컨더리 인덱스(PK를 가리키는 포인터)로 나뉘며, 따라서 PK 길이가 길수록 모든 인덱스가 함께 비대해집니다. PostgreSQL은 힙 + 보조 인덱스 구조로 PK도 별도 인덱스이며, HOT(Heap-Only Tuples) 업데이트로 인덱스 갱신을 줄입니다. LSM 트리(RocksDB, Cassandra)는 쓰기를 메모리 메모테이블에 모아 SSTable로 컴팩션하는 방식으로 쓰기 처리량을 극대화합니다. 옵티마이저는 비용 모델로 인덱스 스캔, 비트맵 인덱스 스캔, 인덱스 온리 스캔, 시퀀셜 스캔을 비교합니다. 카디널리티 추정 오류로 옵티마이저가 풀스캔을 잘못 선택하면 통계를 ANALYZE로 갱신하거나 확장 통계(extended statistics)로 컬럼 간 상관관계를 학습시켜야 합니다. 함수 인덱스, 표현식 인덱스, 다중 컬럼 GIN, 트리그램 GIN(pg_trgm)은 풀텍스트와 LIKE 검색을 가속합니다. 또한 Z-ordering, BRIN min/max 인덱스, Bloom 필터 인덱스는 데이터 레이크하우스 환경에서 핵심 최적화 도구입니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>-- 표현식 인덱스: 대소문자 무시 검색
+CREATE INDEX idx_member_email_lower
+  ON member (LOWER(email));
+
+-- pg_trgm 트리그램 인덱스: 부분 문자열 검색 가속
+CREATE EXTENSION pg_trgm;
+CREATE INDEX idx_product_name_trgm
+  ON product USING GIN (name gin_trgm_ops);
+
+-- 인덱스 사용 강제 비교 (PostgreSQL)
+SET enable_seqscan = off;
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT * FROM orders WHERE member_id = 1001;
+SET enable_seqscan = on;
+
+-- 인덱스 사용 통계 모니터링
+SELECT relname, indexrelname, idx_scan, idx_tup_read
+FROM   pg_stat_user_indexes
+ORDER  BY idx_scan ASC;  -- 사용 안 되는 인덱스 발굴</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>벡터 인덱스(HNSW, IVF, ScaNN)는 임베딩 기반 유사도 검색의 핵심으로, pgvector·Milvus·Weaviate가 대표 구현입니다. 또한 Apache Iceberg와 Delta Lake는 통계 기반 파일 프루닝과 Z-order 정렬로 페타바이트 규모의 분석 쿼리를 가속합니다. AI 옵티마이저(예: 쿼리 실행계획에 ML을 적용한 Bao, Neo)도 학계와 산업계의 활발한 연구 영역입니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 인덱스: Elasticsearch의 샤드 라우팅과 역색인.</li>
+    <li>벡터 검색: HNSW 그래프 구조와 PQ(Product Quantization).</li>
+    <li>스토리지 엔진: B+ 트리 vs LSM 트리 트레이드오프.</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Use The Index, Luke!" — Markus Winand.</li>
+    <li>"Database Internals" Part I — Alex Petrov.</li>
+    <li>PostgreSQL의 Index Types 공식 문서.</li>
+  </ul>
+
+  <div class="success-box">
+    <strong>🎓 도전 과제:</strong> 1억 행 주문 테이블에 대해 (member_id, created_at) 복합 인덱스, 동일 컬럼의 BRIN 인덱스, 부분 인덱스 세 가지를 만들어 동일 쿼리의 실행계획과 I/O 통계를 비교하고, 운영 환경 적합성을 정리해 보세요.
+  </div>
+</div>
+
 </main>
 </div>
 </body>

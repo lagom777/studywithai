@@ -742,6 +742,118 @@ li:first-child { font-weight: bold; }
                 <a href="01-html-basics.html" class="nav-btn prev">← 이전: HTML 기초</a>
                 <a href="03-javascript-core.html" class="nav-btn next">다음: JavaScript 핵심 →</a>
             </div>
+
+            <h2>📚 난이도별 학습</h2>
+            <p>본인 수준에 맞춰 탭 선택. 우측 상단 언어 토글로 영어/일본어/중국어 학습 가능.</p>
+            <div class="difficulty-tabs">
+                <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+                <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+                <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+            </div>
+            <div class="difficulty-content" data-level="easy">
+                <span class="difficulty-badge easy">하 · 입문</span>
+                <h3>한 줄로 이해하기</h3>
+                <p>CSS는 HTML 요소를 어떻게 보여줄지 결정하는 "스타일 규칙"이며, 색·크기·배치를 모두 담당합니다.</p>
+                <h3>왜 배워야 하나?</h3>
+                <p>실무 사례로는 (1) 회사 브랜드 컬러를 사이트 전반에 일관되게 적용, (2) 모바일·태블릿·PC에서 자동으로 레이아웃이 바뀌는 반응형 디자인, (3) 호버 시 버튼이 살짝 떠오르는 마이크로 인터랙션 구현이 있습니다. 잘 짠 CSS는 코드 양을 절반으로 줄이고, 디자이너와의 협업을 부드럽게 만듭니다.</p>
+                <div class="info-card">
+                    <h4>🌱 핵심 용어</h4>
+                    <ul>
+                        <li><strong>선택자(Selector)</strong>: 어떤 요소에 스타일을 적용할지 지정</li>
+                        <li><strong>속성/값(Property/Value)</strong>: <code>color: red;</code>처럼 무엇을 어떻게 바꿀지</li>
+                        <li><strong>박스 모델</strong>: content + padding + border + margin 4겹</li>
+                        <li><strong>Flexbox/Grid</strong>: 1차원·2차원 레이아웃 시스템</li>
+                        <li><strong>캐스케이드</strong>: 여러 규칙이 겹쳤을 때 우선순위 결정 방식</li>
+                    </ul>
+                </div>
+                <h3>개념 풀어쓰기</h3>
+                <p>HTML이 집의 골조라면 CSS는 인테리어입니다. 똑같은 골조여도 페인트 색, 가구 배치, 조명 밝기에 따라 분위기가 완전히 달라지듯, CSS만 바꿔도 동일 HTML이 미니멀 디자인이 되기도 하고 화려한 카드 갤러리가 되기도 합니다. CSS 규칙은 "선택자 { 속성: 값; }" 형태로 단순합니다. 예를 들어 <code>p { color: blue; }</code>는 "모든 p 요소의 글자색을 파랑으로"라는 뜻입니다. 박스 모델은 모든 요소가 양파처럼 4겹의 영역을 가진다는 모델인데, 이를 이해하지 못하면 "왜 여백이 의도와 다르게 생기지?" 같은 문제로 며칠을 헤맬 수 있습니다. Flexbox는 한 줄로 정렬하기 좋고, Grid는 신문처럼 2차원으로 배치할 때 위력을 발휘합니다. 처음엔 두 가지를 동시에 배우려 하지 말고 Flex부터 손에 익히세요.</p>
+                <div class="study-tip">
+                    <strong>💡 학습 TIP:</strong> Flexbox Froggy, Grid Garden 같은 게임형 학습 사이트로 30분만 놀아도 핵심 속성이 손가락에 새겨집니다.
+                </div>
+                <h3>한 페이지 요약</h3>
+                <ul>
+                    <li>CSS는 선택자·속성·값의 조합으로 스타일을 적용</li>
+                    <li>박스 모델은 content/padding/border/margin 4단계</li>
+                    <li>Flexbox = 1차원, Grid = 2차원 레이아웃</li>
+                    <li>캐스케이드와 명시도(specificity)가 우선순위 결정</li>
+                    <li>미디어 쿼리로 반응형 구현, 모바일 우선 권장</li>
+                </ul>
+            </div>
+            <div class="difficulty-content" data-level="medium">
+                <span class="difficulty-badge medium">중 · 응용</span>
+                <h3>이론 깊이</h3>
+                <p>CSS의 핵심은 "캐스케이드(Cascade) + 명시도(Specificity) + 상속(Inheritance)" 세 축입니다. 동일 속성에 여러 규칙이 겹치면 (1) 출처(작성자/사용자/브라우저), (2) <code>!important</code>, (3) 명시도 점수(인라인=1000, ID=100, 클래스=10, 태그=1), (4) 작성 순서 순으로 결정됩니다. <code>box-sizing: border-box</code>를 전역으로 설정하면 padding이 width를 침범하지 않아 레이아웃 계산이 직관적이 됩니다. Flexbox는 <code>justify-content</code>(주축)와 <code>align-items</code>(교차축)의 조합이 핵심이고, Grid는 <code>grid-template-areas</code>로 영역을 ASCII 아트처럼 정의하는 방식이 가독성이 가장 좋습니다. 애니메이션은 transform과 opacity 위주로 작성해 GPU 합성 단계에서 처리되도록 해야 60fps를 유지할 수 있습니다.</p>
+                <h3>핵심 코드 패턴</h3>
+                <pre><code>/* 카드 그리드: 자동으로 열 개수가 늘고 줄어듦 */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+/* 호버 애니메이션: GPU 가속 */
+.card {
+  transition: transform .2s ease, box-shadow .2s ease;
+  will-change: transform;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0,0,0,.15);
+}</code></pre>
+                <h3>대표 예제</h3>
+                <div class="info-card">
+                    <h4>💻 예제 1: Sticky 사이드바</h4>
+                    <p><code>position: sticky; top: 1rem;</code> 한 줄로 스크롤해도 따라오는 사이드바를 만들 수 있어 JS 의존성을 제거할 수 있습니다.</p>
+                </div>
+                <div class="info-card">
+                    <h4>💻 예제 2: 다크 모드</h4>
+                    <p>CSS 변수와 <code>[data-theme="dark"]</code> 선택자를 조합하면 한 번의 속성 변경으로 전체 테마를 전환할 수 있고, <code>prefers-color-scheme</code> 미디어 쿼리로 OS 설정을 자동 반영할 수 있습니다.</p>
+                </div>
+                <h3>실무 응용</h3>
+                <p>실무에서는 (1) 디자인 토큰(색·간격·글꼴)을 CSS 커스텀 프로퍼티로 정의해 디자인 시스템을 구축, (2) Tailwind/CSS Modules로 클래스 충돌을 차단, (3) <code>clamp(min, ideal, max)</code>로 글자 크기를 화면 크기에 따라 부드럽게 조절합니다.</p>
+                <div class="warning-box">
+                    <strong>⚠️ 자주 하는 실수:</strong> margin 충돌(collapsing margins), z-index 남용으로 쌓임 맥락(stacking context) 무너뜨리기, 절대 단위(px)만 사용해 접근성 떨어뜨리기. 가능한 한 <code>rem</code>·<code>em</code>을 사용하세요.
+                </div>
+            </div>
+            <div class="difficulty-content" data-level="hard">
+                <span class="difficulty-badge hard">상 · 심화</span>
+                <h3>전문가 레벨</h3>
+                <p>브라우저 렌더링 파이프라인은 Style → Layout → Paint → Composite 4단계로 이루어집니다. 너비/위치 변경은 Layout부터 다시 계산되어 비용이 크지만, transform·opacity는 Composite 단계만 거치므로 60fps에 적합합니다. 또한 Layer Promotion을 유발하는 <code>will-change</code>·<code>transform: translateZ(0)</code>을 남용하면 메모리 폭증으로 오히려 성능이 악화될 수 있어 측정 후 적용해야 합니다. 컨테이너 쿼리(Container Queries)는 컴포넌트가 자기 부모 너비에 따라 스스로 모양을 바꿀 수 있게 하여 미디어 쿼리 패러다임을 보완하며, <code>:has()</code> 부모 선택자는 마침내 CSS만으로 "자식 상태에 따라 부모 스타일 변경"을 가능케 했습니다. 캐스케이드 레이어(<code>@layer</code>)는 명시도 전쟁을 끝내는 도구이며, 색 함수 <code>color-mix()</code>·<code>oklch()</code>는 색채 인지 균형 잡힌 팔레트를 만들 때 핵심입니다.</p>
+                <h3>고급 패턴</h3>
+                <pre><code>/* 컨테이너 쿼리 + :has() + 캐스케이드 레이어 */
+@layer reset, base, components, utilities;
+
+@layer components {
+  .card { container-type: inline-size; }
+
+  @container (min-width: 480px) {
+    .card { display: grid; grid-template-columns: 120px 1fr; }
+  }
+
+  /* 자식 input이 invalid이면 부모 스타일 변경 */
+  .field:has(input:invalid) {
+    border-color: hsl(0 80% 60%);
+  }
+}</code></pre>
+                <h3>최신 트렌드</h3>
+                <p>(1) <strong>View Transitions API</strong>: SPA 페이지 전환을 CSS만으로 모핑, (2) <strong>CSS Nesting</strong>: SCSS 없이도 네이티브 중첩 작성 가능(2023년 모든 메이저 브라우저 지원), (3) <strong>Subgrid</strong>: 자식 그리드가 부모의 트랙 라인을 상속해 카드 정렬이 픽셀 단위로 맞아떨어집니다.</p>
+                <h3>관련 분야</h3>
+                <ul>
+                    <li>디자인 시스템 엔지니어링(Figma Tokens, Style Dictionary)</li>
+                    <li>모션 디자인(Framer Motion, GSAP)</li>
+                    <li>인쇄용 CSS(<code>@page</code>, paged.js)</li>
+                </ul>
+                <h3>추가 자료</h3>
+                <ul>
+                    <li>📖 CSS Specs (W3C CSS Working Group)</li>
+                    <li>📺 Kevin Powell YouTube — 모던 CSS 기법</li>
+                    <li>🔬 Chrome DevTools "Rendering" 패널로 Paint 영역 시각화</li>
+                </ul>
+                <div class="success-box">
+                    <strong>🎓 도전 과제:</strong> JavaScript 0줄로 이미지 캐러셀(스냅 스크롤 + 페이드 + 인디케이터)을 구현해보세요. <code>scroll-snap</code>·<code>:target</code>·<code>animation-timeline: scroll()</code>이 무기가 됩니다.
+                </div>
+            </div>
         </main>
     </div>
 
