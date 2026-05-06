@@ -1,4 +1,4 @@
-# Study With AI
+# nanamate
 
 여러 학문 분야를 한 입구에서 시작하는 통합 학습 허브.
 
@@ -15,7 +15,7 @@
 정적 파일이라 Python 간이 서버로 충분합니다.
 
 ```bash
-cd studywithai
+cd nanamate
 python -m http.server 8000
 # → http://localhost:8000
 ```
@@ -31,7 +31,7 @@ python -m http.server 8000
 
 ## 새 분야 추가
 
-1. `studywithai/` 아래에 새 폴더 생성 (예: `aboutMath/`)
+1. `nanamate/` 아래에 새 폴더 생성 (예: `aboutMath/`)
 2. 그 폴더의 첫 페이지(예: `index.html`) 사이드바 상단에 통합 허브 링크 삽입:
    ```html
    <a href="../index.html" class="hub-back-link" ...>↑ 통합 허브</a>
