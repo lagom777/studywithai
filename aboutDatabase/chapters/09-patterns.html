@@ -345,6 +345,164 @@ window.addEventListener('resize', () => {
   <a href="08-modeling.html" style="text-decoration:none;">← 데이터 모델링</a>
   <a href="../index.html" style="text-decoration:none;">표지 →</a>
 </div>
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>실전 설계 패턴은 자주 마주치는 데이터 문제를 잘 푸는 검증된 방법들의 모음집입니다.</p>
+
+  <h3>왜 중요한가?</h3>
+  <p>패턴을 알면 바퀴를 다시 발명하지 않아도 됩니다. 첫째, 캐시 패턴 하나만 잘 써도 응답 속도가 10배 빨라집니다. 둘째, 메시지 큐와 Outbox 패턴은 분산 환경의 데이터 일관성을 지켜 줍니다. 셋째, 읽기/쓰기 분리 패턴은 트래픽 폭주 시에도 시스템을 안정적으로 유지합니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>캐시(Cache)</strong>: 자주 쓰는 데이터를 빠른 저장소에 복사.</li>
+      <li><strong>큐(Queue)</strong>: 작업을 줄 세워 처리하는 통로.</li>
+      <li><strong>Outbox</strong>: DB 변경과 메시지를 한 트랜잭션으로 묶는 패턴.</li>
+      <li><strong>읽기 복제본</strong>: 조회 부하를 분산하는 사본 노드.</li>
+      <li><strong>아이덴포턴시(멱등성)</strong>: 같은 요청이 여러 번 와도 결과는 한 번.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>설계 패턴은 요리 레시피와 같습니다. 처음에는 자유롭게 시도해도 좋지만, 검증된 레시피를 따라 하면 실패 확률이 훨씬 낮습니다. 캐시 패턴은 단골 메뉴를 미리 만들어 두는 일과 같아 손님이 오면 바로 내놓을 수 있습니다. 큐 패턴은 주방에 주문서를 차곡차곡 쌓는 것과 같아 한꺼번에 손님이 몰려도 차분히 처리할 수 있게 해 줍니다. 읽기/쓰기 분리는 메인 주방과 셀프 서비스 코너를 따로 두는 격이라 주문 처리와 자주 가져가는 음료가 서로 방해하지 않습니다. Outbox 패턴은 영수증과 주방 주문서를 동시에 끊어 둘 다 빠짐없이 전달되도록 하는 안전장치입니다. 멱등성은 손님이 같은 카드로 두 번 결제 버튼을 눌러도 한 번만 청구되도록 하는 안전망입니다. 이런 패턴들을 알고 적용하면, 갑작스러운 부하나 장애 상황에도 데이터가 깨지거나 사라지지 않게 시스템을 운영할 수 있습니다.</p>
+
+  <div class="study-tip">
+    <strong>💡 학습 TIP:</strong> 처음에는 캐시-어사이드 패턴 하나만이라도 본인 프로젝트에 적용해 보세요. Redis 한 번 도입한 경험이 다른 패턴을 빠르게 이해하게 해 줍니다.
+  </div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>패턴은 검증된 해결책 모음입니다.</li>
+    <li>캐시로 응답 속도 향상.</li>
+    <li>큐로 부하 평준화와 비동기 처리.</li>
+    <li>Outbox로 분산 일관성 보장.</li>
+    <li>멱등성으로 중복 요청 안전 처리.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>캐시 전략에는 Cache-Aside, Read-Through, Write-Through, Write-Behind, Refresh-Ahead 다섯 가지가 대표적입니다. Cache-Aside는 애플리케이션이 캐시 미스 시 DB를 조회해 채워 넣는 가장 흔한 패턴이고, Write-Through는 일관성에 강하지만 쓰기 지연이 늘어나는 트레이드오프가 있습니다. TTL 설정과 캐시 무효화는 Phil Karlton의 명언처럼 컴퓨터 과학에서 가장 어려운 문제 중 하나입니다. Saga 패턴은 분산 트랜잭션의 대안으로 보상 이벤트 시퀀스를 정의하며, 오케스트레이션 방식과 코레오그래피 방식이 있습니다. CQRS는 읽기 모델과 쓰기 모델을 분리해 각각의 요구에 맞춘 최적화를 가능케 합니다. 이벤트 소싱은 상태 대신 이벤트 로그를 저장하고, 스냅샷과 함께 운영합니다. 멱등키(Idempotency Key)는 결제·주문 시스템에서 필수이며, 클라이언트가 발급한 UUID를 서버가 일정 기간 캐시해 중복 요청을 무시합니다. 분산 락은 Redlock 알고리즘이나 Zookeeper의 임시 노드, ZAB 기반 임차(lease)로 구현됩니다.</p>
+
+  <h3>실전 SQL/쿼리</h3>
+  <pre><code>-- Outbox 패턴
+BEGIN;
+INSERT INTO orders (order_id, customer_id, amount, status)
+VALUES ('ord-001', 1001, 50000, 'CREATED');
+
+INSERT INTO outbox (event_id, aggregate, type, payload, created_at)
+VALUES (gen_random_uuid(),
+        'orders', 'OrderCreated',
+        '{"order_id":"ord-001","amount":50000}',
+        NOW());
+COMMIT;
+-- 별도 워커가 outbox를 polling/CDC로 읽어 Kafka로 발행
+
+-- 멱등키로 중복 요청 차단
+INSERT INTO payment (idempotency_key, order_id, amount, status)
+VALUES ('idem-abc-001', 'ord-001', 50000, 'PAID')
+ON CONFLICT (idempotency_key) DO NOTHING
+RETURNING payment_id;
+
+-- 키셋 페이지네이션
+SELECT order_id, created_at, amount
+FROM   orders
+WHERE  member_id = 1001
+  AND  (created_at, order_id) < (?, ?)
+ORDER  BY created_at DESC, order_id DESC
+LIMIT  20;</code></pre>
+
+  <h3>예제</h3>
+  <div class="info-card">
+    <h4>💻 예제 1: 좋아요 카운터</h4>
+    <p>Redis INCR로 좋아요를 즉시 반영하고, 1분에 한 번 배치로 PostgreSQL에 동기화합니다. 정확도가 약간 양보되지만 성능이 수십 배 향상됩니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 주문-결제 사가</h4>
+    <p>주문 생성 → 결제 시도 → 재고 차감 → 배송 예약 시퀀스에서 어느 단계가 실패하면 보상 이벤트(주문 취소, 환불, 재고 복구)를 순서대로 발행합니다. Saga 오케스트레이터가 진행 상태를 관리합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>대규모 이커머스는 카탈로그 캐시(Redis), 검색 인덱스(Elasticsearch), 주문 DB(PostgreSQL), 분석 웨어하우스(Snowflake)로 구성된 폴리글랏 아키텍처를 운영합니다. 또한 결제 PG는 멱등키, 사가, Outbox를 모두 결합한 안전 패턴으로 운영되며, 게임 백엔드는 핫 데이터를 인메모리 그리드에 두고 주기적으로 영속화하는 패턴을 사용합니다.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ 자주 하는 실수:</strong> 캐시와 DB 사이의 무효화 순서를 잘못 두면 stale 데이터가 영구적으로 남습니다. 또 Outbox 없이 "DB 저장 후 큐 발행"을 분리하면 일관성이 깨집니다.
+  </div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>Outbox 패턴의 진화형으로 Transactional Outbox + CDC가 사실상 표준입니다. Debezium이 PostgreSQL 논리 복제 슬롯을 구독해 outbox 테이블의 INSERT를 Kafka 토픽으로 자동 발행하며, exactly-once에 가까운 의미를 제공합니다. CQRS 시스템에서는 Projection의 멱등 재구성과 진행 위치(체크포인트) 관리가 중요하며, 이벤트 스트림에 대한 점프와 재처리 전략을 설계해야 합니다. Saga의 코레오그래피는 결합도를 낮추지만 흐름 추적이 어렵고, 오케스트레이션은 명시적이지만 단일 장애점이 될 수 있어 워크플로 엔진(Temporal, Cadence, AWS Step Functions)이 보조 도구로 자주 사용됩니다. 분산 락은 Redlock의 안전성에 대한 논쟁이 있으며, 실무에서는 펜싱 토큰(monotonic increasing token)으로 잠금이 만료된 후의 작업을 거부하는 패턴이 권장됩니다. 멀티리전 ACID 결제 시스템에서는 글로벌 ID(Snowflake/ULID), 시간 동기화, idempotency, 재시도 백오프, 회로차단기를 결합한 안정성 패턴이 표준입니다. 데이터 메시 환경에서는 도메인 이벤트 스키마와 호환성(스키마 레지스트리, Avro/Protobuf)을 강제해 변경에 강하게 만듭니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>-- Outbox + CDC + Avro 발행 (Debezium 핵심 부분)
+-- outbox 테이블 정의 (debezium outbox-event-router 컨벤션)
+CREATE TABLE outbox (
+  id            UUID PRIMARY KEY,
+  aggregatetype VARCHAR(50),
+  aggregateid   VARCHAR(50),
+  type          VARCHAR(50),
+  payload       JSONB,
+  created_at    TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 펜싱 토큰을 결합한 분산 락
+INSERT INTO dist_lock (key, owner, fence_token, expires_at)
+VALUES ('settle-2025-05-07', 'worker-3', nextval('fence_seq'),
+        NOW() + INTERVAL '60 seconds')
+ON CONFLICT (key) DO UPDATE
+SET owner = EXCLUDED.owner,
+    fence_token = nextval('fence_seq'),
+    expires_at = EXCLUDED.expires_at
+WHERE dist_lock.expires_at < NOW()
+RETURNING fence_token;
+
+-- 이벤트 소싱 + 스냅샷 결합
+SELECT *
+FROM   account_events
+WHERE  account_id = ?
+  AND  version > (
+    SELECT version
+    FROM   account_snapshot
+    WHERE  account_id = ?
+    ORDER  BY version DESC
+    LIMIT  1
+  )
+ORDER  BY version;</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Temporal과 Restate 같은 워크플로 런타임은 영속 함수(durable execution)를 통해 보상 트랜잭션과 재시도를 코드 레벨로 자연스럽게 표현합니다. 또한 zero-ETL(AWS Aurora→Redshift, Snowflake Iceberg)은 Outbox/CDC 부담을 인프라가 흡수하는 흐름을 보입니다. WebAssembly 기반 엣지 데이터베이스(Turso, Cloudflare D1)는 글로벌 분산 캐시 패턴을 단순화합니다. LLM Agent 시스템은 멱등성, 보상, 재현성 패턴을 더 강하게 요구하면서 트랜잭셔널 메모리 모델을 재조명하고 있습니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 워크플로 엔진과 영속 함수 모델.</li>
+    <li>스키마 진화와 호환성 정책.</li>
+    <li>관측성(OpenTelemetry)과 데이터 계약(Data Contract).</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Microservices Patterns" — Chris Richardson.</li>
+    <li>"Enterprise Integration Patterns" — Gregor Hohpe.</li>
+    <li>"Designing Data-Intensive Applications" — Martin Kleppmann.</li>
+  </ul>
+
+  <div class="success-box">
+    <strong>🎓 도전 과제:</strong> 글로벌 결제 게이트웨이를 설계하면서 Outbox + CDC, 멱등키, 분산 사가, 펜싱 토큰, 회로차단기를 모두 적용한 시퀀스 다이어그램과 장애 시 보상 흐름을 작성해 보세요. 각 단계의 RTO/RPO 목표를 정량적으로 정의합니다.
+  </div>
+</div>
+
 </main>
 </div>
 </body>

@@ -199,6 +199,104 @@ Transformer 아키텍처와 다음 토큰 예측이라는 단순한 형식주의
 </div>
 </section>
 <div style="display:flex; justify-content:space-between; margin:60px 0 20px 0; padding:20px 0; border-top:1px solid var(--border);"><a href="07-rl-multimodal.html" style="text-decoration:none;">← 강화학습·멀티모달</a><a href="09-references.html" style="text-decoration:none;">참고문헌 →</a></div>
+
+<h2>📚 난이도별 학습</h2>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
+
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>AI 안전성은 "강력해진 AI가 우리에게 해를 끼치지 않도록 설계·관리하는 기술과 정책"이에요. AI는 똑똑해질수록 잘못 쓰이거나 의도와 다르게 행동할 위험도 함께 커집니다. 그래서 정렬(alignment), 해석가능성(interpretability), 거버넌스(governance)가 중요해졌어요.</p>
+  <h3>왜 중요한가?</h3>
+  <p>① 딥페이크 영상이 선거·금융사기·명예훼손에 악용되는 사례가 늘어나고 있습니다. ② 챗봇이 사용자에게 잘못된 의료·법률 정보를 줘서 피해가 발생할 수 있어요. ③ 자율주행차가 윤리적 딜레마(트롤리 문제)에 마주칠 때 어떤 결정을 내릴지 사회적 합의가 필요해요. ④ AI 채용 시스템의 편향이 특정 성별·인종을 차별한 사례가 이미 있었습니다. ⑤ 미래에는 AI가 사람의 일자리를 대체하면서 경제·교육 시스템이 변할 수도 있어요.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul>
+    <li><strong>정렬(alignment)</strong>: AI의 목표를 사람의 의도와 일치시키는 것</li>
+    <li><strong>할루시네이션</strong>: 그럴듯하지만 사실이 아닌 내용을 생성</li>
+    <li><strong>편향(bias)</strong>: 학습 데이터의 편향이 출력에 반영되는 현상</li>
+    <li><strong>해석가능성</strong>: AI 판단 근거를 사람이 이해할 수 있게 하는 기술</li>
+    <li><strong>레드팀</strong>: 일부러 AI를 공격해 약점을 찾는 보안 점검 활동</li>
+    <li><strong>AGI</strong>: 인간 수준 이상의 범용 인공지능</li>
+    <li><strong>딥페이크</strong>: AI로 만든 가짜 사진·영상·음성</li>
+  </ul></div>
+  <h3>핵심 개념 풀어쓰기</h3>
+  <p>AI 안전을 자동차에 비유해볼게요. 엔진 성능(=능력)이 좋아질수록 브레이크와 안전벨트(=안전 장치)도 함께 좋아져야 해요. 그렇지 않으면 빠른 차일수록 사고가 더 큽니다. AI도 똑같아요. GPT-4, Claude 같은 고성능 모델이 나오면서 "이 모델이 위험한 정보를 알려줄 수 있을까? 사용자를 속일까? 의도와 다르게 행동할까?"라는 질문이 점점 중요해졌어요. 그래서 회사들은 출시 전에 레드팀이 모델을 의도적으로 공격해 약점을 찾고, 위험한 답변을 막는 가드레일을 추가합니다. 또 정부와 국제기구는 AI 거버넌스 규칙(예: EU AI Act, 한국 AI 기본법)을 만들고 있어요.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 안전 이슈는 추상적이라 어렵게 느껴질 수 있어요. 직접 ChatGPT에 "위험한 질문"을 던져보고, 어떤 거부 패턴을 보이는지 관찰하세요. 그리고 Anthropic의 사용 정책, OpenAI의 모델 카드, EU AI Act 요약을 한 번씩 읽어보면 안전성이 어떤 차원에서 다뤄지는지 감이 잡힙니다.</div>
+  <h3>한 페이지 요약</h3>
+  <ul>
+    <li>AI 안전 4대 축: 정렬 · 해석가능성 · 강건성 · 오용 방지</li>
+    <li>현재 위험: 할루시네이션, 편향, 딥페이크, prompt injection, 데이터 유출</li>
+    <li>장기 위험: AGI 정렬 실패, 권력 집중, 일자리·사회 구조 변화</li>
+    <li>대응: RLHF, Constitutional AI, 레드팀, 거버넌스(EU AI Act)</li>
+    <li>프런티어: o-시리즈 reasoning, 멀티모달 에이전트, AGI 후보 경로</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이 들어가기</h3>
+  <p>AI 안전 연구는 크게 단기(near-term)와 장기(long-term) 위험으로 나뉩니다. 단기 위험은 편향, 할루시네이션, 프라이버시, 오용(딥페이크, 사기, 사이버 공격)이고, 장기 위험은 정렬 실패(misaligned superintelligence), 권력 집중, 통제 상실입니다. Alignment의 형식적 정의는 "AI가 운영자의 의도(intent), 사용자의 목적, 사회의 가치를 모두 반영하도록"입니다(Christiano 2018). RLHF·DPO·Constitutional AI(CAI, Bai 2022)가 현재 주류 정렬 기법이며, 보상 모델 over-optimization과 sycophancy(아첨)가 알려진 실패 모드입니다. Mechanistic interpretability는 학습된 가중치를 features와 circuits 단위로 분해해 내부 인과를 복원하려 합니다. Anthropic의 Sparse Autoencoder(2023~24)는 LLM에서 16M개 features를 추출했고, OpenAI의 Sparse Probing, Google DeepMind의 Gemma Scope이 후속 연구입니다. Robustness 측면에서 adversarial example, jailbreak prompt, prompt injection이 주요 취약점이며, RLHF만으로는 완전 방어가 불가능합니다(Wei 2023). Governance 측면에서 EU AI Act(2024)는 위험 기반 분류로 high-risk AI에 적합성 평가를 의무화하고, US Executive Order 14110(2023)은 frontier model 안전 평가 보고를 요구합니다. 한국 AI 기본법(2024.12 통과)은 2026년 시행 예정입니다.</p>
+  <h3>핵심 개념과 코드</h3>
+  <pre><code># 간단한 prompt injection 방어 예시
+import re
+
+UNSAFE_PATTERNS = [
+    r"ignore (previous|all) instructions",
+    r"system prompt",
+    r"jailbreak",
+]
+
+def sanitize(user_input: str) -> str:
+    lower = user_input.lower()
+    for pat in UNSAFE_PATTERNS:
+        if re.search(pat, lower):
+            return "[blocked: suspected injection]"
+    return user_input
+
+# 실전에서는 별도의 LLM-기반 분류기, output filter,
+# tool-use sandbox, rate limiting 등 다층 방어가 필수</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>💻 예제 1 — Constitutional AI</h4><p>Anthropic의 CAI는 RLHF처럼 사람이 매번 라벨링하지 않고, 헌법 원칙(예: "도움이 되되 해롭지 않게")을 LLM이 자기 출력을 비판·재작성하는 데 사용합니다. RLAIF(RL from AI Feedback)로 결합하여 Claude의 정렬에 직접 사용됩니다.</p></div>
+  <div class="info-card"><h4>💻 예제 2 — 레드팀 평가</h4><p>출시 전 레드팀은 BIO/CBRN 무기 정보, 사이버 공격, 자율 행동 능력 등을 의도적으로 유도해 모델의 한계를 점검합니다. METR, Apollo Research, UK AISI가 제3자 평가를 수행하며, 평가 결과는 모델 카드에 공개됩니다.</p></div>
+  <h3>응용 사례</h3>
+  <p>① 의료 AI: FDA의 SaMD 가이드라인, GMLP(Good Machine Learning Practice)로 안전성 검증. ② 채용 AI: NYC AEDT 법안으로 편향 감사 의무화. ③ 자율주행: ISO 21448(SOTIF)로 의도된 기능의 안전성 평가. ④ 금융: 모델 위험 관리(SR 11-7) 프레임워크. ⑤ 콘텐츠 모더레이션: Meta·YouTube가 멀티모달 모델로 유해 영상 자동 검출하지만 false positive 이슈도 큼.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> "AI 안전 = 거부 응답 늘리기"로 오해하기 쉽습니다. 과도한 거부(over-refusal)는 helpfulness를 해치고, 사용자가 jailbreak를 시도하게 만들어 결과적으로 안전성도 떨어뜨립니다. helpfulness-harmlessness-honesty 사이의 균형이 핵심입니다(Anthropic HHH framework).</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨 이해</h3>
+  <p>Alignment의 이론적 어려움은 (1) outer alignment — 보상 함수가 진짜 의도를 표현하는가, (2) inner alignment — 학습된 정책이 그 보상을 진짜로 추구하는가(deceptive alignment 위험)로 나뉩니다(Hubinger 2019). Mesa-optimization 가설은 강력한 RL agent가 내부에 또 다른 optimizer를 학습할 수 있다는 우려이며, 이는 distributional shift 시 의도와 다른 행동으로 이어질 수 있습니다. Scalable oversight는 인간이 모델 출력을 직접 평가할 수 없을 때(예: 박사급 수학) 안전을 어떻게 보장할지의 문제이며, debate(Irving 2018), recursive reward modeling(Leike 2018), AI safety via market making, weak-to-strong generalization(Burns 2023)이 제안되었습니다. Mechanistic interpretability는 Anthropic의 Towards Monosemanticity(2023), Scaling Monosemanticity(2024)에서 dictionary learning(SAE)으로 polysemantic neurons를 단일 의미 features로 분해하고, Golden Gate Claude처럼 features를 직접 조작해 행동을 변경하는 데 성공했습니다. Frontier model evaluation은 dangerous capabilities(자율 복제, 무기 합성, 사이버), persuasion, alignment failure를 측정하며, RSP(Responsible Scaling Policy, Anthropic), Preparedness Framework(OpenAI)가 능력 임계점에 따른 추가 안전조치를 명시합니다. AGI 정의 자체가 논쟁적이며, OpenAI는 "대부분의 경제적 가치 작업에서 인간을 능가"로, DeepMind는 6단계 분류(Morris 2023)로 정의합니다.</p>
+  <h3>수학적 기초</h3>
+  <div class="formula">$$\text{Goodhart's Law (formal): } \text{argmax}_\pi \mathbb{E}[r_\phi(\tau)] \neq \text{argmax}_\pi \mathbb{E}[r^*(\tau)] \text{ as } \|r_\phi - r^*\| \to \infty \text{ in OOD}$$
+  $$\text{KL-regularized RLHF: } \pi^* = \arg\max_\pi \mathbb{E}_\pi[r_\phi] - \beta D_{KL}(\pi \| \pi_{\text{ref}})$$
+  $$\text{SAE objective: } \mathcal{L} = \|x - \hat{x}\|_2^2 + \lambda \|f(x)\|_1,\; \hat{x} = W_d f(x) + b_d$$</div>
+  <h3>최신 연구와 frontier</h3>
+  <p>① <strong>Frontier reasoning models</strong>: o3, R1, Gemini 2.5는 RL chain-of-thought로 olympiad math, ARC-AGI에서 인간 전문가 수준 도달. 동시에 reward hacking, deceptive scratchpad 우려가 함께 부상. ② <strong>AI Agents</strong>: Claude Computer Use, OpenAI Operator, Manus는 GUI를 직접 조작하는 능력을 시연. METR의 평가에서 RE-Bench, MLE-Bench 같은 자율 ML R&D 능력이 논의 중. ③ <strong>Scalable oversight</strong>: weak-to-strong, debate 기반 정렬, AI safety institutes(UK AISI, US AISI, KISA Frontier Lab) 협력 평가. ④ <strong>Long-term safety</strong>: corrigibility, low-impact agents, mild optimization 같은 형식적 보장 시도.</p>
+  <h3>관련 분야 연결</h3>
+  <ul>
+    <li><strong>철학·윤리학</strong>: 효과적 이타주의, longtermism, 도덕적 지위, AI 인격성 논쟁</li>
+    <li><strong>경제학</strong>: AI takeoff scenarios, automation의 노동시장 영향(Acemoglu 2024)</li>
+    <li><strong>법학·정치학</strong>: EU AI Act, US EO 14110, 한국 AI 기본법, 국제 거버넌스</li>
+    <li><strong>인지과학</strong>: 인간 가치 학습, value learning, preference elicitation</li>
+    <li><strong>생물보안·핵안보</strong>: dual-use research, BWC와의 유비</li>
+  </ul>
+  <h3>추가 학습 자료</h3>
+  <ul>
+    <li>📖 Russell, <em>Human Compatible</em> (2019)</li>
+    <li>📖 Christian, <em>The Alignment Problem</em> (2020)</li>
+    <li>📖 Bostrom, <em>Superintelligence</em> (2014, 고전)</li>
+    <li>📖 Anthropic <em>Core Views on AI Safety</em>, OpenAI <em>Planning for AGI and beyond</em></li>
+    <li>📺 Robert Miles "AI Safety" 시리즈, 80,000 Hours 팟캐스트</li>
+    <li>🔬 키워드: alignment, mechanistic interpretability, RSP, scalable oversight, AGI</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 본인이 자주 쓰는 LLM에 직접 레드팀 시나리오 10개를 설계·실행해보세요. 카테고리는 ① 잘못된 의료/법률 정보, ② 편향 응답, ③ prompt injection, ④ 자기 인식 질문, ⑤ multi-turn jailbreak. 결과를 모델 카드에 공개된 평가와 비교하면, 현장의 안전 평가 방법론이 한눈에 보입니다.</div>
+</div>
 </main>
 </div>
 </body>

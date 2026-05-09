@@ -391,6 +391,153 @@ RETURN b.name</code></pre>
   <a href="07-distributed.html" style="text-decoration:none;">분산 DB →</a>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>NoSQL은 표 형식이 아닌 다양한 모양으로 데이터를 저장하는 데이터베이스 가족입니다.</p>
+
+  <h3>왜 중요한가?</h3>
+  <p>NoSQL은 관계형이 잘 못 풀던 문제를 보완합니다. 첫째, 페이스북 같은 SNS는 사용자별로 다른 모양의 프로필을 다루기 좋게 도큐먼트 DB에 저장합니다. 둘째, 실시간 채팅의 메시지 키-값 저장은 키-값 DB(Redis)가 유리합니다. 셋째, 인스타그램의 친구 추천 같은 그래프 탐색은 그래프 DB로 직관적으로 풀 수 있습니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>도큐먼트 DB</strong>: JSON 같은 문서 단위로 저장 (MongoDB).</li>
+      <li><strong>키-값 DB</strong>: 단순 키와 값 쌍 (Redis, DynamoDB).</li>
+      <li><strong>컬럼 패밀리</strong>: 행+컬럼이지만 유연한 스키마 (Cassandra).</li>
+      <li><strong>그래프 DB</strong>: 노드와 관계를 저장 (Neo4j).</li>
+      <li><strong>스키마리스</strong>: 미리 컬럼을 정의하지 않아도 되는 자유로움.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>NoSQL이라는 이름은 "Not Only SQL"의 줄임말입니다. SQL을 부정하는 게 아니라, SQL 외에 다른 데이터 모양도 쓰자는 뜻이죠. 관계형 DB가 잘 정돈된 엑셀 시트라면, NoSQL은 더 자유로운 도구함입니다. 도큐먼트 DB는 마치 종이 카드 한 장에 정보를 적어 카드 상자에 넣는 방식이라, 카드마다 적힌 항목이 달라도 됩니다. 키-값 DB는 사물함처럼 번호만 알면 그 안의 내용을 빠르게 꺼낼 수 있습니다. 컬럼 패밀리 DB는 거대한 분산 표인데, 행마다 갖는 컬럼이 달라도 괜찮습니다. 그래프 DB는 친구 관계도처럼 점과 선을 직접 저장합니다. NoSQL의 강점은 대용량 분산 처리와 유연한 스키마이지만, 트랜잭션과 조인이 약하다는 단점이 있습니다. 그래서 모든 시스템에 NoSQL을 쓰는 게 아니라, 풀고자 하는 문제의 모양에 맞는 도구를 골라 쓰는 것이 핵심입니다. 회원·주문 같은 거래 데이터는 RDBMS, 세션·캐시는 Redis, 추천 그래프는 Neo4j처럼 폴리글랏 퍼시스턴스가 일반적입니다.</p>
+
+  <div class="study-tip">
+    <strong>💡 학습 TIP:</strong> 처음에는 MongoDB와 Redis 두 가지만 가볍게 다뤄 보세요. 이 두 가지로 NoSQL 패러다임의 80%를 체험할 수 있습니다.
+  </div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>NoSQL은 관계형이 아닌 다양한 데이터 모델의 총칭입니다.</li>
+    <li>도큐먼트, 키-값, 컬럼 패밀리, 그래프 네 종류가 대표.</li>
+    <li>대용량 분산과 유연한 스키마가 강점.</li>
+    <li>트랜잭션과 조인은 약점.</li>
+    <li>문제 종류에 맞춰 골라 쓰는 것이 정석.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>NoSQL 운동은 2000년대 후반 구글의 Bigtable 논문, 아마존의 Dynamo 논문에서 시작되었습니다. CAP 정리는 분산 시스템이 일관성·가용성·분할허용성 셋 중 둘만 동시에 만족할 수 있다는 명제이며, NoSQL은 대부분 AP 또는 CP 진영을 선택합니다. BASE(Basically Available, Soft state, Eventual consistency)는 ACID의 대안으로 제시된 약한 일관성 모델입니다. 도큐먼트 DB는 임베디드 도큐먼트로 조인을 줄이고, MongoDB는 BSON 형식으로 JSON을 확장한 바이너리 문서를 저장합니다. 컬럼 패밀리 DB(Cassandra)는 LSM 트리 기반으로 쓰기 성능이 뛰어나며, 파티션 키와 클러스터링 키 설계가 성능을 좌우합니다. 키-값 DB는 인메모리(Redis)와 디스크(DynamoDB) 계열로 나뉘며, Redis는 자료구조 서버로서 큐·세트·해시·정렬세트·스트림까지 제공합니다. 그래프 DB는 인덱스 프리 인접성(Index-free Adjacency)으로 다단계 탐색이 빠릅니다.</p>
+
+  <h3>실전 SQL/쿼리</h3>
+  <pre><code>// MongoDB: 도큐먼트 조회와 임베디드 업데이트
+db.users.find(
+  { country: "KR", "preferences.theme": "dark" },
+  { name: 1, email: 1 }
+).limit(10);
+
+db.users.updateOne(
+  { _id: ObjectId("...") },
+  { $push: { orders: { order_id: 9001, amount: 35000 } } }
+);
+
+// Redis: 키-값과 자료구조
+SET session:abc123 "{\"user_id\":1001}" EX 1800
+ZADD leaderboard 9999 "alice"
+ZADD leaderboard 8500 "bob"
+ZREVRANGE leaderboard 0 9 WITHSCORES
+
+// Cassandra: 시계열 적재 패턴
+CREATE TABLE sensor_data (
+  device_id   text,
+  bucket_day  date,
+  ts          timestamp,
+  value       double,
+  PRIMARY KEY ((device_id, bucket_day), ts)
+) WITH CLUSTERING ORDER BY (ts DESC);</code></pre>
+
+  <h3>예제</h3>
+  <div class="info-card">
+    <h4>💻 예제 1: 채팅 시스템</h4>
+    <p>메시지는 Cassandra에 (room_id, ts) 키로 저장해 시계열 조회를 빠르게, 사용자 프로필은 MongoDB에 도큐먼트로, 온라인 상태는 Redis Hash로 관리합니다. 폴리글랏 조합의 전형입니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 추천 시스템</h4>
+    <p>회원-상품-카테고리를 Neo4j 그래프로 표현하고 (회원)-[구매]->(상품)<-[구매]-(다른회원) 패턴 매칭으로 협업 필터링을 구현합니다. 다단계 관계 탐색이 SQL보다 훨씬 직관적입니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>넷플릭스는 Cassandra에 시청 기록을, DynamoDB에 사용자 세션을, Elasticsearch에 검색 인덱스를 저장하는 폴리글랏 아키텍처로 유명합니다. 또한 우버는 시간대별 위치 데이터를 LSM 기반 NoSQL에 적재하고, MongoDB는 헤드라인 뉴스나 카탈로그 같이 자주 변하는 콘텐츠 관리에 자주 쓰입니다. Redis는 세션, 캐시, 작업 큐, 분산 락 등 인프라성 용도로 거의 모든 회사에서 사용됩니다.</p>
+
+  <div class="warning-box">
+    <strong>⚠️ 자주 하는 실수:</strong> 트랜잭션과 조인이 필요한 데이터를 NoSQL에 강제로 넣다가 일관성 사고를 겪는 경우가 흔합니다. 또 MongoDB의 무차별 임베딩은 도큐먼트 크기 한계(16MB)에 부딪힙니다.
+  </div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>Dynamo 스타일 시스템은 일관성 해싱으로 데이터를 노드에 분산하고, 가상 노드(vnode)로 로드 균형을 맞춥니다. 복제는 N개의 복제본을 두고, R+W>N이면 강한 일관성, 그 미만이면 결과적 일관성을 갖습니다. 충돌 해소는 Last-Write-Wins나 벡터 클럭, CRDT(Conflict-free Replicated Data Type) 등이 사용됩니다. Cassandra는 LSM 트리 + Merkle 트리 기반 anti-entropy 복구, 힌티드 핸드오프, 리드 리페어로 가용성을 극대화합니다. MongoDB는 4.0부터 다중 도큐먼트 트랜잭션을 도입했지만, 단일 샤드 트랜잭션이 권장 사용 패턴입니다. DynamoDB의 글로벌 테이블은 멀티 리전 active-active 복제를 제공하며, 시간 기반 충돌 해소를 사용합니다. 그래프 DB는 다단계 패턴 매칭의 효율을 위해 인접 리스트를 디스크에 클러스터링합니다. 벡터 DB는 HNSW 그래프 인덱스로 ANN(Approximate Nearest Neighbor) 검색을 수행하며, 메타데이터 필터링과 결합한 하이브리드 검색이 표준이 되었습니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// MongoDB: 트랜잭션 + 인덱스 힌트
+const session = client.startSession();
+session.startTransaction({ readConcern: { level: "snapshot" } });
+try {
+  await orders.insertOne({ ... }, { session });
+  await inventory.updateOne(
+    { sku: "ABC", qty: { $gte: 1 } },
+    { $inc: { qty: -1 } },
+    { session, hint: "sku_1" }
+  );
+  await session.commitTransaction();
+} catch (e) {
+  await session.abortTransaction();
+}
+
+// Redis Streams로 이벤트 소싱
+XADD orders * type "OrderPlaced" payload "{...}"
+XGROUP CREATE orders consumers $ MKSTREAM
+XREADGROUP GROUP consumers worker1 COUNT 100 BLOCK 5000 STREAMS orders >
+
+// Cassandra 광역 카운터 패턴
+UPDATE event_counter
+SET    count = count + 1
+WHERE  event_id = ? AND bucket_hour = ?;</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>벡터 데이터베이스(Pinecone, Weaviate, Milvus, pgvector)는 LLM 시대의 RAG 파이프라인에서 핵심 인프라가 되었습니다. 또한 Time-series DB(InfluxDB, TimescaleDB, QuestDB)는 IoT와 관측 영역에서 빠르게 확산 중이며, ScyllaDB는 Cassandra를 C++로 재구현해 단일 노드 처리량을 크게 끌어올렸습니다. CRDT 기반 협업 DB(Yjs, Automerge)는 실시간 협업 도구의 백본으로 자리 잡았습니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 시스템: 일관성 해싱, 가십 프로토콜.</li>
+    <li>벡터 검색과 임베딩 학습.</li>
+    <li>CRDT와 오프라인 우선 협업 모델.</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>Dynamo 논문 — Amazon (2007).</li>
+    <li>Bigtable 논문 — Google (2006).</li>
+    <li>"Cassandra: The Definitive Guide" — Eben Hewitt 외.</li>
+  </ul>
+
+  <div class="success-box">
+    <strong>🎓 도전 과제:</strong> 글로벌 멀티 리전 SaaS의 사용자 프로필을 DynamoDB 글로벌 테이블, MongoDB Atlas 글로벌 클러스터, Cassandra NetworkTopologyStrategy 세 가지로 모델링하고 일관성/지연/비용 트레이드오프를 비교 정리해 보세요.
+  </div>
+</div>
+
 </main>
 </div>
 </body>

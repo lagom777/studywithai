@@ -45,6 +45,121 @@
   <p>Middleware Patterns & Routing의 기본 원리와 실전 패턴을 다룹니다.</p>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>라우팅은 어떤 URL이 어떤 기능을 수행하는지 정해주는 것이고, 미들웨어는 요청과 응답 사이에 끼어드는 작은 처리기들입니다.</p>
+
+  <h3>왜 배워야 하나?</h3>
+  <p>로그인 검사를 모든 페이지마다 반복해서 작성하면 코드가 지저분해집니다. 미들웨어로 한 번만 작성하면 모든 라우트에서 자동 적용됩니다. 요청 로깅, 압축, CORS, 에러 처리도 마찬가지입니다. 라우팅을 잘 설계하면 새 기능이 늘어도 코드 구조가 깔끔하게 유지됩니다. 실무에서 백엔드 코드의 절반은 라우팅과 미들웨어 조합으로 만들어지므로 핵심 기술입니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>라우팅</strong>: URL과 메서드 → 처리 함수 매핑.</li>
+      <li><strong>미들웨어</strong>: 요청/응답을 가공하는 중간 단계 함수.</li>
+      <li><strong>파이프라인</strong>: 미들웨어들이 순차로 연결된 흐름.</li>
+      <li><strong>핸들러</strong>: 실제 비즈니스 로직을 처리하는 함수.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>공장의 컨베이어 벨트를 떠올려 보세요. 부품이 들어오면 첫 번째 작업자가 검사하고, 두 번째 작업자가 라벨을 붙이고, 세 번째 작업자가 포장합니다. 각 단계가 미들웨어이고, 마지막 작업자가 라우트 핸들러입니다. 어느 단계에서든 부품에 문제가 있으면 빠질 수 있습니다(에러 처리). 라우팅은 부품 종류에 따라 어떤 라인으로 보낼지 결정하는 분배기 역할입니다. /users 요청은 사용자 처리 라인으로, /products 요청은 상품 처리 라인으로 보냅니다. 이렇게 흐름을 작은 단위로 쪼개고 합치는 구조는 코드를 짧게 유지하고 재사용성을 높여줍니다.</p>
+
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 미들웨어 순서가 중요합니다. 인증 미들웨어를 보호 라우트보다 먼저 등록해야 합니다.</div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>라우팅은 URL을 처리 함수로 연결한다.</li>
+    <li>미들웨어는 공통 처리를 분리한다.</li>
+    <li>파이프라인 형태로 순차 실행된다.</li>
+    <li>등록 순서가 동작에 영향을 준다.</li>
+    <li>에러 처리도 미들웨어로 통합한다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>Express의 미들웨어는 (req, res, next) 시그니처를 가진 함수이며 next()를 호출해 다음으로 넘기거나 res.send()로 즉시 응답합니다. 4인자 (err, req, res, next) 시그니처는 에러 미들웨어로 자동 인식됩니다. Koa는 async/await를 전제로 한 양방향 미들웨어 모델(onion model)을 사용해 next()의 전후 처리를 자연스럽게 작성할 수 있습니다. 라우팅은 일반적으로 트리/트라이 구조로 등록 경로를 인덱싱해 O(log n) 또는 O(1)에 가까운 매칭을 합니다. 동적 파라미터(/users/:id), 와일드카드, 정규식 매칭이 지원됩니다. 라우터 모듈을 도메인별로 분리하면(/api/v1/users, /api/v1/orders) 책임이 명확해집니다. CORS 미들웨어는 preflight OPTIONS 요청을 처리하고 허용 도메인/메서드/헤더를 정의합니다. 속도 제한은 IP 또는 API 키 단위로 토큰 버킷, leaky bucket 알고리즘을 적용합니다. 검증 미들웨어(zod, joi)는 요청 본문/쿼리/파라미터를 스키마에 따라 검증하고 핸들러에서 안전한 입력을 보장합니다.</p>
+
+  <h3>코드 패턴</h3>
+  <pre><code>// 미들웨어 체인
+const auth = (req, res, next) => {
+  if (!req.headers.authorization) return res.status(401).end();
+  next();
+};
+const validate = (schema) => (req, res, next) => {
+  const r = schema.safeParse(req.body);
+  if (!r.success) return res.status(400).json(r.error);
+  req.body = r.data;
+  next();
+};
+app.post('/api/orders', auth, validate(orderSchema), createOrder);</code></pre>
+
+  <div class="info-card">
+    <h4>💻 예제 1: 라우터 분리</h4>
+    <p>userRouter.use(authMiddleware) 처럼 라우터 단위로 적용하면 특정 그룹에만 인증을 강제할 수 있습니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 비동기 에러 전파</h4>
+    <p>async 핸들러 안에서 발생한 예외를 next(err)로 전달하거나 express-async-errors로 자동 전달되게 합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>대형 커머스 API는 인증 → 속도 제한 → 검증 → 로깅 → 라우터 → 에러 핸들러 순으로 미들웨어를 구성합니다. 멀티테넌트 SaaS는 요청 도메인을 보고 테넌트를 식별하는 미들웨어를 가장 먼저 두어 이후 모든 처리에 테넌트 컨텍스트를 주입합니다. 게임 서버는 패킷 단위로 디코드/검증/라우팅 미들웨어를 두어 HTTP가 아닌 커스텀 프로토콜에도 동일한 패턴을 적용합니다.</p>
+
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 본문 파서(express.json) 미들웨어를 라우트 등록보다 뒤에 두면 req.body가 undefined가 되는 문제가 생깁니다.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>대규모 백엔드에서 미들웨어는 단순한 함수 체인을 넘어서 관측 가능성, 보안, 트래픽 제어의 핵심 레버가 됩니다. AsyncLocalStorage 기반 컨텍스트 전파로 요청 ID, 사용자 ID, 트레이스 ID를 코드 전반에 자동 주입할 수 있습니다. 분산 트레이싱(OpenTelemetry)은 미들웨어 진입/종료 시점에 스팬을 생성하여 다운스트림 호출과 자연스럽게 연결됩니다. 라우팅 매칭은 라딕스 트리(Fastify) 또는 정규식 컴파일된 트리(Express 5)로 최적화되어 수천 라우트에서도 일정한 성능을 유지합니다. 동적 라우팅에서는 캐시 친화적인 라우트 키 정규화가 중요합니다. 게이트웨이 레벨에서는 Envoy의 HTTP filter chain, NGINX의 phase 모델, Caddy의 directive 모델이 비슷한 미들웨어 추상화를 제공하며 동적 설정 갱신, 회로 차단기, 부하 분산을 함께 처리합니다. WAF(Web Application Firewall) 미들웨어는 ModSecurity 또는 Cloudflare 룰셋으로 SQLi/XSS 패턴을 차단합니다. 멀티 리전 아키텍처에서는 지역 라우팅(geo routing)으로 가장 가까운 리전으로 요청을 보내고, 데이터 주권 요구사항에 따라 특정 트래픽을 특정 리전에 강제하기도 합니다. 카나리/블루-그린 배포는 라우팅 가중치를 미세 조정해 점진 노출을 구현합니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// 순차/병렬 합성 미들웨어
+function compose(middlewares) {
+  return (req, res, next) => {
+    let i = -1;
+    const dispatch = (idx) => {
+      if (idx <= i) return Promise.reject(new Error('next() called multiple times'));
+      i = idx;
+      const fn = middlewares[idx] || next;
+      return Promise.resolve(fn(req, res, dispatch.bind(null, idx + 1)));
+    };
+    return dispatch(0);
+  };
+}</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>엣지 함수(Cloudflare Workers, Vercel Edge Middleware)는 가장 가까운 PoP에서 라우팅과 미들웨어 처리를 수행해 글로벌 지연을 수십 ms로 줄입니다. eBPF 기반 사이드카리스 서비스 메시(Cilium)는 사이드카 컨테이너 없이 커널 수준에서 L7 정책을 적용해 오버헤드를 줄입니다. WASM 기반 필터(Envoy proxy-wasm)는 다양한 언어로 작성한 미들웨어를 게이트웨이에 안전하게 주입할 수 있게 합니다. AI 기반 위협 탐지 미들웨어는 정상 트래픽 패턴을 학습해 비정상 요청을 실시간 차단합니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>API 게이트웨이 & 서비스 메시</li>
+    <li>관측 가능성과 분산 트레이싱</li>
+    <li>WAF/Bot 관리</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>Envoy Proxy 공식 문서(HTTP filter chain)</li>
+    <li>Fastify 내부 라우터(라딕스 트리) 분석 글</li>
+    <li>OpenTelemetry HTTP 인스트루먼테이션 가이드</li>
+  </ul>
+
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 미들웨어 합성을 통해 동일 라우트에서 정상 트래픽은 v2, 5%만 v1으로 보내는 카나리 라우팅과 트레이싱 자동 주입을 한 번에 구현해 보세요.</div>
+</div>
+
 </main>
 </div>
 

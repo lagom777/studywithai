@@ -194,58 +194,101 @@ td {
   border-bottom: 1px solid rgba(0,0,0,0.06) !important;
 }
 
-/* === 난이도 섹션 (공통) === */
+/* === 난이도 탭 — 우측 상단 고정 === */
 .difficulty-tabs {
+  position: fixed;
+  top: 16px;
+  right: 80px;
+  z-index: 9998;
   display: flex;
-  gap: 8px;
-  margin: 24px 0 16px;
-  border-bottom: 2px solid rgba(0,0,0,0.08);
-  padding-bottom: 0;
+  gap: 4px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 999px;
+  padding: 4px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
 .difficulty-tab {
-  background: transparent;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
-  color: #6b7280 !important;
-  border-bottom: 3px solid transparent;
-  transition: all 0.2s;
-  margin-bottom: -2px;
-}
-.difficulty-tab:hover {
-  color: #0a0e1a !important;
-  background: rgba(0,0,0,0.03);
-}
-.difficulty-tab.active {
-  color: #0a0e1a !important;
-  border-bottom-color: #0066cc;
   background: transparent !important;
+  border: none !important;
+  padding: 8px 16px !important;
+  cursor: pointer;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #6b7280 !important;
+  border-radius: 999px !important;
+  transition: all 0.2s;
+  min-width: auto !important;
+  white-space: nowrap;
 }
+.difficulty-tab:hover:not(.active) {
+  color: #0a0e1a !important;
+  background: rgba(0,0,0,0.04) !important;
+}
+.difficulty-tab.active[data-target="easy"] {
+  background: #10b981 !important;
+  color: #ffffff !important;
+}
+.difficulty-tab.active[data-target="medium"] {
+  background: #f59e0b !important;
+  color: #ffffff !important;
+}
+.difficulty-tab.active[data-target="hard"] {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+/* === 난이도 콘텐츠 — 가운데 정렬 === */
 .difficulty-content {
   display: none;
-  padding: 20px 0;
+  padding: 32px 0;
+  max-width: 700px;
+  margin: 0 auto;
   animation: fadeIn 0.3s;
 }
 .difficulty-content.active {
   display: block;
 }
+.difficulty-content h3 {
+  text-align: center;
+}
+.difficulty-content > p {
+  text-align: center;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .difficulty-badge {
   display: inline-block;
-  padding: 3px 10px;
-  border-radius: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
   font-size: 12px;
   font-weight: 700;
-  margin-right: 8px;
+  margin-bottom: 16px;
 }
 .difficulty-badge.easy { background: #d1fae5; color: #065f46; }
 .difficulty-badge.medium { background: #fef3c7; color: #92400e; }
 .difficulty-badge.hard { background: #fecaca; color: #991b1b; }
+
+/* 모바일에서 난이도 탭 위치 조정 */
+@media (max-width: 768px) {
+  .difficulty-tabs {
+    top: auto;
+    bottom: 16px;
+    right: 50%;
+    transform: translateX(50%);
+    font-size: 12px;
+  }
+  .difficulty-tab {
+    padding: 6px 12px !important;
+    font-size: 11px !important;
+  }
+}
 
 /* === 다국어 토글 === */
 .lang-toggle {

@@ -45,6 +45,113 @@
   <p>Server Fundamentals & Architecture의 기본 원리와 실전 패턴을 다룹니다.</p>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>서버는 클라이언트(브라우저, 앱)의 요청을 받아 처리하고 응답을 돌려주는 컴퓨터 프로그램입니다.</p>
+
+  <h3>왜 배워야 하나?</h3>
+  <p>스마트폰으로 쇼핑몰에 접속해 상품을 검색하면, 그 검색어가 서버로 전달되어 데이터베이스에서 결과를 찾아 다시 화면에 보여줍니다. 인스타그램에 사진을 올리면 서버가 받아 저장하고 친구들에게 보여줍니다. 카카오톡 메시지도 서버를 거쳐 상대방에게 전달됩니다. 이처럼 우리가 매일 쓰는 거의 모든 서비스가 서버 위에서 돌아가므로, 서버 동작 원리를 이해하는 것은 백엔드 개발의 출발점입니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>클라이언트(Client)</strong>: 서비스를 요청하는 쪽 — 보통 브라우저나 앱.</li>
+      <li><strong>서버(Server)</strong>: 요청을 받아 처리하고 응답을 돌려주는 프로그램.</li>
+      <li><strong>요청(Request)</strong>: 클라이언트가 서버에 보내는 작업 의뢰.</li>
+      <li><strong>응답(Response)</strong>: 서버가 처리 결과로 돌려주는 데이터.</li>
+      <li><strong>포트(Port)</strong>: 한 대의 컴퓨터에서 여러 서비스를 구분해주는 번호.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>서버를 식당에 비유해보세요. 손님(클라이언트)이 메뉴를 보고 주문을 합니다. 주문(요청)을 받은 점원이 주방으로 가서 음식을 만들어 손님에게 가져다 줍니다. 이때 점원과 주방 시스템이 서버 역할입니다. 한 번에 손님이 한 명만 오는 것이 아니라 동시에 여러 명이 주문하기 때문에, 서버는 동시 요청을 효율적으로 처리할 수 있어야 합니다. 만약 식당이 작아 손님이 너무 많으면 대기 줄이 길어집니다. 서버에서도 마찬가지로 처리 능력이 부족하면 응답이 느려지거나 멈춥니다. 그래서 서버를 여러 대로 늘리거나(스케일 아웃), 한 대의 성능을 높이는(스케일 업) 방법을 씁니다. 또한 손님 주문을 잘못 받으면 클레임이 들어오듯, 서버도 오류 처리를 잘 해야 안정적인 서비스가 됩니다.</p>
+
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 처음에는 "내 컴퓨터에 작은 서버를 띄워보는" 경험부터 시작하세요. Node.js나 Python 한 줄로 서버를 띄울 수 있습니다.</div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>서버는 요청을 받아 응답을 돌려주는 프로그램이다.</li>
+    <li>클라이언트와 서버는 네트워크로 연결된다.</li>
+    <li>포트 번호로 같은 컴퓨터의 여러 서비스를 구분한다.</li>
+    <li>요청-응답이 백엔드의 가장 기본 흐름이다.</li>
+    <li>스케일 업/아웃으로 처리 능력을 늘린다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>서버는 OSI 7계층 위에서 동작합니다. 일반적인 웹 서버는 TCP/IP 4계층 모델 기준으로 응용 계층(HTTP)에서 요청을 처리합니다. 운영체제는 listen 시스템 콜로 특정 포트를 열어 두고, accept로 연결을 받아들입니다. 한 번에 여러 클라이언트가 연결되므로 동시성 모델이 중요합니다. 멀티 프로세스(아파치 prefork), 멀티 스레드(Tomcat), 이벤트 루프(Node.js, Nginx) 세 가지가 대표적입니다. 멀티 프로세스는 안정적이지만 메모리 비용이 큽니다. 멀티 스레드는 메모리 효율은 좋지만 공유 자원 동기화가 필요합니다. 이벤트 루프는 단일 스레드로 수만 개의 연결을 비동기로 처리할 수 있어 I/O가 많은 서비스에 유리합니다. 또한 리버스 프록시(Nginx)를 앞에 두고 뒤에 애플리케이션 서버를 두는 구조가 일반적입니다. 로드 밸런서는 여러 서버에 트래픽을 골고루 분배해 가용성을 높입니다.</p>
+
+  <h3>코드 패턴</h3>
+  <pre><code>// Node.js 기본 HTTP 서버
+const http = require('http');
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'application/json' });
+  res.end(JSON.stringify({ message: 'Hello, server!' }));
+});
+server.listen(3000, () => console.log('Listening on :3000'));</code></pre>
+
+  <div class="info-card">
+    <h4>💻 예제 1: 동시 접속 처리</h4>
+    <p>이벤트 루프 기반 서버는 한 요청이 DB 응답을 기다리는 동안 다른 요청을 받아 처리합니다. 콜백, Promise, async/await로 비동기 흐름을 작성합니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 리버스 프록시</h4>
+    <p>Nginx가 80/443 포트로 외부 요청을 받고 내부 3000번 포트로 띄워진 Node 앱에 전달합니다. SSL 종단 처리와 정적 파일 서빙을 분리합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>대형 커머스 사이트는 트래픽이 폭증하는 행사 시간을 위해 오토스케일링을 설정합니다. CPU 사용률 70%를 넘으면 인스턴스를 자동으로 추가하고 트래픽이 줄면 줄이는 식입니다. 또한 글로벌 서비스에서는 지역별 엣지 로케이션에 서버를 분산 배치해 응답 속도를 줄입니다. 게임 서버는 매치메이킹 서버, 게임 로직 서버, 채팅 서버를 분리해 부하를 나눕니다.</p>
+
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 동기 블로킹 코드를 이벤트 루프에서 사용해 전체 서버가 멈추는 경우가 흔합니다. CPU 집약 작업은 워커 스레드로 분리하세요.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>대규모 분산 서버 시스템에서는 단일 노드 성능보다 노드 간 일관성과 가용성이 더 큰 도전입니다. CAP 정리에 따르면 네트워크 분할이 일어났을 때 일관성과 가용성 중 하나만 선택할 수 있습니다. 실무에서는 강한 일관성이 필요한 결제 시스템과 최종 일관성으로 충분한 피드 시스템을 분리 설계합니다. C10K, C10M 문제를 해결하기 위해 epoll, kqueue 같은 OS 수준 이벤트 알림과 io_uring 같은 비동기 I/O 인터페이스를 활용합니다. TCP 백로그 큐 크기, SO_REUSEPORT, TCP_NODELAY 같은 소켓 옵션 튜닝이 처리량에 큰 영향을 줍니다. NUMA 아키텍처에서는 CPU 친화도 설정으로 캐시 미스를 줄입니다. 커넥션 풀링, HTTP/2 멀티플렉싱, gRPC의 스트리밍 등으로 연결 비용을 분산합니다. 컨센서스 알고리즘(Raft, Paxos)으로 리더 선출과 상태 복제를 안전하게 수행하고, 벡터 클럭이나 CRDT로 분산 상태 충돌을 해소합니다. 모니터링은 USE 모델(사용률, 포화도, 오류)과 RED 모델(요청률, 오류율, 지속시간)을 결합해 추적합니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// 이벤트 루프 + 워커 풀 (Node.js)
+const { Worker } = require('worker_threads');
+function runHeavyTask(payload) {
+  return new Promise((resolve, reject) => {
+    const w = new Worker('./cpu-task.js', { workerData: payload });
+    w.on('message', resolve);
+    w.on('error', reject);
+  });
+}</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Kubernetes는 사실상의 컨테이너 오케스트레이션 표준이 되어 서버 배포 패러다임을 바꿨습니다. eBPF는 커널 영역에서 안전하게 코드를 실행할 수 있게 해주어 Cilium 같은 네트워크 솔루션이 사이드카 없이 L7 정책을 구현하게 했습니다. 서버리스(AWS Lambda, Cloudflare Workers)는 콜드 스타트를 줄이고 V8 isolate를 활용해 ms 단위 시작 시간을 달성합니다. 엣지 컴퓨팅은 사용자에게 가장 가까운 PoP에서 동적 코드를 실행해 글로벌 레이턴시를 줄입니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 시스템 이론(Consensus, Replication)</li>
+    <li>네트워크 프로그래밍(소켓, RDMA)</li>
+    <li>SRE/관측 가능성(Observability, OpenTelemetry)</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Designing Data-Intensive Applications" — Martin Kleppmann</li>
+    <li>"The Linux Programming Interface" — Michael Kerrisk</li>
+    <li>Google SRE Book(무료 공개)</li>
+  </ul>
+
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Raw TCP 소켓으로 동시 1만 연결을 처리하는 에코 서버를 작성하고 wrk로 부하 테스트해 보세요.</div>
+</div>
+
 </main>
 </div>
 

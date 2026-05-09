@@ -45,6 +45,116 @@
   <p>Microservice Architecture & Patterns의 기본 원리와 실전 패턴을 다룹니다.</p>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>마이크로서비스는 큰 서비스를 작은 서비스 여러 개로 나누어 각자 독립적으로 만들고 배포하는 방식입니다.</p>
+
+  <h3>왜 배워야 하나?</h3>
+  <p>처음에는 작은 모놀리식(하나의 큰 앱)으로 시작해도 사용자와 기능이 늘면 코드가 비대해져 한 줄 고치는 데도 두려워집니다. 인스타그램은 사진 업로드, 피드, 메시지, 결제를 각각 독립 서비스로 운영합니다. 한 팀이 한 서비스만 책임지므로 다른 팀과 부딪히지 않고 빠르게 배포할 수 있습니다. 한 서비스에 장애가 생겨도 전체가 멈추지 않습니다. 큰 서비스를 만들거나 큰 회사로 갈 계획이라면 마이크로서비스 사고방식이 필요합니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>모놀리식</strong>: 모든 기능이 하나의 앱에 든 구조.</li>
+      <li><strong>마이크로서비스</strong>: 작은 단위로 나뉜 독립 서비스 모음.</li>
+      <li><strong>API 게이트웨이</strong>: 외부 요청을 적절한 서비스로 라우팅하는 입구.</li>
+      <li><strong>서비스 디스커버리</strong>: 서비스 위치를 동적으로 찾는 메커니즘.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>큰 백화점을 떠올려 보세요. 모놀리식은 한 사람이 모든 매장을 관리하는 백화점, 마이크로서비스는 매장마다 독립된 사장과 직원이 있는 쇼핑몰과 같습니다. 한 매장이 인테리어를 바꿔도 다른 매장은 영향이 없고, 한 매장이 문을 닫아도 손님은 다른 매장에서 쇼핑할 수 있습니다. 다만 매장이 많아지면 안내 데스크(API 게이트웨이)가 필요하고, 매장끼리 정보를 주고받을 통신 체계(메시지 큐, gRPC)도 필요합니다. 분리의 장점 만큼 운영 복잡도가 늘어나니 작은 팀이라면 무리하지 말고 모놀리식부터 시작해도 됩니다.</p>
+
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 처음부터 마이크로서비스를 쓰기보다, 모놀리식이 한계에 부딪히는 시점에 도메인 경계로 점진 분리하는 것이 안전합니다.</div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>마이크로서비스는 독립 배포 가능한 작은 서비스 모음이다.</li>
+    <li>장애 격리와 빠른 배포가 장점이다.</li>
+    <li>운영 복잡도가 크게 늘어난다.</li>
+    <li>API 게이트웨이가 외부 입구를 단일화한다.</li>
+    <li>도메인 경계로 분리하는 것이 안전하다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>마이크로서비스 분리 기준은 도메인 주도 설계(DDD)의 바운디드 컨텍스트가 흔합니다. 한 서비스는 한 데이터베이스를 소유하는 "Database per Service" 원칙을 따라 강결합을 피합니다. 서비스 간 통신은 동기(REST/gRPC)와 비동기(Kafka, RabbitMQ) 두 방식이 있고, 사용자 응답에 즉시 필요한 흐름만 동기로, 부수 작업은 비동기로 분리합니다. API 게이트웨이는 라우팅, 인증, 속도 제한, BFF(Backend for Frontend) 역할을 합니다. 서비스 디스커버리는 클라이언트 사이드(Eureka, Consul)와 서버 사이드(Kubernetes Service) 두 방식이 있습니다. 회로 차단기(Hystrix, Resilience4j)는 다운스트림 장애가 전체로 번지는 것을 막습니다. 분산 트랜잭션은 2PC 대신 사가 패턴으로 보상 트랜잭션을 사용합니다. 분산 트레이싱(Jaeger, Zipkin)은 한 요청이 여러 서비스를 거치는 흐름을 시각화해 디버깅을 가능하게 합니다. 컨테이너와 Kubernetes는 마이크로서비스 운영의 사실상 표준이 되었습니다.</p>
+
+  <h3>코드 패턴</h3>
+  <pre><code>// 회로 차단기 패턴(opossum)
+const CircuitBreaker = require('opossum');
+const breaker = new CircuitBreaker(callPaymentService, {
+  timeout: 3000, errorThresholdPercentage: 50, resetTimeout: 10000
+});
+breaker.fallback(() => ({ status: 'queued', retryAfter: 30 }));
+const result = await breaker.fire(orderId);</code></pre>
+
+  <div class="info-card">
+    <h4>💻 예제 1: BFF 패턴</h4>
+    <p>모바일 앱과 웹용 BFF를 따로 두어 각 클라이언트에 최적화된 응답을 만듭니다. 내부적으로는 동일한 마이크로서비스를 호출합니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 사가 패턴</h4>
+    <p>주문 서비스가 결제, 재고, 배송 서비스를 순차 호출하다 실패하면 보상 트랜잭션(환불, 재고 복원)을 역순으로 호출합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>넷플릭스는 700개 이상의 마이크로서비스로 운영되며 각 팀이 자신의 서비스를 풀 사이클로 책임집니다. 우버는 4000개 넘는 서비스를 사용하다 도메인 단위로 묶는 "도메인 지향" 재정비를 진행했습니다. 쿠팡은 풀필먼트, 배송, 결제, 추천을 별도 마이크로서비스로 운영하며 카프카로 이벤트를 연결합니다.</p>
+
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> "분산된 모놀리식"이 가장 안 좋습니다. 서비스끼리 강하게 동기 호출로 얽혀 있으면 분리 이점은 없고 운영 복잡도만 커집니다.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>대규모 마이크로서비스 환경의 핵심 도전은 일관성, 관찰 가능성, 서비스 간 안정성입니다. 이벤트 주도 아키텍처는 서비스 간 결합을 줄이지만 이벤트 스키마 진화 관리가 어렵습니다. Schema Registry와 호환성 정책(backward, forward, full)을 명확히 정의해야 합니다. 분산 트랜잭션의 사가는 오케스트레이션과 코레오그래피 두 모델이 있고, 후자는 결합도가 낮지만 흐름 추적이 어렵습니다. CQRS와 Event Sourcing을 결합하면 읽기/쓰기 모델을 분리하고 모든 상태 변화를 이벤트 로그로 보관해 시간 여행 디버깅과 재처리가 가능해집니다. 서비스 메시(Istio, Linkerd, Cilium)는 사이드카 또는 ambient 모드로 mTLS, 트래픽 셰이핑, 정책 적용을 코드와 분리합니다. eBPF 기반 사이드카리스 메시는 오버헤드를 줄이고 커널 단에서 L7 정책을 처리합니다. SLO 기반 운영은 에러 버짓을 정의해 신기능 배포와 안정성의 균형을 맞춥니다. 카오스 엔지니어링(Chaos Mesh, Gremlin)은 의도적 장애 주입으로 시스템 회복력을 검증합니다. 멀티 클러스터/멀티 리전 배포는 데이터 주권, 지연, 비용을 종합적으로 고려해 active-active 또는 failover 모델을 선택합니다. 도메인 분리가 잘못되면 분산 모놀리식이 되어 운영 비용이 폭증하므로 콘웨이의 법칙을 의식해 조직 구조와 함께 설계해야 합니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// 사가 오케스트레이터(의사 코드)
+async function placeOrderSaga(orderId) {
+  try {
+    await payment.charge(orderId);
+    await inventory.reserve(orderId);
+    await shipping.schedule(orderId);
+  } catch (e) {
+    await shipping.cancel(orderId).catch(() => {});
+    await inventory.release(orderId).catch(() => {});
+    await payment.refund(orderId).catch(() => {});
+    throw e;
+  }
+}</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Kubernetes Gateway API는 인그레스 표준을 대체하며 멀티 테넌시와 트래픽 정책을 일급 자원으로 제공합니다. 서비스 메시의 ambient 모드(Istio Ambient, Cilium)는 사이드카 컨테이너를 제거해 자원 사용을 줄입니다. WASM 기반 정책 엔진(Open Policy Agent, Kyverno)은 분산 인가를 통일된 언어로 표현합니다. 서버리스 컨테이너(Knative, Cloud Run)는 자동 0→N 스케일링으로 마이크로서비스 운영 비용을 더 줄입니다. AI 모델 서빙도 마이크로서비스화되어 모델 배포, 카나리, 트래픽 분기를 동일한 도구로 관리합니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>도메인 주도 설계(DDD)</li>
+    <li>서비스 메시와 정책 엔진</li>
+    <li>플랫폼 엔지니어링과 내부 개발자 플랫폼(IDP)</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Building Microservices" — Sam Newman</li>
+    <li>"Implementing Domain-Driven Design" — Vaughn Vernon</li>
+    <li>Microsoft .NET Microservices Architecture eBook(무료)</li>
+  </ul>
+
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 도메인 3개 이상을 분리하고 사가 오케스트레이터, 분산 트레이싱, 회로 차단기, 카나리 배포까지 통합한 데모 시스템을 Kubernetes 위에 구축해 보세요.</div>
+</div>
+
 </main>
 </div>
 

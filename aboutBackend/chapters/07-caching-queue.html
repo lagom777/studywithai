@@ -45,6 +45,110 @@
   <p>Caching Strategies & Message Queues의 기본 원리와 실전 패턴을 다룹니다.</p>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>캐싱은 자주 쓰는 결과를 미리 저장해 빠르게 응답하는 기법이고, 메시지 큐는 작업을 줄세워 천천히 처리하는 우편함입니다.</p>
+
+  <h3>왜 배워야 하나?</h3>
+  <p>인기 상품 페이지를 매번 DB에 물어보면 서버가 금세 한계에 부딪힙니다. 캐시에 한 번 저장해두면 수만 명에게 똑같은 결과를 빠르게 줄 수 있습니다. 또 회원가입 후 환영 메일을 보내는 작업처럼 즉시 결과가 필요 없는 일은 큐에 넣고 나중에 처리하면 사용자가 빠르게 다음 화면을 볼 수 있습니다. 캐싱과 큐를 잘 쓰면 같은 서버로 몇 배 더 많은 사용자를 처리할 수 있어 비용과 성능 둘 다 잡을 수 있습니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>캐시(Cache)</strong>: 자주 쓰는 데이터의 빠른 사본 저장소.</li>
+      <li><strong>TTL</strong>: 캐시 항목의 유효 기간.</li>
+      <li><strong>큐(Queue)</strong>: 작업을 순서대로 보관하는 대기열.</li>
+      <li><strong>Producer/Consumer</strong>: 큐에 넣는 쪽과 꺼내 처리하는 쪽.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>캐시를 책상 위 자주 쓰는 노트라고 생각하세요. 책장(원본 DB)까지 갈 필요 없이 책상에서 바로 찾으면 빠릅니다. 다만 노트가 오래되면 책장 내용과 달라질 수 있으니 적절히 갱신해야 합니다(TTL). 메시지 큐는 카페 주문 대기열을 떠올리면 됩니다. 손님이 한꺼번에 몰려도 주문서를 받아 줄세우면 바리스타는 자기 속도로 차근차근 만들 수 있습니다. 큐가 없으면 모두가 즉시 처리되어야 하니 일이 몰리면 시스템이 멈춥니다. 큐는 갑작스러운 트래픽을 흡수하고, 실패한 작업을 재시도하기에도 편합니다.</p>
+
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> Redis는 캐시와 간단한 큐 모두 시작하기에 좋은 도구입니다. set/get과 lpush/brpop 두 쌍이면 핵심 패턴을 익힐 수 있습니다.</div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>캐시는 응답 속도를 빠르게 한다.</li>
+    <li>TTL로 신선도를 관리한다.</li>
+    <li>큐는 작업을 비동기로 처리한다.</li>
+    <li>트래픽 폭주를 완충해준다.</li>
+    <li>실패 재시도가 쉬워진다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>캐시는 적중률(hit rate)이 핵심 지표입니다. LRU, LFU, ARC 같은 교체 정책으로 자주 쓰는 데이터를 우선 보관합니다. 캐시 무효화는 어렵습니다. write-through(쓰기 시 즉시 캐시도 갱신), write-back(나중 반영), write-around(캐시 우회) 전략이 있습니다. cache-aside는 가장 흔한 패턴으로 읽을 때 캐시 미스면 DB에서 읽어 캐시에 채웁니다. 분산 캐시(Redis, Memcached)는 일관 해시로 키를 노드에 분배합니다. 메시지 큐 시스템에는 Redis Streams, RabbitMQ, AWS SQS, Kafka가 대표적입니다. RabbitMQ는 AMQP 기반으로 라우팅(direct, topic, fanout, headers)이 풍부합니다. Kafka는 로그 기반 분산 큐로 토픽-파티션 모델을 사용해 높은 처리량과 재처리 능력을 제공합니다. 메시지 전달 보장은 at-most-once, at-least-once, exactly-once 세 단계로 분류됩니다. 멱등성 처리, DLQ(Dead Letter Queue), 백오프 재시도가 안정적인 큐 운영의 필수 요소입니다.</p>
+
+  <h3>코드 패턴</h3>
+  <pre><code>// Cache-aside (Redis)
+async function getUser(id) {
+  const cached = await redis.get(`user:${id}`);
+  if (cached) return JSON.parse(cached);
+  const user = await db.findUser(id);
+  await redis.set(`user:${id}`, JSON.stringify(user), 'EX', 60);
+  return user;
+}</code></pre>
+
+  <div class="info-card">
+    <h4>💻 예제 1: BullMQ 작업 큐</h4>
+    <p>queue.add('send-email', { to, subject }) 로 작업을 넣고, worker가 process 콜백으로 꺼내 실행. 실패 시 자동 재시도와 지수 백오프 설정이 가능합니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: 캐시 스탬피드 방어</h4>
+    <p>인기 키 만료 시 동시에 여러 요청이 DB로 몰리는 현상을 방지하려고 단일 갱신 락 또는 stale-while-revalidate를 적용합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>커머스의 상품 상세 페이지는 CDN + 응답 캐시 + 객체 캐시 다중 계층으로 99% 이상 캐시 히트를 만듭니다. 결제 완료 후 재고 차감, 포인트 적립, 알림 발송은 큐로 분리되어 결제 응답 자체는 빠르게 돌려줍니다. 토스의 알림은 카프카로 수억 건 이벤트를 라우팅합니다. 라이브 방송의 채팅은 Redis Pub/Sub로 즉시 전파됩니다.</p>
+
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 큐 컨슈머가 멱등하지 않으면 재처리 시 중복 결제 같은 사고가 납니다. 메시지 ID로 중복 처리 여부를 반드시 확인하세요.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>대규모 분산 캐시는 일관성과 가용성의 균형이 핵심입니다. write-back 캐시는 쓰기 성능이 좋지만 노드 장애 시 데이터 유실 위험이 있어 WAL과 복제로 보완합니다. 캐시 코히런스는 단일 머신의 CPU 캐시뿐 아니라 분산 환경에서도 중요합니다. invalidation broadcast는 비싸지만 정확하고, lazy invalidation은 효율적이지만 짧은 불일치를 허용합니다. Redis Cluster의 슬롯 해시(16384), Consistent Hashing, Rendezvous Hashing이 노드 추가/제거 시 키 재분배를 줄입니다. 캐시 워밍은 콜드 스타트 후 적중률을 빠르게 올리기 위해 미리 인기 키를 채우는 기법입니다. 메시지 큐의 exactly-once는 사실상 컨슈머의 멱등성과 트랜잭션 출력(transactional outbox)으로 달성됩니다. Kafka의 트랜잭션 API는 프로듀서-컨슈머 사이의 정확히 한 번 시맨틱을 제공합니다. 사가(Saga) 패턴은 분산 트랜잭션을 보상 트랜잭션으로 분해해 마이크로서비스 간 일관성을 유지합니다. 백프레셔는 컨슈머 랙(consumer lag)을 모니터링해 자동 스케일링을 트리거하고, 슬로우 컨슈머는 격리해 다른 컨슈머에 영향을 주지 않게 합니다. CDC(Change Data Capture, Debezium)는 DB 변경을 실시간 이벤트로 변환해 캐시 무효화와 검색 색인을 동기화합니다. 이벤트 소싱과 CQRS는 큐와 함께 사용해 읽기/쓰기 모델을 분리하고 시간 여행 디버깅을 가능하게 합니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// Outbox 패턴(트랜잭션 일관성)
+await db.tx(async (t) => {
+  await t.orders.insert(order);
+  await t.outbox.insert({ topic: 'order.created', payload: order });
+});
+// 별도 워커가 outbox를 폴링하여 Kafka로 발행</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Cloudflare KV, D1, R2처럼 글로벌 분산 캐시/DB가 엣지에서 1ms 단위로 데이터를 제공합니다. Redis 7.4의 Vector Search는 임베딩 검색을 캐시 레이어에 통합해 LLM 검색을 가속합니다. Apache Pulsar는 다중 테넌시와 지오 복제를 기본 지원하는 차세대 메시징 시스템입니다. NATS JetStream은 가벼운 분산 큐로 IoT/엣지에 적합합니다. AI 워크로드 큐(Ray Serve, Modal)는 GPU 자원 인지 스케줄링으로 추론 처리량을 최적화합니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>분산 시스템 일관성 모델</li>
+    <li>이벤트 주도 아키텍처(EDA)</li>
+    <li>CDC와 데이터 통합</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"Designing Data-Intensive Applications" — Martin Kleppmann</li>
+    <li>Kafka 공식 문서(트랜잭션, EOS)</li>
+    <li>Redis University 무료 강의</li>
+  </ul>
+
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 트랜잭션 outbox + Kafka + idempotent consumer + Redis 캐시 무효화로 결제-재고-알림 흐름을 정확히 한 번 처리되도록 구현하세요.</div>
+</div>
+
 </main>
 </div>
 

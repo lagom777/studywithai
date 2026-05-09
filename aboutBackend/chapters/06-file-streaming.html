@@ -45,6 +45,113 @@
   <p>File I/O & Stream Processing의 기본 원리와 실전 패턴을 다룹니다.</p>
 </div>
 
+<h2>📚 난이도별 학습</h2>
+<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>스트리밍은 큰 데이터를 한 번에 다 읽지 않고 작은 조각으로 흘려보내며 처리하는 방식입니다.</p>
+
+  <h3>왜 배워야 하나?</h3>
+  <p>유튜브는 영상을 한꺼번에 다운받지 않고 조금씩 받아서 재생합니다. 사진 업로드 시 기가바이트 영상을 메모리에 다 올리지 않고 흘러가듯 저장합니다. 엑셀 수만 행을 읽을 때도 한 번에 메모리에 올리면 서버가 죽습니다. 스트리밍을 알면 메모리 부담 없이 큰 파일을 처리할 수 있고, 사용자가 더 빠르게 결과를 보게 만들 수 있어 백엔드의 성능과 안정성이 함께 올라갑니다.</p>
+
+  <div class="info-card">
+    <h4>🌱 핵심 용어</h4>
+    <ul>
+      <li><strong>스트림(Stream)</strong>: 데이터가 흐르는 통로.</li>
+      <li><strong>버퍼(Buffer)</strong>: 짧게 모아두는 임시 저장 공간.</li>
+      <li><strong>파이프(Pipe)</strong>: 한 스트림 출력을 다른 스트림 입력으로 잇는 것.</li>
+      <li><strong>청크(Chunk)</strong>: 스트림이 한 번에 보내는 작은 조각.</li>
+    </ul>
+  </div>
+
+  <h3>개념 풀어쓰기</h3>
+  <p>강물을 떠올려 보세요. 댐에 물을 모두 받아두고 한 번에 흘려보내려면 거대한 저수지가 필요합니다. 대신 작은 수로로 계속 흘려보내면 큰 저장 공간 없이도 끝없이 물을 옮길 수 있습니다. 스트리밍이 그렇습니다. 1GB 영상을 메모리에 올리려면 1GB의 RAM이 필요하지만, 64KB 청크씩 읽고 즉시 응답으로 보내면 메모리는 거의 그대로 유지됩니다. 또한 첫 청크가 도착하는 즉시 사용자가 영상을 볼 수 있으니 체감 속도도 빨라집니다. 파일 업로드, 다운로드, 실시간 로그 처리, 동영상 변환 등 큰 데이터를 다루는 모든 곳에서 스트리밍이 핵심입니다.</p>
+
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> Node.js의 fs.createReadStream과 res.write()를 파이프로 연결하는 코드 한 줄로 스트리밍을 시작할 수 있습니다.</div>
+
+  <h3>요약</h3>
+  <ul>
+    <li>스트리밍은 데이터를 청크 단위로 흘려 처리한다.</li>
+    <li>메모리 사용을 일정하게 유지한다.</li>
+    <li>첫 응답이 빨라 체감 속도가 좋다.</li>
+    <li>파이프로 스트림을 자연스럽게 연결한다.</li>
+    <li>큰 파일/실시간 처리에 필수다.</li>
+  </ul>
+</div>
+
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>이론 깊이</h3>
+  <p>Node.js는 Readable, Writable, Duplex, Transform 네 종류의 스트림을 제공합니다. 백프레셔(backpressure)는 소비자가 따라오지 못할 때 생산자를 잠시 멈추는 메커니즘으로 pipe()는 자동으로 백프레셔를 처리해줍니다. 파일 업로드는 multipart/form-data 파싱을 스트리밍으로 처리하면 임시 파일 없이 바로 S3 등 객체 스토리지로 흘려보낼 수 있습니다. 동영상은 Range 요청 헤더로 부분 다운로드를 지원해 빨리감기와 이어보기를 가능하게 합니다. CSV/JSONL 같은 라인 단위 데이터는 stream + line splitter + transform 조합으로 ETL 파이프라인을 구성합니다. 압축(gzip, brotli)은 변환 스트림으로 동작해 압축/해제와 다른 처리를 동시에 수행합니다. 객체 스토리지(S3, GCS) 업로드는 멀티파트 업로드 API로 5MB 단위 청크를 병렬 전송해 대용량 파일을 안정적으로 올립니다. CDN과 결합하면 서버는 사인된 URL만 만들어주고 클라이언트가 직접 스토리지에 업로드하는 패턴이 효율적입니다.</p>
+
+  <h3>코드 패턴</h3>
+  <pre><code>// 파일 다운로드 스트리밍
+app.get('/files/:id', async (req, res) => {
+  const meta = await db.findFile(req.params.id);
+  res.setHeader('Content-Type', meta.mime);
+  res.setHeader('Content-Length', meta.size);
+  fs.createReadStream(meta.path).pipe(res);
+});</code></pre>
+
+  <div class="info-card">
+    <h4>💻 예제 1: 변환 파이프라인</h4>
+    <p>readStream.pipe(decryptTransform).pipe(gzip).pipe(res) 처럼 변환 단계를 줄세워 한 번에 처리합니다.</p>
+  </div>
+  <div class="info-card">
+    <h4>💻 예제 2: SSE & 실시간</h4>
+    <p>Server-Sent Events는 단방향 텍스트 스트림으로 알림, 진행률, AI 응답 토큰 스트리밍에 적합합니다.</p>
+  </div>
+
+  <h3>실무 응용</h3>
+  <p>넷플릭스 같은 OTT는 적응형 비트레이트(HLS/DASH) 스트리밍으로 네트워크 상태에 따라 화질을 동적으로 바꿉니다. 라이브 방송은 RTMP/SRT로 송출되고 트랜스코딩 후 HLS로 배포됩니다. ChatGPT처럼 LLM 응답이 길어지는 서비스는 토큰을 SSE로 스트리밍해 사용자에게 즉시 보여줍니다. 데이터 분석 파이프라인은 S3에 쌓인 로그를 stream으로 읽어 변환 후 데이터 웨어하우스로 적재합니다.</p>
+
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> readStream에 error 이벤트 리스너를 달지 않으면 파일이 없을 때 프로세스가 비정상 종료됩니다. 항상 에러를 처리하고 res.status를 설정하세요.</div>
+</div>
+
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>전문가 레벨</h3>
+  <p>대용량 미디어 시스템에서는 인제스트, 인코딩, 패키징, 배포의 각 단계가 분산 워커로 분리됩니다. FFmpeg 기반 트랜스코딩은 하드웨어 가속(NVENC, QSV) 없이는 비용 폭증이 일어나 GPU 인스턴스 풀과 잡 큐가 필수입니다. CMAF는 HLS와 DASH의 공통 포맷으로 동일한 미디어 세그먼트를 두 프로토콜에 재사용해 스토리지 비용을 줄입니다. Low-Latency HLS와 Low-Latency DASH는 청크 인코드와 HTTP/2 push로 라이브 지연을 1초 미만으로 줄입니다. 객체 스토리지는 일관성 모델, 멀티파트 업로드 무결성(ETag, checksum), 라이프사이클 정책(IA, Glacier)으로 비용을 최적화합니다. 데이터 무결성은 콘텐츠 해시 기반 키(ipfs 스타일)와 서명된 URL로 보장합니다. 백프레셔는 시스템 전체에 전파되어야 합니다. 카프카 컨슈머가 느려지면 프로듀서도 속도를 줄여야 토픽 적체와 장애 확산을 막습니다. WebRTC는 SFU(Selective Forwarding Unit) 아키텍처로 N:N 화상회의를 효율적으로 분산합니다. QUIC 기반 미디어 전송은 패킷 손실 회복이 빨라 모바일 라이브 방송 품질을 끌어올립니다. 보안 측면에서는 DRM(Widevine, FairPlay) 키 교환과 토큰 기반 접근 제어가 결합됩니다.</p>
+
+  <h3>고급 패턴</h3>
+  <pre><code>// pipeline + AsyncIterator + 백프레셔
+const { pipeline } = require('stream/promises');
+async function* uppercase(source) {
+  for await (const chunk of source) yield chunk.toString().toUpperCase();
+}
+await pipeline(
+  fs.createReadStream('big.txt'),
+  uppercase,
+  fs.createWriteStream('big.upper.txt')
+);</code></pre>
+
+  <h3>최신 동향</h3>
+  <p>Web Streams API 표준이 Node.js, Deno, 브라우저, Cloudflare Workers에서 통일되어 동일한 코드로 어디서든 스트림을 다룰 수 있게 되었습니다. WebTransport는 QUIC 위에서 양방향 메시지/스트림을 제공해 WebSocket 대안으로 부상하고 있습니다. 서버리스 환경의 Streaming Response는 함수가 응답을 점진적으로 흘려보낼 수 있게 해 LLM 콜드 스타트 체감을 줄입니다. AV1, VVC 같은 차세대 코덱은 같은 화질을 더 작은 비트레이트로 전송해 네트워크 비용을 절감합니다.</p>
+
+  <h3>관련 분야</h3>
+  <ul>
+    <li>비디오 인코딩과 코덱(H.264/HEVC/AV1)</li>
+    <li>객체 스토리지와 CDN</li>
+    <li>실시간 통신(WebRTC, WebTransport)</li>
+  </ul>
+
+  <h3>추가 자료</h3>
+  <ul>
+    <li>"High Performance Browser Networking" — Ilya Grigorik</li>
+    <li>Apple HLS Authoring Specification</li>
+    <li>Cloudflare Stream / AWS MediaConvert 문서</li>
+  </ul>
+
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 사용자가 업로드한 영상을 자동 트랜스코딩 후 HLS로 변환하고, Range 요청과 토큰 인증, CDN 캐싱까지 갖춘 미디어 파이프라인을 구축하세요.</div>
+</div>
+
 </main>
 </div>
 
