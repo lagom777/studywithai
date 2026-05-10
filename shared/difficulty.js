@@ -12,15 +12,14 @@
       buttons.forEach(btn => {
         btn.addEventListener('click', () => {
           const target = btn.dataset.target;
-          const container = tabs.parentElement;
 
-          // 모든 탭 비활성화
-          tabs.querySelectorAll('.difficulty-tab').forEach(b => b.classList.remove('active'));
-          container.querySelectorAll('.difficulty-content').forEach(c => c.classList.remove('active'));
+          // 모든 탭 비활성화 (사이드바로 이동했으므로 document 전체 탐색)
+          document.querySelectorAll('.difficulty-tab').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.difficulty-content').forEach(c => c.classList.remove('active'));
 
           // 선택된 탭 활성화
           btn.classList.add('active');
-          const content = container.querySelector(`.difficulty-content[data-level="${target}"]`);
+          const content = document.querySelector(`.difficulty-content[data-level="${target}"]`);
           if (content) content.classList.add('active');
         });
       });

@@ -22,12 +22,13 @@ inject_into() {
   local css_link="<link rel=\"stylesheet\" href=\"${prefix}shared/light-theme.css\">"
   local i18n_script="<script defer src=\"${prefix}shared/i18n.js\"></script>"
   local diff_script="<script defer src=\"${prefix}shared/difficulty.js\"></script>"
+  local sidebar_script="<script defer src=\"${prefix}shared/sidebar.js\"></script>"
 
   # macOS sed compatibility
   if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' -e "s|</head>|  ${css_link}\n  ${i18n_script}\n  ${diff_script}\n</head>|" "$file"
+    sed -i '' -e "s|</head>|  ${css_link}\n  ${i18n_script}\n  ${diff_script}\n  ${sidebar_script}\n</head>|" "$file"
   else
-    sed -i -e "s|</head>|  ${css_link}\n  ${i18n_script}\n  ${diff_script}\n</head>|" "$file"
+    sed -i -e "s|</head>|  ${css_link}\n  ${i18n_script}\n  ${diff_script}\n  ${sidebar_script}\n</head>|" "$file"
   fi
 }
 

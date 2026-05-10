@@ -194,36 +194,83 @@ td {
   border-bottom: 1px solid rgba(0,0,0,0.06) !important;
 }
 
-/* === 난이도 탭 — 우측 상단 고정 === */
-.difficulty-tabs {
+/* === 사이드바 토글 버튼 (☰) === */
+.sidebar-toggle {
   position: fixed;
-  top: 16px;
-  right: 80px;
-  z-index: 9998;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+  background: #ffffff !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  color: #1a1f2e !important;
+  border-radius: 8px !important;
+  padding: 7px 11px !important;
+  font-size: 17px !important;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  transition: background 0.15s;
+  min-width: auto !important;
+}
+.sidebar-toggle:hover {
+  background: #f5f7fa !important;
+}
+
+/* === 사이드바 숨김/표시 === */
+aside.sidebar-hidden {
+  display: none !important;
+}
+.sidebar-collapsed .layout {
+  grid-template-columns: 1fr !important;
+}
+
+/* === 사이드바 내부 컨트롤 영역 === */
+.sidebar-controls {
+  padding: 0 0 12px 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.sidebar-section {
+  margin-bottom: 10px;
+}
+.sidebar-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: #9ca3af;
+  margin-bottom: 5px;
+}
+.sidebar-divider {
+  display: none;
+}
+
+/* === 난이도 탭 — 사이드바 내부 === */
+.difficulty-tabs {
   display: flex;
-  gap: 4px;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.1);
-  border-radius: 999px;
-  padding: 4px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  gap: 3px;
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  padding: 3px;
 }
 .difficulty-tab {
+  flex: 1;
   background: transparent !important;
   border: none !important;
-  padding: 8px 16px !important;
+  padding: 6px 4px !important;
   cursor: pointer;
-  font-size: 13px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
   color: #6b7280 !important;
-  border-radius: 999px !important;
-  transition: all 0.2s;
+  border-radius: 6px !important;
+  transition: all 0.15s;
   min-width: auto !important;
   white-space: nowrap;
+  text-align: center;
 }
 .difficulty-tab:hover:not(.active) {
   color: #0a0e1a !important;
-  background: rgba(0,0,0,0.04) !important;
+  background: rgba(0,0,0,0.06) !important;
 }
 .difficulty-tab.active[data-target="easy"] {
   background: #10b981 !important;
@@ -275,53 +322,42 @@ td {
 .difficulty-badge.medium { background: #fef3c7; color: #92400e; }
 .difficulty-badge.hard { background: #fecaca; color: #991b1b; }
 
-/* 모바일에서 난이도 탭 위치 조정 */
+/* 모바일 — 사이드바 기본 숨김 (sidebar.js가 JS로도 처리) */
 @media (max-width: 768px) {
-  .difficulty-tabs {
-    top: auto;
-    bottom: 16px;
-    right: 50%;
-    transform: translateX(50%);
-    font-size: 12px;
-  }
-  .difficulty-tab {
-    padding: 6px 12px !important;
-    font-size: 11px !important;
+  .sidebar-toggle {
+    top: 8px;
+    left: 8px;
   }
 }
 
-/* === 다국어 토글 === */
+/* === 다국어 토글 — 사이드바 내부 === */
 .lang-toggle {
-  position: fixed;
-  top: 16px;
-  right: 16px;
-  z-index: 9999;
-  background: #ffffff;
-  border: 1px solid rgba(0,0,0,0.12);
-  border-radius: 999px;
-  padding: 4px;
   display: flex;
   gap: 2px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  background: rgba(0,0,0,0.04);
+  border-radius: 8px;
+  padding: 3px;
 }
 .lang-toggle button {
+  flex: 1;
   background: transparent !important;
   color: #6b7280 !important;
   border: none !important;
-  padding: 6px 12px !important;
-  font-size: 13px !important;
+  padding: 5px 4px !important;
+  font-size: 12px !important;
   font-weight: 600 !important;
-  border-radius: 999px !important;
+  border-radius: 6px !important;
   cursor: pointer;
   transition: all 0.15s;
   min-width: auto !important;
+  text-align: center;
 }
 .lang-toggle button.active {
   background: #0a0e1a !important;
   color: #ffffff !important;
 }
 .lang-toggle button:hover:not(.active) {
-  background: rgba(0,0,0,0.05) !important;
+  background: rgba(0,0,0,0.06) !important;
   color: #0a0e1a !important;
 }
 
