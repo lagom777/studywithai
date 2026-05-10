@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. 품사 — aboutEnglishGrammar</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 소개</a></li>
+    <li><a href="01-parts-of-speech.html" style="color:var(--accent);font-weight:600;">1. 품사</a></li>
+    <li><a href="02-tenses.html">2. 시제</a></li>
+    <li><a href="03-sentences.html">3. 문장 구조</a></li>
+    <li><a href="04-clauses.html">4. 절과 구</a></li>
+    <li><a href="05-passive-voice.html">5. 수동태와 능동태</a></li>
+    <li><a href="06-conditionals.html">6. 가정법</a></li>
+    <li><a href="07-modals.html">7. 조동사</a></li>
+    <li><a href="08-articles-prepositions.html">8. 관사와 전치사</a></li>
+    <li><a href="09-common-mistakes.html">9. 한국인 빈출 오류</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>품사:<br><em>8가지</em> 단어의 역할</h1>
+  <p class="authors">Chapter 1 — Parts of Speech</p>
+  <p class="affiliation">명사·대명사·동사·형용사·부사·전치사·접속사·감탄사</p>
+</header>
+
+<h2>품사란?</h2>
+<p>영어의 모든 단어는 문장 안에서 특정한 역할을 합니다. 이 역할에 따라 8가지로 분류한 것이 품사(Parts of Speech)입니다. 품사를 이해하면 문장 구조를 분석하고 올바른 표현을 선택하는 능력이 생깁니다.</p>
+
+<div class="scene-3d" id="pos-scene"></div>
+<span class="interact-hint">⟳ 8가지 품사가 각자의 궤도를 돕니다 — 드래그로 회전</span>
+
+<h2>8품사 개요</h2>
+
+<div class="info-card">
+  <h4>명사 (Noun) — 사람·사물·장소·개념</h4>
+  <p><em>book</em>, <em>teacher</em>, <em>Seoul</em>, <em>happiness</em> — 문장의 주어·목적어·보어 역할</p>
+</div>
+
+<div class="info-card teal">
+  <h4>대명사 (Pronoun) — 명사를 대신</h4>
+  <p><em>he</em>, <em>she</em>, <em>it</em>, <em>they</em>, <em>who</em> — 반복을 피하고 문장을 간결하게</p>
+</div>
+
+<div class="info-card sky">
+  <h4>동사 (Verb) — 동작·상태</h4>
+  <p><em>run</em>, <em>is</em>, <em>seem</em>, <em>have</em> — 문장의 핵심, 시제·태·수가 변형됨</p>
+</div>
+
+<div class="info-card">
+  <h4>형용사 (Adjective) — 명사를 수식</h4>
+  <p><em>beautiful</em>, <em>three</em>, <em>this</em> — 명사 앞 또는 보어 위치</p>
+</div>
+
+<div class="info-card teal">
+  <h4>부사 (Adverb) — 동사·형용사·부사를 수식</h4>
+  <p><em>quickly</em>, <em>very</em>, <em>yesterday</em> — 위치가 유연하며 강조·시간·정도를 표현</p>
+</div>
+
+<div class="info-card sky">
+  <h4>전치사 (Preposition) — 관계 표현</h4>
+  <p><em>in</em>, <em>on</em>, <em>at</em>, <em>by</em> — 명사 앞에 위치, 시간·장소·방향 관계</p>
+</div>
+
+<div class="info-card">
+  <h4>접속사 (Conjunction) — 연결</h4>
+  <p><em>and</em>, <em>but</em>, <em>because</em>, <em>although</em> — 단어·구·절을 이어줌</p>
+</div>
+
+<div class="info-card teal">
+  <h4>감탄사 (Interjection) — 감정 표현</h4>
+  <p><em>Oh!</em>, <em>Wow!</em>, <em>Oops!</em> — 독립적 발화, 문법 기능 없음</p>
+</div>
+
+<h2>같은 단어, 다른 품사</h2>
+<p>영어에서는 같은 단어가 문맥에 따라 다른 품사로 사용됩니다. 품사는 단어 자체가 아니라 문장에서의 역할로 결정됩니다.</p>
+<div class="formula">
+  The <u>light</u> is on. (명사) &nbsp;&nbsp;|&nbsp;&nbsp; a <u>light</u> blue (형용사) &nbsp;&nbsp;|&nbsp;&nbsp; Please <u>light</u> the candle. (동사)
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>품사는 단어의 "직업"입니다. 명사는 이름표, 동사는 행동대장, 형용사는 꾸미기 전문가라고 생각하세요.</p>
+  <h3>왜 중요한가?</h3>
+  <p>품사를 알면 사전을 올바르게 사용할 수 있고, 문장에서 어떤 단어가 어디에 와야 하는지 알 수 있습니다.</p>
+  <div class="info-card"><h4>🌱 핵심 암기법</h4><ul><li>명사(N): 사람·장소·사물·개념</li><li>동사(V): ~하다, ~이다</li><li>형용사(Adj): 어떤, 무슨 (명사 앞)</li><li>부사(Adv): 어떻게, 얼마나 (동사 뒤)</li><li>전치사(Prep): in/on/at + 명사</li></ul></div>
+  <h3>예문으로 확인</h3>
+  <p><em>The beautiful girl sings loudly in the park.</em></p>
+  <p>The(관사/형용사) beautiful(형용사) girl(명사) sings(동사) loudly(부사) in(전치사) the(관사) park(명사).</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 문장을 읽을 때 각 단어 위에 품사 약어(N, V, Adj, Adv)를 적어보는 연습을 해보세요.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>품사의 기능적 이해</h3>
+  <p>품사는 고정된 것이 아닙니다. 명사의 형용사적 사용(attributive noun): <em>a stone wall</em>에서 stone은 명사지만 형용사처럼 쓰입니다. 동명사(V-ing)는 동사에서 파생된 명사 역할을 합니다: <em>Swimming is fun.</em> 이처럼 품사의 기능적 이동을 이해하는 것이 중급의 핵심입니다.</p>
+  <h3>핵심 변환 패턴</h3>
+  <div class="formula">happy(형용사) → happily(부사) → happiness(명사) → unhappy(반의어)</div>
+  <h3>자주 혼동하는 품사쌍</h3>
+  <div class="info-card"><h4>hard vs. hardly</h4><p>She works <em>hard</em>. (부사: 열심히) vs. She <em>hardly</em> works. (부사: 거의 ~않다) — 의미 완전히 다름 주의!</p></div>
+  <div class="info-card teal"><h4>late vs. lately</h4><p>He came <em>late</em>. (부사: 늦게) vs. <em>Lately</em> I've been busy. (부사: 최근에)</p></div>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> -ly로 끝난다고 항상 부사가 아닙니다. friendly, lovely, lonely는 형용사입니다!</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>품사의 언어학적 이해</h3>
+  <p>생성문법(Generative Grammar) 관점에서 품사는 어휘 범주(Lexical Category)로 분류됩니다. N(명사), V(동사), A(형용사), P(전치사), Adv(부사)는 내용어(Content Word)이고, Det(결정사), Conj(접속사)는 기능어(Function Word)입니다. X-bar 이론에서 각 품사는 핵어(Head)로서 구(Phrase)를 형성합니다: NP, VP, AP, PP 등.</p>
+  <h3>품사의 분포 기준</h3>
+  <div class="formula">명사 ↔ Determiner + ___ + (Adj) + N &nbsp;|&nbsp; 동사 ↔ S + ___ + (O/C)</div>
+  <h3>전문 심화 토픽</h3>
+  <ul>
+    <li>명사 편입(Nominalization): destroy → destruction, decide → decision</li>
+    <li>기능어의 폐쇄 집합 vs. 내용어의 개방 집합</li>
+    <li>영어의 품사 중의성(Syntactic Ambiguity): <em>flying planes can be dangerous</em></li>
+    <li>Corpus linguistics에서의 품사 태깅(POS Tagging)</li>
+  </ul>
+  <h3>추가 학습</h3>
+  <ul>
+    <li>Quirk et al., "A Comprehensive Grammar of the English Language"</li>
+    <li>Huddleston & Pullum, "The Cambridge Grammar of the English Language"</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> <em>The good die young.</em>에서 good의 품사를 분석하고, 왜 이것이 가능한지 설명하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('pos-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 10);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // 8 POS nodes in orbit
+  const posData = [
+    { color: 0x1e90ff, label: 'N',    radius: 3.5, speed: 0.4,  phase: 0 },
+    { color: 0x60b8ff, label: 'Pro',  radius: 2.8, speed: 0.55, phase: 0.8 },
+    { color: 0x00cfcf, label: 'V',    radius: 4.2, speed: 0.3,  phase: 1.6 },
+    { color: 0x38bdf8, label: 'Adj',  radius: 3.0, speed: 0.5,  phase: 2.4 },
+    { color: 0xfbbf24, label: 'Adv',  radius: 4.8, speed: 0.25, phase: 3.2 },
+    { color: 0xf687b3, label: 'Prep', radius: 2.3, speed: 0.65, phase: 4.0 },
+    { color: 0x10b981, label: 'Conj', radius: 3.8, speed: 0.35, phase: 4.8 },
+    { color: 0xa78bfa, label: 'Int',  radius: 5.2, speed: 0.22, phase: 5.6 },
+  ];
+
+  const nodes = posData.map(d => {
+    const geo = new THREE.SphereGeometry(0.32, 24, 24);
+    const mat = new THREE.MeshBasicMaterial({ color: d.color });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+    return { mesh, ...d };
+  });
+
+  // Center sphere
+  const cGeo = new THREE.SphereGeometry(0.5, 32, 32);
+  const cMat = new THREE.MeshBasicMaterial({ color: 0x1e90ff, transparent: true, opacity: 0.8 });
+  scene.add(new THREE.Mesh(cGeo, cMat));
+
+  // Orbit rings
+  [2.3, 2.8, 3.0, 3.5, 3.8, 4.2, 4.8, 5.2].forEach(r => {
+    const rg = new THREE.RingGeometry(r - 0.01, r + 0.01, 80);
+    const rm = new THREE.MeshBasicMaterial({ color: 0x1e90ff, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(rg, rm);
+    ring.rotation.x = -Math.PI / 2;
+    scene.add(ring);
+  });
+
+  scene.add(new THREE.GridHelper(24, 24, 0x162040, 0x0d1530));
+
+  let isDragging = false, prevX = 0, rotY = 0;
+  container.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  container.addEventListener('mousemove', e => {
+    if (isDragging) rotY += (e.clientX - prevX) * 0.01;
+    prevX = e.clientX;
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    nodes.forEach(n => {
+      const angle = t * n.speed + n.phase + rotY;
+      n.mesh.position.x = Math.cos(angle) * n.radius;
+      n.mesh.position.z = Math.sin(angle) * n.radius;
+      n.mesh.position.y = Math.sin(t * 0.5 + n.phase) * 0.4;
+    });
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

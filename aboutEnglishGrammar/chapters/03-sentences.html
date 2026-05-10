@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3. 문장 구조 — aboutEnglishGrammar</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 소개</a></li>
+    <li><a href="01-parts-of-speech.html">1. 품사</a></li>
+    <li><a href="02-tenses.html">2. 시제</a></li>
+    <li><a href="03-sentences.html" style="color:var(--accent);font-weight:600;">3. 문장 구조</a></li>
+    <li><a href="04-clauses.html">4. 절과 구</a></li>
+    <li><a href="05-passive-voice.html">5. 수동태와 능동태</a></li>
+    <li><a href="06-conditionals.html">6. 가정법</a></li>
+    <li><a href="07-modals.html">7. 조동사</a></li>
+    <li><a href="08-articles-prepositions.html">8. 관사와 전치사</a></li>
+    <li><a href="09-common-mistakes.html">9. 한국인 빈출 오류</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>문장 구조:<br><em>5형식</em>의 설계도</h1>
+  <p class="authors">Chapter 3 — Sentence Structure (Five Patterns)</p>
+  <p class="affiliation">S+V / S+V+C / S+V+O / S+V+IO+DO / S+V+O+OC</p>
+</header>
+
+<h2>영어 문장의 5형식</h2>
+<p>영어의 모든 문장은 주어(S), 동사(V), 목적어(O), 보어(C)의 조합으로 이루어집니다. 동사의 종류에 따라 어떤 요소가 뒤에 오는지 결정됩니다.</p>
+
+<div class="scene-3d" id="sentence-scene"></div>
+<span class="interact-hint">🏗️ 5형식 구조를 3D로 — 각 노드는 문장 성분</span>
+
+<div class="info-card">
+  <h4>1형식: S + V</h4>
+  <p><em>Birds <strong>fly</strong>.</em> — 완전자동사, 목적어/보어 없음</p>
+</div>
+<div class="info-card teal">
+  <h4>2형식: S + V + C</h4>
+  <p><em>She <strong>is</strong> a teacher.</em> / <em>He <strong>looks</strong> tired.</em> — 연결동사(be, seem, look, become) + 주격보어</p>
+</div>
+<div class="info-card sky">
+  <h4>3형식: S + V + O</h4>
+  <p><em>I <strong>love</strong> music.</em> — 타동사 + 직접목적어</p>
+</div>
+<div class="info-card">
+  <h4>4형식: S + V + IO + DO</h4>
+  <p><em>She <strong>gave</strong> me a book.</em> — 수여동사 + 간접목적어 + 직접목적어</p>
+</div>
+<div class="info-card teal">
+  <h4>5형식: S + V + O + OC</h4>
+  <p><em>They <strong>elected</strong> him president.</em> — 목적격보어, O=OC 관계 성립</p>
+</div>
+
+<h2>4형식 ↔ 3형식 전환</h2>
+<div class="formula">
+  She gave me a book. (4형식)<br>
+  → She gave a book <u>to</u> me. (3형식, give/send/teach → to)<br>
+  → She bought me a book. (4형식, buy/make/cook → for)
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>영어 문장의 뼈대는 S(누가) + V(어떻게 한다) + O/C(무엇을/어떤)입니다. 동사가 뼈대의 핵심입니다.</p>
+  <div class="info-card"><h4>🌱 판별 공식</h4><ul><li>동사 뒤 없으면 → 1형식</li><li>동사 뒤 형용사/명사 (=주어) → 2형식</li><li>동사 뒤 명사 (≠주어) → 3형식</li><li>동사 뒤 명사 두 개 → 4형식</li><li>동사 뒤 명사+명사/형용사 (=목적어) → 5형식</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 동사가 결정합니다! 동사 사전에서 [VN], [VNN], [VNAdj] 기호를 확인하세요.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>5형식 주의 포인트</h3>
+  <p>5형식 목적격보어는 명사 또는 형용사가 올 수 있습니다. 지각동사(see, hear, feel)와 사역동사(make, let, have)는 목적격보어로 원형부정사를 취합니다: <em>I <strong>saw</strong> him <u>run</u>.</em> / <em>She <strong>made</strong> me <u>cry</u>.</em></p>
+  <div class="formula">지각동사 + O + 원형V / V-ing (진행 강조)<br>사역동사(make/have) + O + 원형V<br>사역동사(get) + O + to-V</div>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> 수동태 전환 시 원형→to-V: <em>He was made <u>to cry</u>.</em></div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>구구조 규칙과 수형도</h3>
+  <p>생성문법의 구구조 규칙(Phrase Structure Rules)으로 5형식을 형식화합니다: S → NP + VP, VP → V + NP, VP → V + NP + NP(4형식), VP → V + NP + AP/NP(5형식). X-bar 이론에서는 모든 구가 핵어(Head)를 중심으로 지정어(Specifier)·보충어(Complement)·부가어(Adjunct)로 구성됩니다.</p>
+  <h3>수형도 예시</h3>
+  <div class="formula">S → [NP She] [VP [V gave] [NP me] [NP a book]]</div>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> "I consider him very talented."를 X-bar 수형도로 그리고, him과 very talented의 구조적 관계를 설명하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('sentence-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 12);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  function addNode(x, y, z, color, size) {
+    const geo = new THREE.SphereGeometry(size, 24, 24);
+    const mat = new THREE.MeshBasicMaterial({ color });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, y, z);
+    scene.add(mesh);
+    return mesh;
+  }
+
+  function addEdge(a, b, color) {
+    const pts = [new THREE.Vector3(...a), new THREE.Vector3(...b)];
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    const m = new THREE.LineBasicMaterial({ color, transparent: true, opacity: 0.5 });
+    scene.add(new THREE.Line(g, m));
+  }
+
+  // 5 sentence patterns as nodes
+  const sColor = 0x1e90ff, vColor = 0x00cfcf, oColor = 0x38bdf8, cColor = 0xfbbf24, ioColor = 0xf687b3;
+
+  // Pattern nodes arranged in space
+  const S = addNode(-4, 2, 0, sColor, 0.45);
+  const V = addNode(0, 2, 0, vColor, 0.45);
+  const O = addNode(4, 2, 0, oColor, 0.35);
+  const C = addNode(4, 0, 0, cColor, 0.35);
+  const IO = addNode(2.5, 0, 2, ioColor, 0.3);
+  const DO = addNode(5.5, 0, 2, oColor, 0.3);
+
+  addEdge([-4,2,0], [0,2,0], sColor);
+  addEdge([0,2,0], [4,2,0], vColor);
+  addEdge([0,2,0], [4,0,0], vColor);
+  addEdge([0,2,0], [2.5,0,2], vColor);
+  addEdge([2.5,0,2], [5.5,0,2], ioColor);
+
+  scene.add(new THREE.GridHelper(20, 20, 0x162040, 0x0d1530));
+
+  let rot = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    rot += 0.005;
+    scene.rotation.y = rot;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

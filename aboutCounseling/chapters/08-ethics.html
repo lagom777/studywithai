@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8. 상담 윤리 — aboutCounseling</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌸 표지 · 소개</a></li>
+    <li><a href="01-basics.html">1. 상담의 기초</a></li>
+    <li><a href="02-listening.html">2. 경청과 공감</a></li>
+    <li><a href="03-cbt.html">3. 인지행동치료</a></li>
+    <li><a href="04-psychodynamic.html">4. 정신역동 상담</a></li>
+    <li><a href="05-humanistic.html">5. 인간중심 상담</a></li>
+    <li><a href="06-family.html">6. 가족 상담</a></li>
+    <li><a href="07-crisis.html">7. 위기 상담</a></li>
+    <li><a href="08-ethics.html" style="color:var(--accent);font-weight:600;">8. 상담 윤리</a></li>
+    <li><a href="09-self-care.html">9. 상담자의 자기 돌봄</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>상담 윤리:<br><em>경계</em>와 <em>책임</em>의 원칙</h1>
+  <p class="authors">Chapter 8 — Counseling Ethics</p>
+  <p class="affiliation">비밀보장 · 이중관계 · 고지된 동의 · 전문적 역량</p>
+</header>
+
+<h2>왜 상담 윤리가 중요한가?</h2>
+<p>상담은 권력 불균형이 존재하는 관계입니다. 내담자는 취약한 상태에서 상담자를 신뢰합니다. 윤리는 이 신뢰를 보호하고, 내담자의 복지를 최우선으로 보장하기 위한 전문적 기준입니다.</p>
+
+<div class="scene-3d" id="ethics-scene"></div>
+<span class="interact-hint">⚖️ 윤리 원칙들의 균형 — 드래그로 탐색</span>
+
+<h2>상담 윤리의 핵심 원칙 (Kitchener, 1984)</h2>
+<div class="info-card">
+  <h4>① 자율성 (Autonomy)</h4>
+  <p>내담자의 자기결정권을 존중합니다. 상담자의 가치관을 강요하지 않습니다.</p>
+</div>
+<div class="info-card rose">
+  <h4>② 선행 (Beneficence)</h4>
+  <p>내담자의 최선의 이익을 위해 행동합니다. 적극적으로 도움이 되도록 노력합니다.</p>
+</div>
+<div class="info-card teal">
+  <h4>③ 무해성 (Nonmaleficence)</h4>
+  <p>"먼저 해를 끼치지 말라(Primum non nocere)." 의도하지 않은 해악도 예방해야 합니다.</p>
+</div>
+<div class="info-card gold">
+  <h4>④ 공정성 (Justice) &amp; ⑤ 신의 (Fidelity)</h4>
+  <p>모든 내담자를 공평하게 대우하고, 약속과 역할에 충실합니다.</p>
+</div>
+
+<h2>비밀보장 (Confidentiality)</h2>
+<div class="formula">
+  비밀보장의 원칙: 상담 내용은 내담자 동의 없이 공개 불가<br>
+  예외: ① 자해·타해 명확한 위험 ② 아동학대 신고 의무<br>
+  ③ 법원 명령 ④ 슈퍼비전(동일 기관 내)
+</div>
+
+<h2>이중관계와 경계 (Dual Relationships &amp; Boundaries)</h2>
+<div class="info-card rose">
+  <h4>이중관계란?</h4>
+  <p>상담자가 내담자와 상담 관계 외에 다른 관계(친구, 사업 파트너, 성적 관계)를 갖는 것. 성적 관계는 절대적 금지이며, 종결 후에도 최소 2년간 금지됩니다.</p>
+</div>
+<div class="info-card teal">
+  <h4>건강한 경계 유지</h4>
+  <p>물리적 경계(터치), 시간 경계(연장 불가), 재정 경계(선물 수수 제한), 자기노출 경계(내담자 이익을 위한 최소한만).</p>
+</div>
+
+<h2>고지된 동의 (Informed Consent)</h2>
+<div class="info-card">
+  <h4>고지된 동의의 요소</h4>
+  <p>상담의 성격과 목적 / 상담자의 자격과 이론적 접근 / 비밀보장의 한계 / 상담 과정의 위험과 이점 / 대안적 치료 방법 / 내담자의 권리</p>
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>윤리의 기본 = 내담자 보호</h3>
+  <div class="info-card"><h4>🌱 절대적 금지 사항</h4><ul><li>내담자와 성적 관계 갖기</li><li>내담자 정보를 동의 없이 공개</li><li>자신의 역량 밖의 문제 다루기</li><li>개인적 이익을 위해 내담자 이용</li><li>훈련받지 않은 기법 사용</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 윤리적 딜레마가 생기면 혼자 결정하지 말고 수퍼바이저나 동료와 상의하세요. 상의 자체가 윤리적 행동입니다.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>윤리적 의사결정 모델</h3>
+  <p>Corey et al.의 8단계: ① 문제 확인 → ② 잠재적 이슈 확인 → ③ 윤리 강령 검토 → ④ 법률 확인 → ⑤ 수퍼비전 → ⑥ 가능한 행동 고려 → ⑦ 결과 검토 → ⑧ 최선의 행동 선택</p>
+  <h3>문화적 역량 (Cultural Competence)</h3>
+  <p>자신의 문화적 편견 인식 → 타 문화에 대한 지식 습득 → 다문화 상담 기술 개발. 문화적 역량은 선택이 아닌 윤리적 의무입니다.</p>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> 지인을 상담하는 것(이중관계)은 대부분의 상황에서 비윤리적입니다. 다른 상담자에게 의뢰하세요.</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>윤리적 원칙주의 vs. 덕 윤리</h3>
+  <p>원칙주의(Principle Ethics, Beauchamp & Childress): 보편적 원칙(자율성, 선행, 무해성, 공정성)의 적용. 덕 윤리(Virtue Ethics, Jordan & Meara): 상담자의 인격과 동기 강조 — 윤리적 원칙을 아는 것보다 윤리적 사람이 되는 것이 중요. 관계 윤리(Care Ethics, Gilligan): 추상적 원칙보다 구체적 관계와 맥락을 강조합니다.</p>
+  <h3>포스트모던 윤리 이슈</h3>
+  <ul>
+    <li>온라인/원격 상담의 비밀보장: 플랫폼 보안, 데이터 저장, 관할권 문제</li>
+    <li>AI 보조 상담 도구의 윤리: 알고리즘 편향, 책임 소재</li>
+    <li>소셜미디어와 경계: 내담자가 SNS 팔로우 요청 시 대응</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> "내담자가 상담 외에서 우연히 만나 연락처를 달라고 한다"는 상황을 원칙주의, 덕 윤리, 관계 윤리의 세 가지 관점에서 각각 분석하고, 가장 적절한 대응을 논술하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('ethics-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 11);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Balance scale visualization
+  // Central pillar
+  const pillarGeo = new THREE.CylinderGeometry(0.08, 0.08, 4, 12);
+  const pillar = new THREE.Mesh(pillarGeo, new THREE.MeshBasicMaterial({ color: 0xb57bee }));
+  pillar.position.y = 0;
+  scene.add(pillar);
+
+  // Scale beam
+  const beamGeo = new THREE.BoxGeometry(6, 0.08, 0.08);
+  const beam = new THREE.Mesh(beamGeo, new THREE.MeshBasicMaterial({ color: 0xb57bee }));
+  beam.position.y = 2;
+  scene.add(beam);
+
+  // Two scale pans
+  const panGeo = new THREE.CylinderGeometry(0.8, 0.8, 0.08, 32);
+  const panMat = new THREE.MeshBasicMaterial({ color: 0xf687b3, transparent: true, opacity: 0.8 });
+  const leftPan = new THREE.Mesh(panGeo, panMat);
+  leftPan.position.set(-3, 1.2, 0);
+  scene.add(leftPan);
+  const rightPan = new THREE.Mesh(panGeo, panMat.clone());
+  rightPan.position.set(3, 1.2, 0);
+  scene.add(rightPan);
+
+  // Ethics principle spheres on pans
+  const ethicsColors = [0x5eead4, 0xfbbf24, 0xa78bfa, 0xf687b3];
+  [-1.5, -2.5, 1.5, 2.5].forEach((x, i) => {
+    const geo = new THREE.SphereGeometry(0.28, 16, 16);
+    const mat = new THREE.MeshBasicMaterial({ color: ethicsColors[i] });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, 1.6, 0);
+    scene.add(mesh);
+  });
+
+  // Orbiting boundary particles
+  const boundaries = [];
+  for (let i = 0; i < 18; i++) {
+    const geo = new THREE.SphereGeometry(0.09, 10, 10);
+    const mat = new THREE.MeshBasicMaterial({ color: 0xb57bee, transparent: true, opacity: 0.5 });
+    const mesh = new THREE.Mesh(geo, mat);
+    const r = 3.5 + Math.random() * 1.5;
+    boundaries.push({ mesh, r, phase: (i/18)*Math.PI*2, speed: 0.2 + Math.random()*0.15 });
+    scene.add(mesh);
+  }
+
+  scene.add(new THREE.GridHelper(18, 18, 0x22183c, 0x170f28));
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    // Gentle swaying of beam
+    beam.rotation.z = Math.sin(t * 0.5) * 0.08;
+    leftPan.position.y  = 1.2 + Math.sin(t * 0.5) * 0.3;
+    rightPan.position.y = 1.2 - Math.sin(t * 0.5) * 0.3;
+
+    boundaries.forEach(b => {
+      const angle = t * b.speed + b.phase;
+      b.mesh.position.x = Math.cos(angle) * b.r;
+      b.mesh.position.z = Math.sin(angle) * b.r;
+      b.mesh.position.y = Math.sin(t * 0.4 + b.phase) * 0.5;
+    });
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

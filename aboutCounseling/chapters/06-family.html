@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>6. 가족 상담 — aboutCounseling</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌸 표지 · 소개</a></li>
+    <li><a href="01-basics.html">1. 상담의 기초</a></li>
+    <li><a href="02-listening.html">2. 경청과 공감</a></li>
+    <li><a href="03-cbt.html">3. 인지행동치료</a></li>
+    <li><a href="04-psychodynamic.html">4. 정신역동 상담</a></li>
+    <li><a href="05-humanistic.html">5. 인간중심 상담</a></li>
+    <li><a href="06-family.html" style="color:var(--accent);font-weight:600;">6. 가족 상담</a></li>
+    <li><a href="07-crisis.html">7. 위기 상담</a></li>
+    <li><a href="08-ethics.html">8. 상담 윤리</a></li>
+    <li><a href="09-self-care.html">9. 상담자의 자기 돌봄</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>가족 상담:<br><em>체계</em>로 보는 관계</h1>
+  <p class="authors">Chapter 6 — Family Counseling</p>
+  <p class="affiliation">체계이론 · Bowen · 구조적 · 전략적 · 해결중심</p>
+</header>
+
+<h2>가족 체계 이론</h2>
+<p>가족 상담은 개인의 문제를 가족 체계(Family System) 안에서 이해합니다. "문제"는 한 개인의 것이 아니라 가족 체계의 기능 방식을 반영합니다. 개인을 변화시키는 것보다 가족 체계를 변화시키는 것이 더 효과적이고 지속적일 수 있습니다.</p>
+
+<div class="scene-3d" id="family-scene"></div>
+<span class="interact-hint">👨‍👩‍👧‍👦 가족 체계 네트워크 — 각 노드는 가족 구성원</span>
+
+<div class="info-card">
+  <h4>체계의 핵심 개념</h4>
+  <p><strong>항상성(Homeostasis)</strong>: 체계는 현재 상태를 유지하려 한다<br><strong>순환적 인과관계</strong>: 원인-결과가 아닌 상호 영향<br><strong>경계(Boundaries)</strong>: 가족 내·외 경계의 투과성</p>
+</div>
+
+<h2>Bowen의 다세대 가족 치료</h2>
+<div class="info-card rose">
+  <h4>자기분화 (Differentiation of Self)</h4>
+  <p>정서와 지성을 구분하는 능력, 타인과 친밀하면서도 자신을 유지하는 능력. 분화 수준이 낮을수록 가족 내 삼각화에 빠지기 쉽습니다.</p>
+</div>
+<div class="info-card teal">
+  <h4>삼각화 (Triangulation)</h4>
+  <p>두 사람 간 긴장이 높아지면 제3자(자녀 등)를 끌어들여 긴장을 완화하려는 패턴. 자녀가 부모의 갈등을 떠안는 구조.</p>
+</div>
+
+<h2>구조적 가족 치료 (Minuchin)</h2>
+<div class="formula">
+  밀착 ←————— 경계 ————→ 유리<br>
+  (enmeshment)  명확한경계  (disengagement)<br>
+  건강한 가족 = 명확하지만 투과적인 경계
+</div>
+
+<h2>해결중심 단기치료 (SFBT)</h2>
+<div class="info-card gold">
+  <h4>문제가 아닌 해결에 집중</h4>
+  <p><strong>기적 질문</strong>: "밤사이 기적이 일어나 문제가 해결된다면, 내일 아침 무엇이 다를까요?"<br><strong>예외 질문</strong>: "문제가 일어나지 않는 때는 언제인가요?"<br><strong>척도 질문</strong>: "1~10점 중 지금은 몇 점인가요?"</p>
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>"가족은 하나의 체계다. 한 사람이 변하면 전체가 변한다. 문제는 사람 안에 있지 않고 관계 사이에 있다."</p>
+  <div class="info-card"><h4>🌱 가족 규칙 탐색하기</h4><ul><li>우리 가족에서 감정(특히 화/슬픔)은 어떻게 표현되는가?</li><li>갈등은 어떻게 해결되는가?</li><li>누가 어떤 역할을 맡고 있는가?</li><li>어떤 주제는 말할 수 없는가?</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 가계도(Genogram)는 3세대 이상의 가족 패턴을 시각화하는 도구입니다. 자신의 가계도를 그려보면 반복되는 패턴을 발견할 수 있습니다.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>Satir의 의사소통 유형</h3>
+  <p>Virginia Satir: 스트레스 상황에서 나타나는 역기능적 의사소통 4유형<br>① 회유형(Placating): 자신을 희생하며 타인 달래기<br>② 비난형(Blaming): 타인을 탓하며 자신 보호<br>③ 초이성형(Computing): 감정 배제, 논리만 강조<br>④ 혼란형(Distracting): 주제 회피, 산만하게 행동</p>
+  <h3>이야기치료 (Narrative Therapy, White)</h3>
+  <p>문제로 가득 찬 이야기(Problem-Saturated Story)를 해체하고, 대안적 이야기(Alternative Story)를 구성합니다. "외재화(Externalization)": 문제를 사람과 분리 — "당신이 문제가 아니라, 문제가 문제다."</p>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> 가족 상담에서 중립성(Neutrality)은 중요하지만, 가정폭력이나 아동학대 상황에서는 피해자 보호가 우선입니다.</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>체계이론의 사이버네틱스 기반</h3>
+  <p>1세대 사이버네틱스(Bateson): 관찰자와 체계가 분리된 객관적 관점. 2세대 사이버네틱스(von Foerster): 관찰자도 체계의 일부(2차 사이버네틱스). 사회구성주의(Social Constructionism): 현실은 언어와 대화를 통해 사회적으로 구성됩니다. 이는 이야기치료와 협력적 언어 체계 치료(Anderson)의 철학적 토대입니다.</p>
+  <h3>다문화 가족 상담</h3>
+  <p>가족 구조와 규범은 문화적으로 결정됩니다. McGoldrick의 민족적 가족 패턴 연구: 아일랜드계(감정 억제), 이탈리아계(표현적), 아시아계(집단주의·효도)등 문화적 다양성 고려가 필수입니다. 한국 가족의 맥락: 유교적 위계, 체면 문화, 한(恨)의 역할.</p>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Bowen의 자기분화 개념을 한국의 집단주의 문화 맥락에 적용할 때 발생하는 문화적 긴장을 분석하고, 문화적으로 민감한 가족 상담 접근법을 제안하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('family-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 11);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Family members as nodes
+  const members = [
+    { x: 0,    y: 2,   z: 0,   color: 0xb57bee, size: 0.45, label: 'parent1' },
+    { x: 2.5,  y: 2,   z: 0,   color: 0xf687b3, size: 0.45, label: 'parent2' },
+    { x: -1,   y: -1,  z: 1,   color: 0x5eead4, size: 0.32, label: 'child1' },
+    { x: 1.5,  y: -1,  z: 1,   color: 0xfbbf24, size: 0.32, label: 'child2' },
+    { x: -3,   y: 1,   z: -1,  color: 0xa78bfa, size: 0.28, label: 'grandp1' },
+    { x: 5,    y: 1,   z: -1,  color: 0x60b8ff, size: 0.28, label: 'grandp2' },
+  ];
+
+  const meshes = members.map(m => {
+    const geo = new THREE.SphereGeometry(m.size, 24, 24);
+    const mat = new THREE.MeshBasicMaterial({ color: m.color });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(m.x, m.y, m.z);
+    scene.add(mesh);
+    return { mesh, ...m };
+  });
+
+  // Connection lines
+  const connections = [[0,1],[0,2],[0,3],[1,2],[1,3],[0,4],[1,5]];
+  connections.forEach(([a,b]) => {
+    const pts = [meshes[a].mesh.position.clone(), meshes[b].mesh.position.clone()];
+    const g = new THREE.BufferGeometry().setFromPoints(pts);
+    const m = new THREE.LineBasicMaterial({ color: 0xb57bee, transparent: true, opacity: 0.3 });
+    scene.add(new THREE.Line(g, m));
+  });
+
+  scene.add(new THREE.GridHelper(18, 18, 0x22183c, 0x170f28));
+
+  let rot = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    rot += 0.004;
+    scene.rotation.y = rot;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

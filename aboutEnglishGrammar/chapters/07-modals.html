@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7. 조동사 — aboutEnglishGrammar</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">📖 표지 · 소개</a></li>
+    <li><a href="01-parts-of-speech.html">1. 품사</a></li>
+    <li><a href="02-tenses.html">2. 시제</a></li>
+    <li><a href="03-sentences.html">3. 문장 구조</a></li>
+    <li><a href="04-clauses.html">4. 절과 구</a></li>
+    <li><a href="05-passive-voice.html">5. 수동태와 능동태</a></li>
+    <li><a href="06-conditionals.html">6. 가정법</a></li>
+    <li><a href="07-modals.html" style="color:var(--accent);font-weight:600;">7. 조동사</a></li>
+    <li><a href="08-articles-prepositions.html">8. 관사와 전치사</a></li>
+    <li><a href="09-common-mistakes.html">9. 한국인 빈출 오류</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>조동사:<br><em>뉘앙스</em>를 결정하는 단어들</h1>
+  <p class="authors">Chapter 7 — Modal Verbs</p>
+  <p class="affiliation">can/could · may/might · will/would · shall/should · must/ought to</p>
+</header>
+
+<h2>조동사란?</h2>
+<p>조동사(Modal Verbs)는 본동사 앞에 놓여 가능성, 의무, 허가, 추측 등의 의미를 더합니다. 조동사 뒤에는 항상 동사 원형이 옵니다. 같은 단어도 맥락에 따라 의미가 달라지므로 정확한 뉘앙스 파악이 중요합니다.</p>
+
+<div class="scene-3d" id="modal-scene"></div>
+<span class="interact-hint">⚡ 조동사별 의미 강도를 색상으로 표현 — 드래그로 회전</span>
+
+<h2>핵심 조동사 의미 체계</h2>
+<div class="info-card">
+  <h4>can / could — 능력·가능·허가·요청</h4>
+  <p>능력: <em>I <strong>can</strong> swim.</em> &nbsp;|&nbsp; 허가: <em>You <strong>can</strong> go.</em> &nbsp;|&nbsp; 정중 요청: <em><strong>Could</strong> you help me?</em></p>
+</div>
+<div class="info-card teal">
+  <h4>may / might — 허가·추측</h4>
+  <p>허가(격식): <em>You <strong>may</strong> leave.</em> &nbsp;|&nbsp; 추측: <em>It <strong>may/might</strong> rain.</em> (might = 가능성 더 낮음)</p>
+</div>
+<div class="info-card sky">
+  <h4>will / would — 의지·예측·요청</h4>
+  <p>의지: <em>I <strong>will</strong> do it!</em> &nbsp;|&nbsp; 정중: <em><strong>Would</strong> you mind...?</em> &nbsp;|&nbsp; 과거 습관: <em>He <strong>would</strong> always sing.</em></p>
+</div>
+<div class="info-card">
+  <h4>must / have to — 의무·강한 추측</h4>
+  <p>의무: <em>You <strong>must</strong> wear a seatbelt.</em> &nbsp;|&nbsp; 강한 추측: <em>She <strong>must</strong> be tired.</em></p>
+</div>
+<div class="info-card teal">
+  <h4>should / ought to — 충고·당위</h4>
+  <p><em>You <strong>should</strong> see a doctor.</em> (충고) &nbsp;|&nbsp; <em>He <strong>ought to</strong> apologize.</em> (도덕적 의무)</p>
+</div>
+
+<h2>조동사 + have p.p. — 과거 추측</h2>
+<div class="formula">
+  must have p.p. → 과거 확신: "She must have left already."<br>
+  should have p.p. → 과거 후회: "I should have studied."<br>
+  could have p.p. → 과거 가능성: "He could have won."<br>
+  may/might have p.p. → 과거 약한 추측
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>조동사 핵심 의미 암기</h3>
+  <div class="info-card"><h4>🌱 4가지 핵심 의미</h4><ul><li>능력: can ("할 수 있다")</li><li>의무: must/have to ("해야 한다")</li><li>충고: should ("하는 게 좋다")</li><li>추측: may/might ("~일지도")</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> must(내부 의무 느낌) vs. have to(외부 규칙): "I must lose weight." (스스로 결심) vs. "I have to wear a uniform." (규칙)</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>추측의 강도 스펙트럼</h3>
+  <div class="formula">must(90%) → should(70%) → may(50%) → might/could(30%) → can't(0%)</div>
+  <h3>부정 조동사의 의미 차이</h3>
+  <div class="info-card"><h4>must not vs. don't have to</h4><p><em>You <strong>must not</strong> smoke here.</em> (금지) vs. <em>You <strong>don't have to</strong> come.</em> (의무 없음, 선택)</p></div>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> needn't = don't have to (불필요), must not (금지)와 다름!</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>양상 논리와 조동사</h3>
+  <p>조동사는 인식 양상(Epistemic Modality: 지식·추측)과 의무 양상(Deontic Modality: 의무·허가)으로 구분됩니다. 동일 조동사가 문맥에 따라 두 양상으로 해석됩니다: <em>You must leave.</em> → epistemic (당연히 떠났겠지) / deontic (떠나야 해). 역사적으로 영어 조동사는 본동사에서 문법화(Grammaticalization)를 거쳤으며, 준조동사(Semi-modals: have to, be going to, be able to)로 확장되는 추세입니다.</p>
+  <div class="formula">Epistemic: must(p) ≈ □p (p가 필연) / may(p) ≈ ◇p (p가 가능)<br>Deontic: must(p) ≈ O(p) (p가 의무) / may(p) ≈ P(p) (p가 허용)</div>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> "Students must submit their assignments by Friday."와 "The suspect must have been there."에서 must의 양상 유형을 각각 분류하고, 동일한 형태가 다른 의미를 갖는 이유를 설명하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('modal-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 11);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Modals as spheres with varying sizes (strength)
+  const modals = [
+    { color: 0x1e90ff, r: 4.5, speed: 0.2, phase: 0,    size: 0.5, label: 'must' },
+    { color: 0x38bdf8, r: 3.8, speed: 0.28, phase: 1.0, size: 0.42, label: 'should' },
+    { color: 0x60b8ff, r: 3.0, speed: 0.38, phase: 2.1, size: 0.35, label: 'may' },
+    { color: 0x00cfcf, r: 2.3, speed: 0.48, phase: 3.2, size: 0.3, label: 'might' },
+    { color: 0xfbbf24, r: 5.2, speed: 0.15, phase: 4.3, size: 0.55, label: 'will' },
+    { color: 0xf687b3, r: 4.0, speed: 0.25, phase: 5.4, size: 0.38, label: 'can' },
+  ];
+
+  const nodes = modals.map(m => {
+    const geo = new THREE.SphereGeometry(m.size, 24, 24);
+    const mat = new THREE.MeshBasicMaterial({ color: m.color });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+    const rg = new THREE.RingGeometry(m.r - 0.01, m.r + 0.01, 64);
+    const rm = new THREE.MeshBasicMaterial({ color: m.color, transparent: true, opacity: 0.06, side: THREE.DoubleSide });
+    const ring = new THREE.Mesh(rg, rm);
+    ring.rotation.x = -Math.PI / 2;
+    scene.add(ring);
+    return { mesh, ...m };
+  });
+
+  const cGeo = new THREE.SphereGeometry(0.45, 32, 32);
+  scene.add(new THREE.Mesh(cGeo, new THREE.MeshBasicMaterial({ color: 0x0047ab })));
+  scene.add(new THREE.GridHelper(20, 20, 0x162040, 0x0d1530));
+
+  let isDragging = false, prevX = 0, rotY = 0;
+  container.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  container.addEventListener('mousemove', e => { if (isDragging) { rotY += (e.clientX - prevX) * 0.01; prevX = e.clientX; } });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    nodes.forEach(n => {
+      const angle = t * n.speed + n.phase + rotY;
+      n.mesh.position.x = Math.cos(angle) * n.r;
+      n.mesh.position.z = Math.sin(angle) * n.r;
+      n.mesh.position.y = Math.sin(t * 0.4 + n.phase) * 0.5;
+    });
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

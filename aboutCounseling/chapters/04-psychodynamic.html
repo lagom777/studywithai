@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4. 정신역동 상담 — aboutCounseling</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌸 표지 · 소개</a></li>
+    <li><a href="01-basics.html">1. 상담의 기초</a></li>
+    <li><a href="02-listening.html">2. 경청과 공감</a></li>
+    <li><a href="03-cbt.html">3. 인지행동치료</a></li>
+    <li><a href="04-psychodynamic.html" style="color:var(--accent);font-weight:600;">4. 정신역동 상담</a></li>
+    <li><a href="05-humanistic.html">5. 인간중심 상담</a></li>
+    <li><a href="06-family.html">6. 가족 상담</a></li>
+    <li><a href="07-crisis.html">7. 위기 상담</a></li>
+    <li><a href="08-ethics.html">8. 상담 윤리</a></li>
+    <li><a href="09-self-care.html">9. 상담자의 자기 돌봄</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>정신역동 상담:<br><em>무의식</em>의 탐험</h1>
+  <p class="authors">Chapter 4 — Psychodynamic Counseling</p>
+  <p class="affiliation">Freud · 방어기제 · 전이 · 대상관계 · 애착이론</p>
+</header>
+
+<h2>정신역동 접근이란?</h2>
+<p>Sigmund Freud의 정신분석에서 출발한 정신역동 접근은, 현재의 심리적 문제가 과거 경험(특히 어린 시절)과 무의식적 갈등에서 비롯된다고 봅니다. 치료는 이 무의식적 패턴을 의식화하여 통찰을 얻는 과정입니다.</p>
+
+<div class="scene-3d" id="psycho-scene"></div>
+<span class="interact-hint">🌊 의식의 층위 — 수면 위와 아래를 드래그로 탐색</span>
+
+<h2>마음의 구조</h2>
+<div class="info-card">
+  <h4>지형학적 모델 (빙산 은유)</h4>
+  <p><strong>의식</strong>(Conscious): 현재 인식하는 영역<br><strong>전의식</strong>(Preconscious): 주의를 기울이면 의식화 가능<br><strong>무의식</strong>(Unconscious): 억압된 욕구·기억·갈등 (빙산의 90%)</p>
+</div>
+<div class="info-card rose">
+  <h4>구조 모델 (성격 삼원 구조)</h4>
+  <p><strong>원초아(Id)</strong>: 쾌락 원칙, 본능적 욕구 &nbsp;|&nbsp; <strong>자아(Ego)</strong>: 현실 원칙, 중재자<br><strong>초자아(Superego)</strong>: 도덕 원칙, 사회적 규범의 내면화</p>
+</div>
+
+<h2>방어기제 (Defense Mechanisms)</h2>
+<div class="formula">
+  억압(Repression) → 부정(Denial) → 투사(Projection)<br>
+  합리화(Rationalization) → 반동형성(Reaction Formation)<br>
+  승화(Sublimation) → 퇴행(Regression) → 전위(Displacement)
+</div>
+
+<h2>전이와 역전이</h2>
+<div class="info-card teal">
+  <h4>전이 (Transference)</h4>
+  <p>내담자가 과거 중요한 인물(부모 등)에 대한 감정을 상담자에게 투사하는 현상. 정신역동 치료에서 전이 분석은 핵심 치료 도구입니다.</p>
+</div>
+<div class="info-card gold">
+  <h4>역전이 (Countertransference)</h4>
+  <p>상담자가 내담자에게 반응하는 감정. 현대 정신역동에서는 역전이를 치료 정보로 활용합니다.</p>
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>"과거 경험(특히 어린 시절)이 현재 감정과 행동에 영향을 미친다." — 정신역동의 핵심.</p>
+  <div class="info-card"><h4>🌱 방어기제 일상 예시</h4><ul><li>억압: 고통스러운 기억을 기억 못하는 것</li><li>합리화: 실패를 외부 탓으로 돌리는 것</li><li>투사: 자신의 화를 상대방이 화났다고 느끼는 것</li><li>승화: 분노를 운동이나 예술로 표출하는 것</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 방어기제는 불건강한 것이 아닙니다. 적절한 방어기제는 심리적 보호막 역할을 합니다. 문제가 되는 건 과도하거나 경직된 사용입니다.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>대상관계 이론 (Object Relations Theory)</h3>
+  <p>Klein, Winnicott, Kohut 등이 발전시킨 이론. 초기 양육자와의 관계 패턴(내적 대상)이 이후 모든 관계의 템플릿이 됩니다. Winnicott의 '충분히 좋은 어머니(Good Enough Mother)'와 '안아주는 환경(Holding Environment)'개념이 핵심입니다.</p>
+  <h3>단기 정신역동 치료 (Brief Psychodynamic Therapy)</h3>
+  <p>Malan, Davanloo 등이 개발. 핵심 갈등 관계 주제(CCRT)를 초점으로 16~25회기 안에 진행합니다.</p>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> 고전 정신분석(주 4-5회, 수년)과 현대 정신역동 상담(주 1회, 단기 가능)은 다릅니다. 현대에는 주 1회 단기 치료도 효과적입니다.</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>애착 이론과 정신역동의 통합</h3>
+  <p>Bowlby의 애착 이론은 정신역동 이론을 진화생물학·인지과학과 통합합니다. 내적 작동 모델(Internal Working Model): 초기 애착 경험이 자기와 타인에 대한 인지적 표상을 형성합니다. Ainsworth의 낯선 상황 실험(Strange Situation): 안정 / 불안-회피 / 불안-저항 / 혼란형 애착 분류. 성인 애착 면접(AAI)은 성인의 애착 표상을 측정하며, 이것이 자녀 양육 패턴과 직결됨을 보였습니다.</p>
+  <h3>신경정신분석학 (Neuropsychoanalysis)</h3>
+  <p>Solms & Panksepp: SEEKING, RAGE, FEAR, LUST, CARE, PANIC, PLAY의 7가지 기본 정서 시스템이 피질하 구조에 기반하며, 이것이 정신분석의 충동(Drive) 개념과 연결됩니다.</p>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Bowlby의 내적 작동 모델과 Freud의 반복 강박(Repetition Compulsion)을 연결하여, 왜 사람들이 해로운 관계 패턴을 반복하는지 통합적으로 설명하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('psycho-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 3, 10);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Iceberg layers: conscious (above), preconscious, unconscious (below)
+  const layers = [
+    { y: 1.5, color: 0xb57bee, opacity: 0.9, size: 1.5, label: 'conscious' },
+    { y: 0, color: 0x8b4fc8, opacity: 0.6, size: 2.5, label: 'preconscious' },
+    { y: -2, color: 0x5b2d8a, opacity: 0.4, size: 4.0, label: 'unconscious' },
+  ];
+
+  layers.forEach(l => {
+    const geo = new THREE.SphereGeometry(l.size, 32, 32);
+    const mat = new THREE.MeshBasicMaterial({ color: l.color, transparent: true, opacity: l.opacity });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.y = l.y;
+    scene.add(mesh);
+  });
+
+  // Defense mechanism particles in unconscious layer
+  const defenses = [];
+  const dColors = [0xf687b3, 0x5eead4, 0xfbbf24, 0xa78bfa, 0xff6b6b, 0x60b8ff];
+  for (let i = 0; i < 18; i++) {
+    const geo = new THREE.SphereGeometry(0.14, 12, 12);
+    const mat = new THREE.MeshBasicMaterial({ color: dColors[i % dColors.length] });
+    const mesh = new THREE.Mesh(geo, mat);
+    const r = 1 + Math.random() * 2.5;
+    const phase = Math.random() * Math.PI * 2;
+    defenses.push({ mesh, r, phase, speed: 0.2 + Math.random() * 0.3, baseY: -2 + (Math.random() - 0.5) * 2 });
+    scene.add(mesh);
+  }
+
+  scene.add(new THREE.GridHelper(18, 18, 0x22183c, 0x170f28));
+
+  let isDragging = false, prevX = 0, rotY = 0;
+  container.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  container.addEventListener('mousemove', e => { if (isDragging) { rotY += (e.clientX - prevX) * 0.01; prevX = e.clientX; } });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    defenses.forEach(d => {
+      const angle = t * d.speed + d.phase + rotY;
+      d.mesh.position.x = Math.cos(angle) * d.r;
+      d.mesh.position.z = Math.sin(angle) * d.r;
+      d.mesh.position.y = d.baseY + Math.sin(t * 0.5 + d.phase) * 0.3;
+    });
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>

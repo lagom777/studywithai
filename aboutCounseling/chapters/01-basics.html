@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1. 상담의 기초 — aboutCounseling</title>
+<link rel="stylesheet" href="../styles.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
+</head>
+<body>
+<div class="layout">
+<aside>
+  <a href="../../index.html" class="hub-back-link">↑ 통합 허브</a>
+  <h3>전체 목차</h3>
+  <ol>
+    <li><a href="../index.html">🌸 표지 · 소개</a></li>
+    <li><a href="01-basics.html" style="color:var(--accent);font-weight:600;">1. 상담의 기초</a></li>
+    <li><a href="02-listening.html">2. 경청과 공감</a></li>
+    <li><a href="03-cbt.html">3. 인지행동치료</a></li>
+    <li><a href="04-psychodynamic.html">4. 정신역동 상담</a></li>
+    <li><a href="05-humanistic.html">5. 인간중심 상담</a></li>
+    <li><a href="06-family.html">6. 가족 상담</a></li>
+    <li><a href="07-crisis.html">7. 위기 상담</a></li>
+    <li><a href="08-ethics.html">8. 상담 윤리</a></li>
+    <li><a href="09-self-care.html">9. 상담자의 자기 돌봄</a></li>
+  </ol>
+</aside>
+<main>
+<header class="paper-header">
+  <h1>상담의 기초:<br><em>도움</em>의 전문적 관계</h1>
+  <p class="authors">Chapter 1 — Fundamentals of Counseling</p>
+  <p class="affiliation">정의 · 목표 · 과정 · 상담 관계의 본질</p>
+</header>
+
+<h2>심리상담이란?</h2>
+<p>심리상담(Counseling)은 훈련된 상담자가 심리적 어려움을 겪는 내담자와 전문적 관계를 맺으며, 내담자의 자기 이해와 성장, 문제 해결을 돕는 과정입니다. 단순한 조언이나 위로와는 다르며, 이론에 기반한 체계적 접근을 사용합니다.</p>
+
+<div class="scene-3d" id="basics-scene"></div>
+<span class="interact-hint">🌸 상담 관계의 핵심 요소들이 연결됩니다 — 드래그로 탐색</span>
+
+<div class="info-card">
+  <h4>상담 vs. 심리치료 vs. 코칭</h4>
+  <p><strong>상담</strong>: 일상적 어려움·발달과업·단기 개입 &nbsp;|&nbsp; <strong>심리치료</strong>: 정신장애·장기·심층 개입<br><strong>코칭</strong>: 목표 달성·강점 중심, 정신건강 문제 다루지 않음</p>
+</div>
+
+<h2>상담의 핵심 목표</h2>
+<div class="info-card rose">
+  <h4>① 자기 이해 증진</h4>
+  <p>내담자가 자신의 감정, 사고, 행동 패턴을 인식하고 이해하도록 돕습니다.</p>
+</div>
+<div class="info-card teal">
+  <h4>② 문제 해결 능력 강화</h4>
+  <p>현재의 문제를 해결하는 것을 넘어, 미래의 어려움에 대처하는 능력을 기릅니다.</p>
+</div>
+<div class="info-card gold">
+  <h4>③ 심리적 성장과 변화</h4>
+  <p>증상 제거를 넘어 전인적 성장, 삶의 질 향상, 자기실현을 지향합니다.</p>
+</div>
+
+<h2>상담의 과정</h2>
+<div class="formula">
+  초기 단계 (관계 형성·문제 탐색) → 중기 단계 (통찰·변화 작업) → 종결 단계 (성과 정리·마무리)
+</div>
+
+<h2>치료적 동맹 (Therapeutic Alliance)</h2>
+<p>연구에 따르면 상담 성과의 30% 이상이 상담 기법이 아닌 <strong>상담 관계의 질</strong>에 의해 결정됩니다. Bordin(1979)은 치료적 동맹을 세 가지 요소로 구분했습니다.</p>
+<div class="info-card">
+  <h4>치료적 동맹의 3요소 (Bordin, 1979)</h4>
+  <p><strong>목표(Goals)</strong>: 상담자-내담자 간 합의된 상담 목표<br><strong>과제(Tasks)</strong>: 상담에서 수행할 구체적 활동<br><strong>유대(Bond)</strong>: 신뢰·수용·공감에 기반한 관계</p>
+</div>
+
+<h2>📚 난이도별 학습</h2>
+<div class="difficulty-tabs">
+  <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
+  <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
+  <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
+</div>
+<div class="difficulty-content" data-level="easy">
+  <span class="difficulty-badge easy">하 · 입문</span>
+  <h3>한 줄로 이해하기</h3>
+  <p>상담은 "전문적으로 훈련된 사람이 심리적 어려움을 겪는 사람을 체계적으로 돕는 과정"입니다.</p>
+  <div class="info-card"><h4>🌱 상담에서 하는 일</h4><ul><li>감정을 안전하게 표현하는 공간 제공</li><li>문제를 다른 시각에서 바라보도록 돕기</li><li>새로운 대처 방법 탐색하기</li><li>자기 이해와 성장 촉진하기</li></ul></div>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 상담자의 역할은 "해결사"가 아니라 "안내자"입니다. 변화의 주체는 언제나 내담자입니다.</div>
+</div>
+<div class="difficulty-content" data-level="medium">
+  <span class="difficulty-badge medium">중 · 응용</span>
+  <h3>상담 구조화 (Structuring)</h3>
+  <p>구조화는 상담의 성격, 한계, 목표, 과정에 대해 내담자에게 명확히 설명하는 것입니다. 비밀보장의 한계(자해·타해 위험, 법적 요구 시 공개), 상담 시간과 장소, 상담료, 취소 정책 등을 초기에 명확히 해야 합니다.</p>
+  <h3>사례 개념화 (Case Conceptualization)</h3>
+  <p>상담자는 내담자의 문제를 이론적 틀로 이해하는 사례 개념화를 진행합니다: 촉발 요인(Precipitating) → 소인 요인(Predisposing) → 유지 요인(Perpetuating) → 보호 요인(Protective).</p>
+  <div class="warning-box"><strong>⚠️ 주의:</strong> 상담자는 내담자의 문화적 배경, 사회경제적 상황, 다양성 요인을 항상 고려해야 합니다.</div>
+</div>
+<div class="difficulty-content" data-level="hard">
+  <span class="difficulty-badge hard">상 · 심화</span>
+  <h3>공통요인 이론 (Common Factors Theory)</h3>
+  <p>Wampold(2001)의 맥락 모델(Contextual Model)에 따르면, 상담의 효과는 특정 기법이 아닌 공통요인(관계의 질, 기대와 희망, 설명 모델의 제공)에서 비롯됩니다. Luborsky et al.(2002)의 "도도새 판결(Dodo Bird Verdict)": 서로 다른 상담 이론 간 효과 차이는 통계적으로 유의미하지 않습니다. 이는 기법보다 관계 변수의 중요성을 지지합니다.</p>
+  <h3>상담 효과 연구 방법론</h3>
+  <ul>
+    <li>RCT(무작위 대조 시험): 특정 기법의 efficacy 검증</li>
+    <li>자연주의 연구(Naturalistic Study): 실제 임상 현장의 effectiveness</li>
+    <li>메타분석: 다수 연구의 효과크기(Cohen's d) 통합</li>
+  </ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> "기법보다 관계가 중요하다"는 공통요인 이론과 "특정 기법이 특정 문제에 효과적이다"는 증거기반 치료(EBT)의 입장을 각각의 근거와 함께 비교 논술하세요.</div>
+</div>
+
+</main>
+</div>
+
+<script>
+(function() {
+  const container = document.getElementById('basics-scene');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(55, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 5, 11);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  container.appendChild(renderer.domElement);
+
+  // Counselor and client as two main nodes
+  const counselorGeo = new THREE.SphereGeometry(0.55, 32, 32);
+  const counselor = new THREE.Mesh(counselorGeo, new THREE.MeshBasicMaterial({ color: 0xb57bee }));
+  counselor.position.set(-2.5, 0, 0);
+  scene.add(counselor);
+
+  const clientGeo = new THREE.SphereGeometry(0.45, 32, 32);
+  const client = new THREE.Mesh(clientGeo, new THREE.MeshBasicMaterial({ color: 0xf687b3 }));
+  client.position.set(2.5, 0, 0);
+  scene.add(client);
+
+  // Alliance bond visualization
+  const bondPts = [new THREE.Vector3(-2.5, 0, 0), new THREE.Vector3(2.5, 0, 0)];
+  const bondGeo = new THREE.BufferGeometry().setFromPoints(bondPts);
+  const bond = new THREE.Line(bondGeo, new THREE.LineBasicMaterial({ color: 0xb57bee, transparent: true, opacity: 0.6 }));
+  scene.add(bond);
+
+  // Orbiting concepts (goals, tasks, bond, empathy, etc.)
+  const concepts = [
+    { color: 0xb57bee, r: 4.0, speed: 0.3, phase: 0 },
+    { color: 0xf687b3, r: 3.2, speed: 0.4, phase: 1.2 },
+    { color: 0x5eead4, r: 4.8, speed: 0.22, phase: 2.4 },
+    { color: 0xfbbf24, r: 3.6, speed: 0.35, phase: 3.6 },
+    { color: 0xa78bfa, r: 5.2, speed: 0.18, phase: 4.8 },
+  ];
+  const cNodes = concepts.map(c => {
+    const geo = new THREE.SphereGeometry(0.28, 16, 16);
+    const mat = new THREE.MeshBasicMaterial({ color: c.color });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+    return { mesh, ...c };
+  });
+
+  scene.add(new THREE.GridHelper(18, 18, 0x22183c, 0x170f28));
+
+  let isDragging = false, prevX = 0, rotY = 0;
+  container.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  container.addEventListener('mousemove', e => { if (isDragging) { rotY += (e.clientX - prevX) * 0.01; prevX = e.clientX; } });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const t = Date.now() * 0.001;
+    cNodes.forEach(n => {
+      const angle = t * n.speed + n.phase + rotY;
+      n.mesh.position.x = Math.cos(angle) * n.r;
+      n.mesh.position.z = Math.sin(angle) * n.r;
+      n.mesh.position.y = Math.sin(t * 0.5 + n.phase) * 0.5;
+    });
+    counselor.position.y = Math.sin(t * 0.8) * 0.15;
+    client.position.y = Math.sin(t * 0.8 + Math.PI) * 0.15;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+})();
+</script>
+</body>
+</html>
