@@ -18,201 +18,261 @@
   <ol>
     <li><a href="../index.html">🖥️ 표지 · 소개</a></li>
     <li><a href="01-server-basics.html">1. 서버 기초</a></li>
-    <li><a href="02-http-api.html">2. HTTP와 API</a></li>
-    <li><a href="03-nodejs-express.html">3. Node.js/Express</a></li>
+    <li><a href="02-http-api.html" style="color:var(--accent);font-weight:600;">2. HTTP와 API 설계</a></li>
+    <li><a href="03-nodejs-express.html">3. Node.js와 Express</a></li>
     <li><a href="04-auth-security.html">4. 인증과 보안</a></li>
-    <li><a href="05-middleware-routing.html">5. 미들웨어</a></li>
-    <li><a href="06-file-streaming.html">6. 파일/스트리밍</a></li>
-    <li><a href="07-caching-queue.html">7. 캐싱/메시지큐</a></li>
+    <li><a href="05-middleware-routing.html">5. 미들웨어와 라우팅</a></li>
+    <li><a href="06-file-streaming.html">6. 파일 처리와 스트리밍</a></li>
+    <li><a href="07-caching-queue.html">7. 캐싱과 메시지 큐</a></li>
     <li><a href="08-microservices.html">8. 마이크로서비스</a></li>
-    <li><a href="09-deploy-devops.html">9. 배포/DevOps</a></li>
+    <li><a href="09-deploy-devops.html">9. 배포와 DevOps</a></li>
   </ol>
 </aside>
 <main>
 <header class="paper-header">
-  <h1><em>HTTP와 API 설계</em></h1>
+  <h1>HTTP와<br><em>API</em> 설계</h1>
   <p class="authors">Chapter 2 — HTTP Protocol & RESTful API Design</p>
+  <p class="affiliation">HTTP 요청 파이프라인 시각화 포함</p>
 </header>
 
-<div class="scene-3d" id="sim-scene"></div>
-<span class="interact-hint">⟳ 서버 아키텍처 시각화</span>
+<h2>HTTP 프로토콜</h2>
+<p>HTTP(HyperText Transfer Protocol)는 웹에서 데이터를 주고받는 규칙입니다. 클라이언트가 요청(Request)을 보내면 서버가 응답(Response)을 돌려주는 단순한 구조이지만, 그 안에는 메서드, 헤더, 상태 코드 등 풍부한 의미가 담겨 있습니다.</p>
 
-<h2>HTTP와 API 설계 개요</h2>
-<p>이 챕터에서는 HTTP와 API 설계의 핵심 개념을 3D 시각화와 함께 학습합니다.</p>
+<h2>HTTP 요청 파이프라인</h2>
+<p>HTTP 메서드를 선택하고 요청을 보내면 데이터가 파이프라인을 통해 흘러가는 모습을 관찰하세요.</p>
+
+<div class="scene-3d" id="http-scene">
+  <div class="scene-controls">
+    <select id="method-select">
+      <option value="GET">GET</option>
+      <option value="POST">POST</option>
+      <option value="PUT">PUT</option>
+      <option value="DELETE">DELETE</option>
+    </select>
+    <button id="http-send-btn">📤 요청 보내기</button>
+    <label id="status-label" style="color:#00ff88;">대기 중...</label>
+  </div>
+</div>
+<span class="interact-hint">📤 메서드를 선택하고 요청 흐름을 관찰하세요</span>
+
+<h2>HTTP 메서드</h2>
 
 <div class="info-card">
-  <h4>핵심 개념</h4>
-  <p>HTTP Protocol & RESTful API Design의 기본 원리와 실전 패턴을 다룹니다.</p>
+  <h4><span class="method-badge get">GET</span> 조회</h4>
+  <p>서버의 자원을 읽어옵니다. 요청 본문이 없으며, 멱등성(여러 번 호출해도 같은 결과)을 가집니다.</p>
+</div>
+
+<div class="info-card http">
+  <h4><span class="method-badge post">POST</span> 생성</h4>
+  <p>새로운 자원을 서버에 생성합니다. 요청 본문에 데이터를 담아 보냅니다.</p>
+</div>
+
+<div class="info-card docker">
+  <h4><span class="method-badge put">PUT</span> 수정 &nbsp; <span class="method-badge patch">PATCH</span> 부분 수정</h4>
+  <p>PUT은 자원 전체를 대체하고, PATCH는 일부만 수정합니다. 둘 다 멱등성을 가집니다.</p>
+</div>
+
+<div class="info-card security">
+  <h4><span class="method-badge delete">DELETE</span> 삭제</h4>
+  <p>서버의 자원을 삭제합니다.</p>
+</div>
+
+<h2>HTTP 상태 코드</h2>
+<div class="flow-horizontal">
+  <span class="flow-node"><span class="status-badge s2xx">200</span> OK</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node"><span class="status-badge s2xx">201</span> Created</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node"><span class="status-badge s3xx">301</span> Moved</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node"><span class="status-badge s4xx">404</span> Not Found</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node"><span class="status-badge s5xx">500</span> Server Error</span>
+</div>
+
+<h2>RESTful API 설계 원칙</h2>
+<p>REST(Representational State Transfer)는 자원 중심의 API 설계 패턴입니다. URL은 명사로 자원을 나타내고, HTTP 메서드가 동사(행위)를 담당합니다.</p>
+
+<div class="code-block" data-title="RESTful API 엔드포인트 예시">GET    /api/users           # 전체 사용자 조회
+GET    /api/users/:id        # 특정 사용자 조회
+POST   /api/users            # 새 사용자 생성
+PUT    /api/users/:id        # 사용자 정보 수정
+DELETE /api/users/:id        # 사용자 삭제
+GET    /api/users/:id/posts  # 사용자의 게시물 조회</div>
+
+<h2>API 시뮬레이터</h2>
+<div class="simulator-panel">
+  <h4>🧪 REST API 테스트</h4>
+  <div class="simulator-row">
+    <select id="sim-method" style="padding:8px;background:var(--bg);color:var(--accent);border:1px solid var(--border);border-radius:6px;font-family:var(--font-mono);">
+      <option>GET</option><option>POST</option><option>PUT</option><option>DELETE</option>
+    </select>
+    <input type="text" id="sim-endpoint" value="/api/users" placeholder="/api/endpoint">
+    <button onclick="simulateAPI()" style="padding:8px 16px;background:var(--accent);color:#000;border:none;border-radius:6px;font-weight:600;cursor:pointer;">실행</button>
+  </div>
+  <div id="sim-output" class="simulator-output">// 엔드포인트를 입력하고 실행을 누르세요</div>
+</div>
+
+<h2>요청/응답 구조</h2>
+<div class="code-block" data-title="HTTP 요청 예시">GET /api/users/42 HTTP/1.1
+Host: api.example.com
+Accept: application/json
+Authorization: Bearer eyJhbGci...</div>
+
+<div class="code-block" data-title="HTTP 응답 예시">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": 42,
+  "name": "홍길동",
+  "email": "hong@example.com"
+}</div>
+
+<div class="info-card queue">
+  <h4>💡 탐구 과제</h4>
+  <p>API 시뮬레이터에서 /api/users, /api/posts 등 다양한 엔드포인트와 메서드 조합을 시도해보세요. 존재하지 않는 경로에 요청하면 어떤 응답이 오는지도 확인해보세요.</p>
 </div>
 
 <h2>📚 난이도별 학습</h2>
-<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
 <div class="difficulty-tabs">
   <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
   <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
   <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
 </div>
-
 <div class="difficulty-content" data-level="easy">
   <span class="difficulty-badge easy">하 · 입문</span>
-  <h3>한 줄로 이해하기</h3>
-  <p>HTTP는 클라이언트와 서버가 약속된 형식으로 대화하는 규칙이고, API는 서버 기능을 외부에서 호출할 수 있게 만든 창구입니다.</p>
-
-  <h3>왜 배워야 하나?</h3>
-  <p>모바일 앱에서 날씨를 확인하면 앱이 날씨 API를 호출해 서버로부터 데이터를 받아옵니다. 카카오 로그인 버튼을 누르면 카카오 인증 API가 동작합니다. 인터넷 뱅킹의 송금 버튼도 결국 은행 서버의 API를 부르는 행위입니다. HTTP/API를 이해하면 어떤 외부 서비스든 연결할 수 있고, 본인의 서비스도 다른 시스템과 연동되도록 만들 수 있어 백엔드 개발의 의사소통 능력을 갖추게 됩니다.</p>
-
-  <div class="info-card">
-    <h4>🌱 핵심 용어</h4>
-    <ul>
-      <li><strong>HTTP</strong>: 웹에서 요청/응답을 주고받는 표준 프로토콜.</li>
-      <li><strong>메서드</strong>: GET(조회), POST(생성), PUT(수정), DELETE(삭제).</li>
-      <li><strong>상태 코드</strong>: 200(성공), 404(없음), 500(서버 오류) 등.</li>
-      <li><strong>JSON</strong>: 서버와 클라이언트가 주고받는 가장 흔한 데이터 형식.</li>
-      <li><strong>엔드포인트</strong>: API에서 호출할 수 있는 URL 경로.</li>
-    </ul>
-  </div>
-
-  <h3>개념 풀어쓰기</h3>
-  <p>HTTP를 편지에 비유해보세요. 편지에는 보내는 사람, 받는 사람, 제목, 본문이 있습니다. HTTP 요청도 마찬가지로 메서드(어떤 일을 할지), URL(어디로 갈지), 헤더(부가 정보), 본문(실제 데이터)이라는 구조가 있습니다. 답장이 오면 그 안에 처리 결과(상태 코드)와 응답 본문이 담겨 있습니다. API는 식당의 메뉴판과 같습니다. 손님이 음식을 직접 만들 수 없으니 메뉴판에 적힌 항목을 주문해서 받습니다. 마찬가지로 외부 시스템은 서버 내부 코드를 바로 호출할 수 없으니 미리 약속한 엔드포인트로 요청을 보냅니다. RESTful API는 자원(URL)과 행동(메서드)을 명확히 분리해 의미를 직관적으로 표현합니다.</p>
-
-  <div class="study-tip"><strong>💡 학습 TIP:</strong> Postman이나 curl로 실제 공개 API(예: jsonplaceholder.typicode.com)에 요청을 보내보세요. 손으로 한 번 해보면 이해가 빠릅니다.</div>
-
-  <h3>요약</h3>
-  <ul>
-    <li>HTTP는 요청과 응답으로 동작하는 무상태 프로토콜이다.</li>
-    <li>메서드와 URL 조합으로 자원의 행동을 표현한다.</li>
-    <li>상태 코드로 결과를 분류한다.</li>
-    <li>JSON은 가장 널리 쓰이는 페이로드 형식이다.</li>
-    <li>API는 시스템 간 약속된 인터페이스다.</li>
-  </ul>
+  <h3>한 줄로 이해하기</h3><p>HTTP는 "웹의 공용어"이고, API는 "두 프로그램이 약속한 대화 방식"입니다. 클라이언트와 서버는 HTTP로 약속된 형식의 요청·응답을 주고받습니다.</p>
+  <h3>왜 중요한가?</h3><p>모바일 앱 화면이 새로고침될 때, 카드 결제 승인이 일어날 때, 카카오 로그인을 누를 때 모두 뒤에서 HTTP API가 호출됩니다. API 설계가 깨지면 앱 화면이 멈추고, 외부 연동 파트너가 떠나며, 보안 사고가 납니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul><li><strong>HTTP 메서드</strong>: GET(조회), POST(생성), PUT/PATCH(수정), DELETE(삭제)</li><li><strong>상태 코드</strong>: 200 OK, 201 Created, 400/401/403/404, 500</li><li><strong>헤더</strong>: 메타데이터 — Content-Type, Authorization 등</li><li><strong>바디</strong>: 실제 데이터 — 주로 JSON</li><li><strong>엔드포인트</strong>: /api/users/42 처럼 자원을 가리키는 URL</li></ul></div>
+  <h3>핵심 개념 풀어쓰기</h3><p>레스토랑의 메뉴판을 상상해보세요. 메뉴판(API 명세)이 있어야 손님(클라이언트)이 무엇을 어떤 형식으로 주문할 수 있는지 압니다. 잘 만든 메뉴판은 항목별 이름, 가격, 옵션이 명확합니다. API도 마찬가지로 자원(URL), 동작(메서드), 입력/출력 형식, 오류 코드가 일관되어야 좋은 API입니다. REST 스타일은 자원을 URL로 표현하고 동작을 HTTP 메서드로 표현하자는 약속입니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> Postman이나 curl로 공개 API(예: GitHub API)에 직접 요청을 날려보세요. 상태 코드와 헤더를 눈으로 확인하면 감이 빨리 잡힙니다.</div>
+  <h3>한 페이지 요약</h3><ul><li>요청 = 메서드 + URL + 헤더 + 바디</li><li>응답 = 상태 코드 + 헤더 + 바디</li><li>REST는 자원 + 메서드 조합으로 표현</li><li>JSON이 사실상 데이터 형식 표준</li><li>좋은 API는 일관성·예측 가능성이 핵심</li></ul>
 </div>
-
 <div class="difficulty-content" data-level="medium">
   <span class="difficulty-badge medium">중 · 응용</span>
-  <h3>이론 깊이</h3>
-  <p>HTTP/1.1은 지속 연결(keep-alive)과 파이프라이닝을 도입했지만 헤드 오브 라인 블로킹 문제가 있습니다. HTTP/2는 단일 TCP 연결 위에서 여러 스트림을 멀티플렉싱하고 헤더 압축(HPACK)을 적용해 성능을 높였습니다. HTTP/3는 QUIC(UDP 기반) 위에서 동작하여 연결 지연을 줄이고 패킷 손실 회복을 빠르게 합니다. RESTful 설계는 자원 중심으로 URL을 설계하고 HTTP 메서드의 의미를 따릅니다. GraphQL은 클라이언트가 필요한 필드만 요청하는 쿼리 언어로, 모바일 같이 네트워크가 제한된 환경에서 페이로드를 줄여줍니다. gRPC는 Protocol Buffers로 직렬화한 바이너리 메시지를 HTTP/2 위에서 주고받는 RPC 프레임워크로 마이크로서비스 간 통신에 적합합니다. CORS는 다른 출처에서의 호출을 제한하는 브라우저 보안 정책으로 서버에서 Access-Control-Allow-Origin 헤더로 허용 정책을 설정합니다.</p>
-
-  <h3>코드 패턴</h3>
-  <pre><code>// Express REST 라우트
-app.get('/api/users/:id', async (req, res) => {
-  const user = await db.findUser(req.params.id);
-  if (!user) return res.status(404).json({ error: 'Not Found' });
-  res.json(user);
-});
-app.post('/api/users', async (req, res) => {
-  const created = await db.createUser(req.body);
-  res.status(201).json(created);
-});</code></pre>
-
-  <div class="info-card">
-    <h4>💻 예제 1: REST vs GraphQL</h4>
-    <p>REST는 /users/123, /users/123/posts처럼 여러 엔드포인트를 호출해야 할 때 GraphQL은 단일 쿼리로 user와 posts를 한 번에 가져옵니다.</p>
-  </div>
-  <div class="info-card">
-    <h4>💻 예제 2: 페이지네이션</h4>
-    <p>오프셋 방식(?page=2&size=20)은 단순하지만 데이터가 변하면 중복/누락이 발생합니다. 커서 방식(?cursor=abc)은 안정적이며 무한 스크롤에 적합합니다.</p>
-  </div>
-
-  <h3>실무 응용</h3>
-  <p>인스타그램 같은 피드 서비스는 GraphQL로 게시물, 좋아요 수, 댓글 일부, 작성자 정보를 한 쿼리로 받아옵니다. 토스페이먼츠 같은 결제 API는 RESTful 표준을 엄격히 따라 멱등성 키를 헤더로 받아 중복 결제를 방지합니다. 슬랙은 이벤트 발생 시 등록된 URL로 POST 요청을 보내는 웹훅 패턴으로 외부 서비스와 연동합니다.</p>
-
-  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 모든 응답을 200 OK로 내려주고 본문에서만 에러를 표시하면 클라이언트의 자동 재시도/모니터링이 깨집니다. 의미에 맞는 상태 코드를 쓰세요.</div>
+  <h3>이론 깊이 들어가기</h3><p>HTTP는 무상태(stateless) 프로토콜입니다. 매 요청은 독립적이며 서버는 이전 요청을 기억하지 않습니다. 상태 유지가 필요하면 쿠키, 세션, 토큰을 사용합니다. HTTP/1.1은 keep-alive로 연결을 재사용하고, HTTP/2는 멀티플렉싱과 헤더 압축(HPACK)으로 효율을 높였습니다. HTTP/3는 QUIC 위에서 동작하여 패킷 손실 회복이 빠릅니다. REST 외에 GraphQL은 클라이언트가 필요한 필드만 골라 받을 수 있고, gRPC는 Protocol Buffers와 HTTP/2를 결합해 마이크로서비스 내부 통신에 강합니다. 멱등성(idempotency)은 같은 요청을 여러 번 보내도 결과가 같아야 하는 성질로, PUT/DELETE에 필수입니다.</p>
+  <h3>핵심 응답 패턴</h3>
+  <pre><code>{
+  "data": [...],
+  "meta": { "page": 1, "total": 120 },
+  "error": null
+}</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>📐 예제 1: 페이지네이션</h4><p>GET /api/posts?page=2&size=20 형태로 offset·limit 또는 cursor 기반 페이징을 제공합니다. 대용량은 cursor 방식이 성능에 유리합니다.</p></div>
+  <div class="info-card"><h4>📐 예제 2: 버전 관리</h4><p>/api/v1/users → /api/v2/users 처럼 URL에 버전을 박거나 Accept 헤더로 협상합니다. 호환을 깨는 변경은 반드시 새 버전으로 분리합니다.</p></div>
+  <h3>응용 사례</h3><p>토스, 카카오뱅크 같은 핀테크 앱은 외부 결제·송금 API에 강한 멱등성을 요구합니다. 클라이언트가 같은 결제 요청을 재시도해도 중복 결제가 일어나지 않도록 Idempotency-Key 헤더를 활용합니다. 공공 데이터 포털은 OpenAPI 명세로 API 카탈로그를 제공해 외부 개발자가 자동으로 SDK를 생성할 수 있게 합니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 모든 오류를 200 OK로 내려주고 바디에 success:false를 넣는 방식은 캐시·모니터링·로깅에 치명적입니다. 상태 코드를 정확히 사용하세요.</div>
 </div>
-
 <div class="difficulty-content" data-level="hard">
   <span class="difficulty-badge hard">상 · 심화</span>
-  <h3>전문가 레벨</h3>
-  <p>대규모 API 게이트웨이 환경에서는 라우팅, 인증, 속도 제한, 사이드카 트레이싱이 모두 한 곳에서 처리됩니다. Envoy 기반 게이트웨이는 동적 설정 갱신(xDS), 회로 차단기, 재시도 정책을 표준화합니다. HTTP 캐싱은 ETag/Last-Modified와 Cache-Control max-age, stale-while-revalidate, stale-if-error로 세밀하게 제어합니다. CDN과 함께 사용할 때는 Vary 헤더와 캐시 키 정규화가 중요합니다. API 버전 관리는 URL 버전(/v1/), 헤더 버전, 콘텐츠 협상 방식이 있고 운영 비용이 다릅니다. OpenAPI 스펙으로 정의를 단일 출처로 두면 서버 스텁, 클라이언트 SDK, 문서, 계약 테스트(Pact)까지 자동화됩니다. GraphQL의 N+1 문제는 DataLoader로 배치/캐싱하고, 쿼리 깊이/복잡도 제한과 영속화 쿼리(persisted queries)로 악의적 쿼리를 방어합니다. gRPC 양방향 스트리밍은 채팅, 실시간 위치 추적, 텔레메트리 같은 고빈도 통신을 효율적으로 처리합니다. 멱등성 토큰, 분산 트랜잭션의 사가 패턴, 동시성 제어를 위한 ETag 기반 낙관적 잠금은 신뢰성 있는 API의 필수 요소입니다.</p>
-
-  <h3>고급 패턴</h3>
-  <pre><code>// GraphQL DataLoader 배치
-const userLoader = new DataLoader(async (ids) => {
-  const users = await db.findUsersByIds(ids);
-  return ids.map(id => users.find(u => u.id === id));
-});
-const resolvers = {
-  Post: { author: (post) => userLoader.load(post.authorId) }
-};</code></pre>
-
-  <h3>최신 동향</h3>
-  <p>HTTP/3와 QUIC은 모바일 환경에서 네트워크 전환 시 연결을 유지해 끊김을 줄입니다. gRPC-Web과 Connect는 브라우저에서 gRPC 호출을 가능하게 합니다. tRPC는 TypeScript 풀스택 프로젝트에서 스키마를 타입으로 공유하며 코드 생성 없이 RPC를 제공합니다. 엣지에서 동작하는 API(Cloudflare Workers, Vercel Edge)는 콜드 스타트 ms 단위, 글로벌 레이턴시 수십 ms를 달성합니다. AsyncAPI 스펙은 메시지 기반 비동기 API를 표준 문서로 표현해 OpenAPI를 보완합니다.</p>
-
-  <h3>관련 분야</h3>
-  <ul>
-    <li>API 보안(OWASP API Top 10)</li>
-    <li>네트워크 프로토콜 최적화(QUIC, BBR)</li>
-    <li>서비스 메시(Istio, Linkerd)</li>
-  </ul>
-
-  <h3>추가 자료</h3>
-  <ul>
-    <li>"REST API Design Rulebook" — Mark Masse</li>
-    <li>"GraphQL in Action" — Samer Buna</li>
-    <li>RFC 9110~9114 (HTTP semantics & versions)</li>
-  </ul>
-
-  <div class="success-box"><strong>🎓 도전 과제:</strong> 동일한 도메인 모델로 REST, GraphQL, gRPC API 세 종류를 만들어 페이로드 크기와 지연 시간을 측정해 비교하세요.</div>
+  <h3>전문가 레벨 이해</h3><p>API 설계의 진짜 어려움은 일관성·진화 가능성·하위 호환의 균형입니다. Roy Fielding의 REST 논문은 HATEOAS(Hypermedia as the Engine of Application State)를 강조하지만, 실무에서는 거의 채택되지 않고 Pragmatic REST가 우세합니다. 백워드 호환을 위해 필드 추가는 허용하되 제거·의미 변경은 금기입니다. 분산 환경에서 정확히 한 번 처리(exactly-once delivery)는 실제로 불가능하므로 "최소 한 번 + 멱등성"을 결합해 실효적 정확성을 만듭니다. 비동기 API에는 webhook, 서버 전송 이벤트(SSE), WebSocket이 있고, 각자 신뢰성·복잡도·인프라 요구가 다릅니다. OpenAPI/AsyncAPI 같은 명세 우선(spec-first) 워크플로는 명세에서 코드와 테스트, 문서를 자동 생성하여 표류를 막습니다.</p>
+  <h3>최신 연구·동향</h3><p>gRPC-Web과 Connect 프로토콜은 브라우저에서도 RPC를 자연스럽게 쓸 수 있게 하며, tRPC는 TypeScript 환경에서 타입을 공유하면서 RPC를 표현합니다. GraphQL Federation은 여러 마이크로서비스의 스키마를 하나의 그래프로 묶어 클라이언트가 단일 엔드포인트로 질의하게 합니다. HTTP/3 + QUIC의 보급은 모바일 환경에서 핸드오버 시 연결 끊김을 줄입니다.</p>
+  <h3>관련 분야</h3><ul><li>API 게이트웨이와 BFF(Backend-for-Frontend) 패턴</li><li>이벤트 주도 아키텍처(EDA)와 메시징</li><li>분산 트랜잭션과 사가(Saga) 패턴</li></ul>
+  <h3>추가 학습 자료</h3><ul><li>"REST API Design Rulebook" — Mark Massé</li><li>"Designing Web APIs" — Brenda Jin 외</li><li>OpenAPI Specification 3.1 공식 문서</li></ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 같은 도메인(예: 메모 앱)을 REST, GraphQL, gRPC 세 가지로 설계해보고 클라이언트 트래픽·페이로드·복잡도를 비교하세요.</div>
 </div>
 
 </main>
 </div>
 
 <script>
+function simulateAPI() {
+  const method = document.getElementById('sim-method').value;
+  const endpoint = document.getElementById('sim-endpoint').value;
+  const output = document.getElementById('sim-output');
+  const ts = new Date().toISOString();
+  const responses = {
+    'GET /api/users': '200 OK\n{\n  "users": [\n    { "id": 1, "name": "김철수", "role": "admin" },\n    { "id": 2, "name": "이영희", "role": "user" }\n  ],\n  "total": 2\n}',
+    'POST /api/users': '201 Created\n{\n  "id": 3,\n  "name": "새 사용자",\n  "createdAt": "' + ts + '"\n}',
+    'PUT /api/users': '200 OK\n{\n  "id": 1,\n  "name": "김철수 (수정됨)",\n  "updatedAt": "' + ts + '"\n}',
+    'DELETE /api/users': '204 No Content\n// 자원이 성공적으로 삭제됨',
+    'GET /api/posts': '200 OK\n{\n  "posts": [\n    { "id": 1, "title": "첫 글", "likes": 42 },\n    { "id": 2, "title": "백엔드 입문", "likes": 128 }\n  ]\n}',
+  };
+  const key = method + ' ' + endpoint.split('/').slice(0,3).join('/');
+  output.textContent = `${method} ${endpoint}\n${'─'.repeat(30)}\n${responses[key] || '404 Not Found\n{\n  "error": "엔드포인트를 찾을 수 없습니다",\n  "path": "'+endpoint+'"\n}'}`;
+}
+
 (function() {
-  const container = document.getElementById('sim-scene');
+  const container = document.getElementById('http-scene');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 4, 10);
+  camera.position.set(0, 4, 12);
+  camera.lookAt(0, 0, 0);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Server nodes network
-  const nodes = [];
-  for (let i = 0; i < 8; i++) {
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6,0.6,0.6), new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true }));
-    const angle = (i/8)*Math.PI*2;
-    mesh.position.set(Math.cos(angle)*4, (Math.random()-0.5)*2, Math.sin(angle)*4);
-    scene.add(mesh); nodes.push(mesh);
-  }
-  // Central server
-  const central = new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2), new THREE.MeshBasicMaterial({ color: 0x22c55e }));
-  scene.add(central);
-  // Connections
-  nodes.forEach(n => {
-    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), n.position]);
-    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.2 })));
+  const methodColors = { GET: 0x10b981, POST: 0xf59e0b, PUT: 0x3b82f6, DELETE: 0xef4444 };
+  const stages = ['Client', 'DNS', 'Server', 'Router', 'Handler', 'DB'];
+  const stageBoxes = [];
+
+  stages.forEach((name, i) => {
+    const x = -10 + i * 4;
+    const geo = new THREE.BoxGeometry(1.5, 1, 1);
+    const mat = new THREE.MeshBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.5 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(x, 0, 0);
+    scene.add(mesh);
+    stageBoxes.push(mesh);
+    const wire = new THREE.Mesh(new THREE.BoxGeometry(1.7, 1.2, 1.2), new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.15 }));
+    wire.position.copy(mesh.position);
+    scene.add(wire);
+    if (i > 0) {
+      const lg = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x-3.15,0,0), new THREE.Vector3(x-0.85,0,0)]);
+      scene.add(new THREE.Line(lg, new THREE.LineBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.15 })));
+    }
   });
 
-  // Data packets
-  const packets = [];
-  for (let i = 0; i < 5; i++) {
-    const p = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
-    packets.push({ mesh: p, target: Math.floor(Math.random()*nodes.length), t: Math.random() });
-    scene.add(p);
-  }
+  scene.add(new THREE.GridHelper(30, 30, 0x0a3a0a, 0x0a3a0a)).position.y = -3;
 
-  let mouseDown = false, prevX = 0;
-  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; });
-  container.addEventListener('mouseup', () => mouseDown = false);
-  container.addEventListener('mousemove', e => { if (mouseDown) { scene.rotation.y += (e.clientX-prevX)*0.005; prevX = e.clientX; } });
-  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; });
-  container.addEventListener('touchmove', e => { scene.rotation.y += (e.touches[0].clientX-prevX)*0.005; prevX = e.touches[0].clientX; });
+  const packets = [];
+  const statusLabel = document.getElementById('status-label');
+
+  function sendHTTP() {
+    const method = document.getElementById('method-select').value;
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.25, 12, 12), new THREE.MeshBasicMaterial({ color: methodColors[method] }));
+    p.position.set(-10, 0, 0);
+    scene.add(p);
+    packets.push({ mesh: p, stage: 0, t: 0, forward: true, method });
+    statusLabel.textContent = method + ' 요청 전송 중...';
+    statusLabel.style.color = '#' + methodColors[method].toString(16).padStart(6, '0');
+  }
+  document.getElementById('http-send-btn').addEventListener('click', sendHTTP);
+
+  let mx = 0;
+  container.addEventListener('mousemove', e => { mx = ((e.clientX - container.getBoundingClientRect().left) / container.clientWidth - 0.5) * 2; });
 
   function animate() {
     requestAnimationFrame(animate);
-    central.rotation.y += 0.01;
-    nodes.forEach(n => n.rotation.x += 0.01);
-    packets.forEach(p => {
-      p.t += 0.01;
-      if (p.t > 1) { p.t = 0; p.target = Math.floor(Math.random()*nodes.length); }
-      const target = nodes[p.target].position;
-      p.mesh.position.lerpVectors(new THREE.Vector3(0,0,0), target, p.t);
-    });
+    const t = Date.now() * 0.001;
+    stageBoxes.forEach((b, i) => b.rotation.y = t * 0.3 + i * 0.5);
+
+    for (let i = packets.length - 1; i >= 0; i--) {
+      const p = packets[i];
+      p.t += 0.015;
+      if (p.t >= 1) {
+        p.t = 0;
+        if (p.forward) { p.stage++; if (p.stage >= stages.length - 1) p.forward = false; }
+        else {
+          p.stage--;
+          if (p.stage <= 0) { scene.remove(p.mesh); packets.splice(i, 1); statusLabel.textContent = '✓ 응답 수신 완료'; statusLabel.style.color = '#00ff88'; continue; }
+        }
+      }
+      const fx = -10 + p.stage * 4;
+      const tx = p.forward ? fx + 4 : fx - 4;
+      p.mesh.position.x = fx + (tx - fx) * p.t;
+      p.mesh.position.y = Math.sin(p.t * Math.PI) * 1.5;
+    }
+
+    camera.position.x += (mx * 3 - camera.position.x) * 0.02;
+    camera.lookAt(0, 0, 0);
     renderer.render(scene, camera);
   }
   animate();
+  setTimeout(sendHTTP, 800);
+
   window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
 })();
 </script>

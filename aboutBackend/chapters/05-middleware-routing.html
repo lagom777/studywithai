@@ -18,146 +18,163 @@
   <ol>
     <li><a href="../index.html">🖥️ 표지 · 소개</a></li>
     <li><a href="01-server-basics.html">1. 서버 기초</a></li>
-    <li><a href="02-http-api.html">2. HTTP와 API</a></li>
-    <li><a href="03-nodejs-express.html">3. Node.js/Express</a></li>
+    <li><a href="02-http-api.html">2. HTTP와 API 설계</a></li>
+    <li><a href="03-nodejs-express.html">3. Node.js와 Express</a></li>
     <li><a href="04-auth-security.html">4. 인증과 보안</a></li>
-    <li><a href="05-middleware-routing.html">5. 미들웨어</a></li>
-    <li><a href="06-file-streaming.html">6. 파일/스트리밍</a></li>
-    <li><a href="07-caching-queue.html">7. 캐싱/메시지큐</a></li>
+    <li><a href="05-middleware-routing.html" style="color:var(--accent);font-weight:600;">5. 미들웨어와 라우팅</a></li>
+    <li><a href="06-file-streaming.html">6. 파일 처리와 스트리밍</a></li>
+    <li><a href="07-caching-queue.html">7. 캐싱과 메시지 큐</a></li>
     <li><a href="08-microservices.html">8. 마이크로서비스</a></li>
-    <li><a href="09-deploy-devops.html">9. 배포/DevOps</a></li>
+    <li><a href="09-deploy-devops.html">9. 배포와 DevOps</a></li>
   </ol>
 </aside>
 <main>
 <header class="paper-header">
-  <h1><em>미들웨어와 라우팅</em></h1>
-  <p class="authors">Chapter 5 — Middleware Patterns & Routing</p>
+  <h1>미들웨어와<br><em>라우팅</em></h1>
+  <p class="authors">Chapter 5 — Middleware Pipeline & Routing</p>
+  <p class="affiliation">미들웨어 파이프라인 시뮬레이터 포함</p>
 </header>
 
-<div class="scene-3d" id="sim-scene"></div>
-<span class="interact-hint">⟳ 서버 아키텍처 시각화</span>
+<h2>미들웨어란?</h2>
+<p>미들웨어는 요청(Request)과 응답(Response) 사이에서 실행되는 함수입니다. 로깅, 인증 확인, 본문 파싱, CORS 처리 등을 담당하며, next()를 호출해 다음 미들웨어로 제어를 넘깁니다. next()를 호출하지 않으면 요청 처리가 거기서 멈춥니다.</p>
 
-<h2>미들웨어와 라우팅 개요</h2>
-<p>이 챕터에서는 미들웨어와 라우팅의 핵심 개념을 3D 시각화와 함께 학습합니다.</p>
+<h2>미들웨어 파이프라인 시뮬레이터</h2>
+<p>요청이 미들웨어 게이트를 하나씩 통과하는 과정을 관찰하세요. "차단 모드"에서는 Auth 게이트에서 요청이 거부됩니다.</p>
 
+<div class="scene-3d" id="middleware-scene">
+  <div class="scene-controls">
+    <button id="mw-send-btn">📤 요청 보내기</button>
+    <label><input type="checkbox" id="mw-block-toggle"> 🚫 차단 모드</label>
+    <label id="mw-status" style="color:#00ff88;">대기 중...</label>
+  </div>
+</div>
+<span class="interact-hint">📤 요청을 보내고 미들웨어 게이트 통과를 관찰하세요</span>
+
+<h2>Express 미들웨어 체인</h2>
+<div class="flow-horizontal">
+  <span class="flow-node">요청</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node active">Logger</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node">CORS</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node">Parser</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node">Auth</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node">Handler</span>
+</div>
+
+<div class="code-block" data-title="미들웨어 체인 구성">const express = require('express');
+const app = express();
+
+// 1. 로깅 미들웨어
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// 2. CORS
+app.use(cors({ origin: 'https://myapp.com' }));
+
+// 3. Body 파싱
+app.use(express.json());
+
+// 4. 인증 (특정 경로만)
+app.use('/api/admin', authMiddleware);
+
+// 5. 라우트 핸들러
+app.get('/api/users', (req, res) => {
+  res.json({ users: [] });
+});</div>
+
+<h2>미들웨어 종류</h2>
 <div class="info-card">
-  <h4>핵심 개념</h4>
-  <p>Middleware Patterns & Routing의 기본 원리와 실전 패턴을 다룹니다.</p>
+  <h4>📝 애플리케이션 레벨</h4>
+  <p>app.use()로 등록하며 모든 요청에 실행됩니다. 로깅, 파싱 등 전역 처리에 사용합니다.</p>
+</div>
+
+<div class="info-card http">
+  <h4>🔀 라우터 레벨</h4>
+  <p>express.Router()에 연결하여 특정 경로 그룹에만 적용합니다.</p>
+</div>
+
+<div class="info-card security">
+  <h4>🚨 에러 핸들링 미들웨어</h4>
+  <p>인자를 4개(err, req, res, next) 받는 특수한 미들웨어입니다. 에러 발생 시 일반 미들웨어를 건너뛰고 여기로 점프합니다.</p>
+</div>
+
+<h2>라우터 분리</h2>
+<div class="code-block" data-title="모듈별 라우터 분리">// routes/users.js
+const router = express.Router();
+router.get('/', listUsers);
+router.post('/', createUser);
+router.put('/:id', updateUser);
+router.delete('/:id', deleteUser);
+module.exports = router;
+
+// app.js
+app.use('/api/users', require('./routes/users'));
+app.use('/api/posts', require('./routes/posts'));</div>
+
+<div class="code-block" data-title="에러 핸들링 미들웨어">app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.statusCode || 500).json({
+    error: err.message,
+    ...(process.env.NODE_ENV === 'development'
+      && { stack: err.stack })
+  });
+});</div>
+
+<div class="info-card queue">
+  <h4>💡 탐구 과제</h4>
+  <p>차단 모드를 켜고 끄면서 Auth 미들웨어의 역할을 확인해보세요. next()를 호출하지 않으면 어떻게 되는지 시각적으로 이해할 수 있습니다.</p>
 </div>
 
 <h2>📚 난이도별 학습</h2>
-<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
 <div class="difficulty-tabs">
   <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
   <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
   <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
 </div>
-
 <div class="difficulty-content" data-level="easy">
   <span class="difficulty-badge easy">하 · 입문</span>
-  <h3>한 줄로 이해하기</h3>
-  <p>라우팅은 어떤 URL이 어떤 기능을 수행하는지 정해주는 것이고, 미들웨어는 요청과 응답 사이에 끼어드는 작은 처리기들입니다.</p>
-
-  <h3>왜 배워야 하나?</h3>
-  <p>로그인 검사를 모든 페이지마다 반복해서 작성하면 코드가 지저분해집니다. 미들웨어로 한 번만 작성하면 모든 라우트에서 자동 적용됩니다. 요청 로깅, 압축, CORS, 에러 처리도 마찬가지입니다. 라우팅을 잘 설계하면 새 기능이 늘어도 코드 구조가 깔끔하게 유지됩니다. 실무에서 백엔드 코드의 절반은 라우팅과 미들웨어 조합으로 만들어지므로 핵심 기술입니다.</p>
-
-  <div class="info-card">
-    <h4>🌱 핵심 용어</h4>
-    <ul>
-      <li><strong>라우팅</strong>: URL과 메서드 → 처리 함수 매핑.</li>
-      <li><strong>미들웨어</strong>: 요청/응답을 가공하는 중간 단계 함수.</li>
-      <li><strong>파이프라인</strong>: 미들웨어들이 순차로 연결된 흐름.</li>
-      <li><strong>핸들러</strong>: 실제 비즈니스 로직을 처리하는 함수.</li>
-    </ul>
-  </div>
-
-  <h3>개념 풀어쓰기</h3>
-  <p>공장의 컨베이어 벨트를 떠올려 보세요. 부품이 들어오면 첫 번째 작업자가 검사하고, 두 번째 작업자가 라벨을 붙이고, 세 번째 작업자가 포장합니다. 각 단계가 미들웨어이고, 마지막 작업자가 라우트 핸들러입니다. 어느 단계에서든 부품에 문제가 있으면 빠질 수 있습니다(에러 처리). 라우팅은 부품 종류에 따라 어떤 라인으로 보낼지 결정하는 분배기 역할입니다. /users 요청은 사용자 처리 라인으로, /products 요청은 상품 처리 라인으로 보냅니다. 이렇게 흐름을 작은 단위로 쪼개고 합치는 구조는 코드를 짧게 유지하고 재사용성을 높여줍니다.</p>
-
-  <div class="study-tip"><strong>💡 학습 TIP:</strong> 미들웨어 순서가 중요합니다. 인증 미들웨어를 보호 라우트보다 먼저 등록해야 합니다.</div>
-
-  <h3>요약</h3>
-  <ul>
-    <li>라우팅은 URL을 처리 함수로 연결한다.</li>
-    <li>미들웨어는 공통 처리를 분리한다.</li>
-    <li>파이프라인 형태로 순차 실행된다.</li>
-    <li>등록 순서가 동작에 영향을 준다.</li>
-    <li>에러 처리도 미들웨어로 통합한다.</li>
-  </ul>
+  <h3>한 줄로 이해하기</h3><p>미들웨어는 요청과 응답 사이를 가로지르는 "통과 게이트"이고, 라우팅은 "어떤 URL을 어떤 함수에 연결할지" 정하는 지도입니다.</p>
+  <h3>왜 중요한가?</h3><p>로그인 검사, 로그 기록, 요청 본문 파싱, 압축, CORS, 에러 처리는 모든 API에 공통으로 필요합니다. 미들웨어로 이를 한 곳에 모아두면, 컨트롤러는 비즈니스 로직에만 집중할 수 있어 코드가 깔끔해지고 보안 누락이 사라집니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul><li><strong>미들웨어</strong>: (req, res, next) 시그니처의 처리 함수</li><li><strong>next()</strong>: 다음 미들웨어로 흐름을 넘기는 호출</li><li><strong>라우터</strong>: 메서드 + URL 패턴 → 핸들러 매핑</li><li><strong>경로 매개변수</strong>: /users/:id의 :id 부분</li><li><strong>에러 미들웨어</strong>: 4-인자 (err, req, res, next)</li></ul></div>
+  <h3>핵심 개념 풀어쓰기</h3><p>공항 보안 검색대를 떠올려보세요. 손님(요청)이 게이트에 들어가려면 신분증 검사 → X-ray → 짐 검색을 순서대로 통과합니다. 어느 단계에서든 문제가 있으면 멈춰서 거절(응답)합니다. 통과한 손님만 다음 단계로 갑니다. 미들웨어 체인도 같은 구조입니다. 라우팅은 그 손님이 결국 어느 게이트(핸들러)로 갈지 결정하는 일입니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 미들웨어의 등록 "순서"가 곧 실행 순서입니다. cors → json 파서 → auth → router → 에러 핸들러 순으로 배치하는 게 일반적입니다.</div>
+  <h3>한 페이지 요약</h3><ul><li>미들웨어는 (req, res, next) 함수</li><li>next()를 호출해야 다음으로 진행</li><li>응답을 보내거나 next(err)로 에러 전파</li><li>등록 순서 = 실행 순서</li><li>라우터로 URL 기반 분기 처리</li></ul>
 </div>
-
 <div class="difficulty-content" data-level="medium">
   <span class="difficulty-badge medium">중 · 응용</span>
-  <h3>이론 깊이</h3>
-  <p>Express의 미들웨어는 (req, res, next) 시그니처를 가진 함수이며 next()를 호출해 다음으로 넘기거나 res.send()로 즉시 응답합니다. 4인자 (err, req, res, next) 시그니처는 에러 미들웨어로 자동 인식됩니다. Koa는 async/await를 전제로 한 양방향 미들웨어 모델(onion model)을 사용해 next()의 전후 처리를 자연스럽게 작성할 수 있습니다. 라우팅은 일반적으로 트리/트라이 구조로 등록 경로를 인덱싱해 O(log n) 또는 O(1)에 가까운 매칭을 합니다. 동적 파라미터(/users/:id), 와일드카드, 정규식 매칭이 지원됩니다. 라우터 모듈을 도메인별로 분리하면(/api/v1/users, /api/v1/orders) 책임이 명확해집니다. CORS 미들웨어는 preflight OPTIONS 요청을 처리하고 허용 도메인/메서드/헤더를 정의합니다. 속도 제한은 IP 또는 API 키 단위로 토큰 버킷, leaky bucket 알고리즘을 적용합니다. 검증 미들웨어(zod, joi)는 요청 본문/쿼리/파라미터를 스키마에 따라 검증하고 핸들러에서 안전한 입력을 보장합니다.</p>
-
-  <h3>코드 패턴</h3>
-  <pre><code>// 미들웨어 체인
-const auth = (req, res, next) => {
-  if (!req.headers.authorization) return res.status(401).end();
+  <h3>이론 깊이 들어가기</h3><p>Express 미들웨어는 함수 체인 패턴의 단순한 구현이지만, 비동기 흐름·에러 전파·조건부 분기를 다 표현해야 해서 설계가 까다롭습니다. app.use는 전역, router.use는 라우터 범위, app.METHOD는 단일 라우트에 적용됩니다. 라우트 매칭은 path-to-regexp가 담당하며 동적 매개변수(:id), 와일드카드, 옵셔널 세그먼트를 지원합니다. 비동기 핸들러에서 throw된 예외는 Express 4.x까지는 next로 자동 전파되지 않아 express-async-errors 같은 래퍼가 필요했고, 5.x부터 표준에 포함되었습니다. CORS, helmet, compression, morgan은 거의 모든 프로젝트의 기본 셋업입니다.</p>
+  <h3>핵심 코드 패턴</h3>
+  <pre><code>// 시간 측정 미들웨어
+app.use((req, res, next) =&gt; {
+  const t0 = Date.now();
+  res.on('finish', () =&gt; console.log(req.method, req.path, Date.now()-t0,'ms'));
   next();
-};
-const validate = (schema) => (req, res, next) => {
-  const r = schema.safeParse(req.body);
-  if (!r.success) return res.status(400).json(r.error);
-  req.body = r.data;
-  next();
-};
-app.post('/api/orders', auth, validate(orderSchema), createOrder);</code></pre>
+});
 
-  <div class="info-card">
-    <h4>💻 예제 1: 라우터 분리</h4>
-    <p>userRouter.use(authMiddleware) 처럼 라우터 단위로 적용하면 특정 그룹에만 인증을 강제할 수 있습니다.</p>
-  </div>
-  <div class="info-card">
-    <h4>💻 예제 2: 비동기 에러 전파</h4>
-    <p>async 핸들러 안에서 발생한 예외를 next(err)로 전달하거나 express-async-errors로 자동 전달되게 합니다.</p>
-  </div>
-
-  <h3>실무 응용</h3>
-  <p>대형 커머스 API는 인증 → 속도 제한 → 검증 → 로깅 → 라우터 → 에러 핸들러 순으로 미들웨어를 구성합니다. 멀티테넌트 SaaS는 요청 도메인을 보고 테넌트를 식별하는 미들웨어를 가장 먼저 두어 이후 모든 처리에 테넌트 컨텍스트를 주입합니다. 게임 서버는 패킷 단위로 디코드/검증/라우팅 미들웨어를 두어 HTTP가 아닌 커스텀 프로토콜에도 동일한 패턴을 적용합니다.</p>
-
-  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 본문 파서(express.json) 미들웨어를 라우트 등록보다 뒤에 두면 req.body가 undefined가 되는 문제가 생깁니다.</div>
+// 에러 미들웨어(반드시 마지막)
+app.use((err, req, res, next) =&gt; {
+  res.status(err.status||500).json({error:err.message});
+});</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>📐 예제 1: 역할 기반 인가</h4><p>requireRole('admin') 같은 팩토리 미들웨어를 만들어 라우트에 단계적으로 끼웁니다. 라우터 단위 또는 메서드 단위로 자유롭게 조립할 수 있습니다.</p></div>
+  <div class="info-card"><h4>📐 예제 2: 라우터 모듈화</h4><p>routes/v1/index.js에서 모든 v1 라우터를 모으고, app.use('/api/v1', v1Router)로 마운트합니다. 버전 분기와 도메인 분리를 동시에 깔끔하게 해결합니다.</p></div>
+  <h3>응용 사례</h3><p>SaaS의 멀티 테넌트 API는 미들웨어로 호스트/서브도메인을 파싱해 req.tenant를 채우고, 이후 모든 쿼리에서 자동으로 테넌트 필터를 적용합니다. 카카오·네이버 API 게이트웨이는 인증·로깅·레이트리밋·서킷브레이커를 모두 미들웨어 체인으로 표현합니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 비동기 미들웨어에서 next()를 호출하기 전에 응답을 보내거나, 에러를 throw만 하고 next(err)로 전파하지 않아 요청이 영원히 매달리는 경우가 흔합니다.</div>
 </div>
-
 <div class="difficulty-content" data-level="hard">
   <span class="difficulty-badge hard">상 · 심화</span>
-  <h3>전문가 레벨</h3>
-  <p>대규모 백엔드에서 미들웨어는 단순한 함수 체인을 넘어서 관측 가능성, 보안, 트래픽 제어의 핵심 레버가 됩니다. AsyncLocalStorage 기반 컨텍스트 전파로 요청 ID, 사용자 ID, 트레이스 ID를 코드 전반에 자동 주입할 수 있습니다. 분산 트레이싱(OpenTelemetry)은 미들웨어 진입/종료 시점에 스팬을 생성하여 다운스트림 호출과 자연스럽게 연결됩니다. 라우팅 매칭은 라딕스 트리(Fastify) 또는 정규식 컴파일된 트리(Express 5)로 최적화되어 수천 라우트에서도 일정한 성능을 유지합니다. 동적 라우팅에서는 캐시 친화적인 라우트 키 정규화가 중요합니다. 게이트웨이 레벨에서는 Envoy의 HTTP filter chain, NGINX의 phase 모델, Caddy의 directive 모델이 비슷한 미들웨어 추상화를 제공하며 동적 설정 갱신, 회로 차단기, 부하 분산을 함께 처리합니다. WAF(Web Application Firewall) 미들웨어는 ModSecurity 또는 Cloudflare 룰셋으로 SQLi/XSS 패턴을 차단합니다. 멀티 리전 아키텍처에서는 지역 라우팅(geo routing)으로 가장 가까운 리전으로 요청을 보내고, 데이터 주권 요구사항에 따라 특정 트래픽을 특정 리전에 강제하기도 합니다. 카나리/블루-그린 배포는 라우팅 가중치를 미세 조정해 점진 노출을 구현합니다.</p>
-
-  <h3>고급 패턴</h3>
-  <pre><code>// 순차/병렬 합성 미들웨어
-function compose(middlewares) {
-  return (req, res, next) => {
-    let i = -1;
-    const dispatch = (idx) => {
-      if (idx <= i) return Promise.reject(new Error('next() called multiple times'));
-      i = idx;
-      const fn = middlewares[idx] || next;
-      return Promise.resolve(fn(req, res, dispatch.bind(null, idx + 1)));
-    };
-    return dispatch(0);
-  };
-}</code></pre>
-
-  <h3>최신 동향</h3>
-  <p>엣지 함수(Cloudflare Workers, Vercel Edge Middleware)는 가장 가까운 PoP에서 라우팅과 미들웨어 처리를 수행해 글로벌 지연을 수십 ms로 줄입니다. eBPF 기반 사이드카리스 서비스 메시(Cilium)는 사이드카 컨테이너 없이 커널 수준에서 L7 정책을 적용해 오버헤드를 줄입니다. WASM 기반 필터(Envoy proxy-wasm)는 다양한 언어로 작성한 미들웨어를 게이트웨이에 안전하게 주입할 수 있게 합니다. AI 기반 위협 탐지 미들웨어는 정상 트래픽 패턴을 학습해 비정상 요청을 실시간 차단합니다.</p>
-
-  <h3>관련 분야</h3>
-  <ul>
-    <li>API 게이트웨이 & 서비스 메시</li>
-    <li>관측 가능성과 분산 트레이싱</li>
-    <li>WAF/Bot 관리</li>
-  </ul>
-
-  <h3>추가 자료</h3>
-  <ul>
-    <li>Envoy Proxy 공식 문서(HTTP filter chain)</li>
-    <li>Fastify 내부 라우터(라딕스 트리) 분석 글</li>
-    <li>OpenTelemetry HTTP 인스트루먼테이션 가이드</li>
-  </ul>
-
-  <div class="success-box"><strong>🎓 도전 과제:</strong> 미들웨어 합성을 통해 동일 라우트에서 정상 트래픽은 v2, 5%만 v1으로 보내는 카나리 라우팅과 트레이싱 자동 주입을 한 번에 구현해 보세요.</div>
+  <h3>전문가 레벨 이해</h3><p>대규모 API에서는 미들웨어 체인 자체가 성능 핫스팟이 됩니다. body 파싱·JSON 직렬화·로깅의 누적 비용이 ms 단위로 쌓이며, 잘못된 미들웨어 한 줄이 RPS를 절반으로 떨어뜨립니다. Fastify는 schema 컴파일 기반의 직렬화로 이를 회피합니다. Koa·NestJS는 미들웨어를 "양파(onion)" 구조로 표현해 응답 직전 후처리를 자연스럽게 표현합니다. 라우팅의 라디스 트리(prefix tree) 구현은 Trie/Radix 기반이며, 매칭 성능이 곧 처리량에 직결됩니다. API 게이트웨이(Kong, Envoy)에서는 미들웨어 개념이 "필터 체인"으로 확장되어 mTLS, JWT 검증, WAF, 추적, 캐싱을 한 곳에서 처리합니다.</p>
+  <h3>최신 연구·동향</h3><p>Cloudflare Workers, Vercel Edge는 미들웨어를 엣지에서 실행해 인증·AB 테스트·캐싱을 origin 호출 없이 끝냅니다. OpenTelemetry는 자동 계측 미들웨어로 모든 요청에 분산 추적을 부여하고, eBPF 기반 관측은 코드 변경 없이 미들웨어 수준 메트릭을 수집합니다.</p>
+  <h3>관련 분야</h3><ul><li>API 게이트웨이와 정책 엔진</li><li>분산 추적(Distributed Tracing)</li><li>서킷 브레이커와 백프레셔</li></ul>
+  <h3>추가 학습 자료</h3><ul><li>Express 공식 가이드 — Writing middleware</li><li>"Building Microservices" — Sam Newman</li><li>Envoy Proxy 문서 — Filter chains</li></ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 자체 작성한 100ms 지연 미들웨어를 체인 앞·중간·뒤 어디에 두느냐에 따라 p95 레이턴시가 어떻게 달라지는지 측정·도식화하세요.</div>
 </div>
 
 </main>
@@ -165,60 +182,109 @@ function compose(middlewares) {
 
 <script>
 (function() {
-  const container = document.getElementById('sim-scene');
+  const container = document.getElementById('middleware-scene');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 4, 10);
+  camera.position.set(0, 5, 14);
+  camera.lookAt(0, 0, 0);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Server nodes network
-  const nodes = [];
-  for (let i = 0; i < 8; i++) {
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6,0.6,0.6), new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true }));
-    const angle = (i/8)*Math.PI*2;
-    mesh.position.set(Math.cos(angle)*4, (Math.random()-0.5)*2, Math.sin(angle)*4);
-    scene.add(mesh); nodes.push(mesh);
-  }
-  // Central server
-  const central = new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2), new THREE.MeshBasicMaterial({ color: 0x22c55e }));
-  scene.add(central);
-  // Connections
-  nodes.forEach(n => {
-    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), n.position]);
-    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.2 })));
+  const gateNames = ['Logger', 'CORS', 'Parser', 'Auth', 'Validate', 'Handler'];
+  const gateColors = [0x10b981, 0x60a5fa, 0xfbbf24, 0xef4444, 0xa78bfa, 0x00ff88];
+  const gates = [];
+
+  gateNames.forEach((name, i) => {
+    const x = -10 + i * 4;
+    const gate = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.3, 3),
+      new THREE.MeshBasicMaterial({ color: gateColors[i], transparent: true, opacity: 0.4, side: THREE.DoubleSide })
+    );
+    gate.position.set(x, 0, 0);
+    scene.add(gate);
+
+    const frame = new THREE.Mesh(
+      new THREE.BoxGeometry(0.1, 3.2, 2),
+      new THREE.MeshBasicMaterial({ color: gateColors[i], wireframe: true, transparent: true, opacity: 0.2 })
+    );
+    frame.position.set(x, 0, 0);
+    scene.add(frame);
+    gates.push({ gate, frame, x, color: gateColors[i] });
   });
 
-  // Data packets
-  const packets = [];
-  for (let i = 0; i < 5; i++) {
-    const p = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
-    packets.push({ mesh: p, target: Math.floor(Math.random()*nodes.length), t: Math.random() });
-    scene.add(p);
-  }
+  const pathLine = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-13,0,0), new THREE.Vector3(13,0,0)]);
+  scene.add(new THREE.Line(pathLine, new THREE.LineBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.1 })));
+  const grid = new THREE.GridHelper(30, 30, 0x0a3a0a, 0x0a3a0a);
+  grid.position.y = -3;
+  scene.add(grid);
 
-  let mouseDown = false, prevX = 0;
-  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; });
-  container.addEventListener('mouseup', () => mouseDown = false);
-  container.addEventListener('mousemove', e => { if (mouseDown) { scene.rotation.y += (e.clientX-prevX)*0.005; prevX = e.clientX; } });
-  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; });
-  container.addEventListener('touchmove', e => { scene.rotation.y += (e.touches[0].clientX-prevX)*0.005; prevX = e.touches[0].clientX; });
+  const packets = [];
+  const statusLabel = document.getElementById('mw-status');
+
+  function sendReq() {
+    const willBlock = document.getElementById('mw-block-toggle').checked;
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.25, 12, 12), new THREE.MeshBasicMaterial({ color: 0x00ff88 }));
+    p.position.set(-13, 0, 0);
+    scene.add(p);
+    packets.push({ mesh: p, gateIdx: 0, blocked: false, willBlock, returning: false, bt: 0 });
+    statusLabel.textContent = '📤 요청 진입...';
+    statusLabel.style.color = '#fbbf24';
+  }
+  document.getElementById('mw-send-btn').addEventListener('click', sendReq);
 
   function animate() {
     requestAnimationFrame(animate);
-    central.rotation.y += 0.01;
-    nodes.forEach(n => n.rotation.x += 0.01);
-    packets.forEach(p => {
-      p.t += 0.01;
-      if (p.t > 1) { p.t = 0; p.target = Math.floor(Math.random()*nodes.length); }
-      const target = nodes[p.target].position;
-      p.mesh.position.lerpVectors(new THREE.Vector3(0,0,0), target, p.t);
-    });
+    const t = Date.now() * 0.001;
+    gates.forEach((g, i) => { g.gate.material.opacity = 0.3 + Math.sin(t * 2 + i) * 0.1; });
+
+    for (let i = packets.length - 1; i >= 0; i--) {
+      const p = packets[i];
+      if (p.blocked) {
+        p.bt += 0.02;
+        p.mesh.position.x -= 0.15;
+        p.mesh.position.y = Math.abs(Math.sin(p.bt * 5)) * 0.5;
+        if (p.mesh.position.x < -15) { scene.remove(p.mesh); packets.splice(i, 1); }
+        continue;
+      }
+      if (p.returning) {
+        p.mesh.position.x -= 0.12;
+        if (p.mesh.position.x < -15) { scene.remove(p.mesh); packets.splice(i, 1); }
+        continue;
+      }
+      const targetX = p.gateIdx < gates.length ? gates[p.gateIdx].x : 13;
+      p.mesh.position.x += (targetX - p.mesh.position.x) * 0.05;
+      p.mesh.position.y = Math.sin(t * 3) * 0.2;
+
+      if (Math.abs(p.mesh.position.x - targetX) < 0.3 && p.gateIdx < gates.length) {
+        gates[p.gateIdx].gate.material.opacity = 1;
+        setTimeout(((idx) => () => { if (gates[idx]) gates[idx].gate.material.opacity = 0.4; })(p.gateIdx), 300);
+
+        if (p.gateIdx === 3 && p.willBlock) {
+          p.mesh.material.color.setHex(0xef4444);
+          p.blocked = true; p.bt = 0;
+          statusLabel.textContent = '❌ Auth에서 차단 — 401';
+          statusLabel.style.color = '#ef4444';
+          continue;
+        }
+        p.mesh.material.color.setHex(gateColors[p.gateIdx]);
+        statusLabel.textContent = '✓ ' + gateNames[p.gateIdx] + ' 통과';
+        p.gateIdx++;
+
+        if (p.gateIdx >= gates.length) {
+          statusLabel.textContent = '✅ 모든 미들웨어 통과 — 200 OK';
+          statusLabel.style.color = '#00ff88';
+          p.mesh.material.color.setHex(0x00ff88);
+          p.returning = true;
+        }
+      }
+    }
     renderer.render(scene, camera);
   }
   animate();
+  setTimeout(sendReq, 800);
+
   window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
 })();
 </script>

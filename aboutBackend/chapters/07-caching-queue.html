@@ -18,135 +18,163 @@
   <ol>
     <li><a href="../index.html">🖥️ 표지 · 소개</a></li>
     <li><a href="01-server-basics.html">1. 서버 기초</a></li>
-    <li><a href="02-http-api.html">2. HTTP와 API</a></li>
-    <li><a href="03-nodejs-express.html">3. Node.js/Express</a></li>
+    <li><a href="02-http-api.html">2. HTTP와 API 설계</a></li>
+    <li><a href="03-nodejs-express.html">3. Node.js와 Express</a></li>
     <li><a href="04-auth-security.html">4. 인증과 보안</a></li>
-    <li><a href="05-middleware-routing.html">5. 미들웨어</a></li>
-    <li><a href="06-file-streaming.html">6. 파일/스트리밍</a></li>
-    <li><a href="07-caching-queue.html">7. 캐싱/메시지큐</a></li>
+    <li><a href="05-middleware-routing.html">5. 미들웨어와 라우팅</a></li>
+    <li><a href="06-file-streaming.html">6. 파일 처리와 스트리밍</a></li>
+    <li><a href="07-caching-queue.html" style="color:var(--accent);font-weight:600;">7. 캐싱과 메시지 큐</a></li>
     <li><a href="08-microservices.html">8. 마이크로서비스</a></li>
-    <li><a href="09-deploy-devops.html">9. 배포/DevOps</a></li>
+    <li><a href="09-deploy-devops.html">9. 배포와 DevOps</a></li>
   </ol>
 </aside>
 <main>
 <header class="paper-header">
-  <h1><em>캐싱과 메시지 큐</em></h1>
+  <h1>캐싱과<br><em>메시지 큐</em></h1>
   <p class="authors">Chapter 7 — Caching Strategies & Message Queues</p>
+  <p class="affiliation">캐시 Hit/Miss 시각화 포함</p>
 </header>
 
-<div class="scene-3d" id="sim-scene"></div>
-<span class="interact-hint">⟳ 서버 아키텍처 시각화</span>
+<h2>캐싱이란?</h2>
+<p>캐싱은 자주 요청되는 데이터를 빠른 저장소에 미리 저장해두는 전략입니다. 데이터베이스 조회는 수십~수백 ms가 걸리지만, Redis 같은 인메모리 캐시는 1ms 이내에 응답할 수 있습니다.</p>
 
-<h2>캐싱과 메시지 큐 개요</h2>
-<p>이 챕터에서는 캐싱과 메시지 큐의 핵심 개념을 3D 시각화와 함께 학습합니다.</p>
+<h2>캐시 Hit / Miss 시뮬레이터</h2>
+<p>"Cache Hit" 버튼은 캐시에서 바로 데이터를 가져오는 빠른 경로를, "Cache Miss" 버튼은 DB까지 가야 하는 느린 경로를 보여줍니다.</p>
 
+<div class="scene-3d" id="cache-scene">
+  <div class="scene-controls">
+    <button id="cache-hit-btn" style="background:#10b981;">✓ Cache Hit</button>
+    <button id="cache-miss-btn" style="background:#f59e0b;">✗ Cache Miss</button>
+    <label id="cache-status" style="color:#00ff88;">대기 중...</label>
+  </div>
+</div>
+<span class="interact-hint">🎯 Cache Hit과 Miss의 경로 차이를 비교하세요</span>
+
+<h2>캐싱 전략</h2>
 <div class="info-card">
-  <h4>핵심 개념</h4>
-  <p>Caching Strategies & Message Queues의 기본 원리와 실전 패턴을 다룹니다.</p>
+  <h4>📖 Cache-Aside (Lazy Loading)</h4>
+  <p>요청 시 캐시를 먼저 확인하고, 없으면(Miss) DB에서 가져와 캐시에 저장합니다. 가장 일반적인 패턴입니다.</p>
+</div>
+
+<div class="info-card http">
+  <h4>✏️ Write-Through</h4>
+  <p>데이터를 쓸 때 캐시와 DB에 동시에 기록합니다. 일관성은 좋지만 쓰기 지연이 있습니다.</p>
+</div>
+
+<div class="info-card queue">
+  <h4>📝 Write-Back</h4>
+  <p>캐시에만 먼저 쓰고, 나중에 비동기로 DB에 반영합니다. 빠르지만 캐시 장애 시 데이터 유실 위험이 있습니다.</p>
+</div>
+
+<div class="code-block" data-title="Redis 캐싱 패턴">const redis = require('redis');
+const client = redis.createClient();
+
+async function getUser(id) {
+  // 1. 캐시 확인
+  const cached = await client.get(`user:${id}`);
+  if (cached) {
+    console.log('Cache HIT');
+    return JSON.parse(cached);
+  }
+
+  // 2. Cache Miss → DB 조회
+  console.log('Cache MISS');
+  const user = await db.users.findById(id);
+
+  // 3. 캐시에 저장 (TTL 1시간)
+  await client.setEx(`user:${id}`, 3600, JSON.stringify(user));
+  return user;
+}</div>
+
+<h2>메시지 큐</h2>
+<p>메시지 큐는 서비스 간 비동기 통신을 가능하게 합니다. 생산자(Producer)가 메시지를 큐에 넣으면, 소비자(Consumer)가 자신의 속도로 처리합니다.</p>
+
+<div class="flow-horizontal">
+  <span class="flow-node">Producer</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node active">Message Queue</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-node">Consumer A</span>
+  <span class="flow-arrow">&nbsp;</span>
+  <span class="flow-node">Consumer B</span>
+</div>
+
+<div class="info-card docker">
+  <h4>🐰 RabbitMQ</h4>
+  <p>AMQP 프로토콜 기반 메시지 브로커. Exchange, Queue, Binding으로 유연한 라우팅을 지원합니다.</p>
+</div>
+
+<div class="info-card security">
+  <h4>📊 Apache Kafka</h4>
+  <p>분산 이벤트 스트리밍 플랫폼. 높은 처리량과 데이터 영속성을 제공합니다. 로그 기반이라 메시지를 재처리할 수 있습니다.</p>
+</div>
+
+<div class="code-block" data-title="Pub/Sub 패턴 예시">// Publisher (이벤트 발행)
+const channel = await connection.createChannel();
+await channel.assertQueue('order-events');
+channel.sendToQueue('order-events',
+  Buffer.from(JSON.stringify({
+    type: 'ORDER_CREATED',
+    orderId: 'ORD-001',
+    userId: 'user123'
+  }))
+);
+
+// Consumer (이벤트 소비)
+channel.consume('order-events', (msg) => {
+  const event = JSON.parse(msg.content.toString());
+  console.log('주문 이벤트 수신:', event.type);
+  // 이메일 전송, 재고 감소 등 처리
+  channel.ack(msg);
+});</div>
+
+<div class="info-card queue">
+  <h4>💡 탐구 과제</h4>
+  <p>Cache Hit과 Miss를 번갈아 클릭하면서 응답 경로와 속도 차이를 관찰하세요. 실제 서비스에서 캐시 적중률 95%만 달성해도 DB 부하가 크게 줄어듭니다.</p>
 </div>
 
 <h2>📚 난이도별 학습</h2>
-<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
 <div class="difficulty-tabs">
   <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
   <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
   <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
 </div>
-
 <div class="difficulty-content" data-level="easy">
   <span class="difficulty-badge easy">하 · 입문</span>
-  <h3>한 줄로 이해하기</h3>
-  <p>캐싱은 자주 쓰는 결과를 미리 저장해 빠르게 응답하는 기법이고, 메시지 큐는 작업을 줄세워 천천히 처리하는 우편함입니다.</p>
-
-  <h3>왜 배워야 하나?</h3>
-  <p>인기 상품 페이지를 매번 DB에 물어보면 서버가 금세 한계에 부딪힙니다. 캐시에 한 번 저장해두면 수만 명에게 똑같은 결과를 빠르게 줄 수 있습니다. 또 회원가입 후 환영 메일을 보내는 작업처럼 즉시 결과가 필요 없는 일은 큐에 넣고 나중에 처리하면 사용자가 빠르게 다음 화면을 볼 수 있습니다. 캐싱과 큐를 잘 쓰면 같은 서버로 몇 배 더 많은 사용자를 처리할 수 있어 비용과 성능 둘 다 잡을 수 있습니다.</p>
-
-  <div class="info-card">
-    <h4>🌱 핵심 용어</h4>
-    <ul>
-      <li><strong>캐시(Cache)</strong>: 자주 쓰는 데이터의 빠른 사본 저장소.</li>
-      <li><strong>TTL</strong>: 캐시 항목의 유효 기간.</li>
-      <li><strong>큐(Queue)</strong>: 작업을 순서대로 보관하는 대기열.</li>
-      <li><strong>Producer/Consumer</strong>: 큐에 넣는 쪽과 꺼내 처리하는 쪽.</li>
-    </ul>
-  </div>
-
-  <h3>개념 풀어쓰기</h3>
-  <p>캐시를 책상 위 자주 쓰는 노트라고 생각하세요. 책장(원본 DB)까지 갈 필요 없이 책상에서 바로 찾으면 빠릅니다. 다만 노트가 오래되면 책장 내용과 달라질 수 있으니 적절히 갱신해야 합니다(TTL). 메시지 큐는 카페 주문 대기열을 떠올리면 됩니다. 손님이 한꺼번에 몰려도 주문서를 받아 줄세우면 바리스타는 자기 속도로 차근차근 만들 수 있습니다. 큐가 없으면 모두가 즉시 처리되어야 하니 일이 몰리면 시스템이 멈춥니다. 큐는 갑작스러운 트래픽을 흡수하고, 실패한 작업을 재시도하기에도 편합니다.</p>
-
-  <div class="study-tip"><strong>💡 학습 TIP:</strong> Redis는 캐시와 간단한 큐 모두 시작하기에 좋은 도구입니다. set/get과 lpush/brpop 두 쌍이면 핵심 패턴을 익힐 수 있습니다.</div>
-
-  <h3>요약</h3>
-  <ul>
-    <li>캐시는 응답 속도를 빠르게 한다.</li>
-    <li>TTL로 신선도를 관리한다.</li>
-    <li>큐는 작업을 비동기로 처리한다.</li>
-    <li>트래픽 폭주를 완충해준다.</li>
-    <li>실패 재시도가 쉬워진다.</li>
-  </ul>
+  <h3>한 줄로 이해하기</h3><p>캐싱은 "자주 쓰는 결과를 빠른 곳에 미리 두기", 메시지 큐는 "지금 당장 처리하지 않아도 되는 일을 줄 세우기" 기술입니다.</p>
+  <h3>왜 중요한가?</h3><p>네이버 검색이 0.2초 안에 결과를 보여주는 비결, 쿠팡 주문 후 알림이 몇 초 뒤에 오는 이유, 인스타 게시물의 좋아요 카운트가 실시간으로 보이는 메커니즘이 모두 이 두 가지 위에 서 있습니다. 캐싱은 응답 속도를, 큐는 안정성과 확장성을 끌어올립니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul><li><strong>Cache Hit/Miss</strong>: 캐시에 있음/없음</li><li><strong>TTL</strong>: 캐시 유효 시간</li><li><strong>Redis</strong>: 가장 널리 쓰는 인메모리 캐시·큐</li><li><strong>큐(Queue)</strong>: 먼저 들어온 메시지가 먼저 처리</li><li><strong>Pub/Sub</strong>: 발행-구독 비동기 통신</li></ul></div>
+  <h3>핵심 개념 풀어쓰기</h3><p>편의점이 매번 본사 창고에서 음료를 가져오면 손님은 한참을 기다려야 합니다. 매장 냉장고(캐시)에 자주 팔리는 음료를 미리 두면 즉시 판매가 가능합니다. 다만 신상품 입고나 가격 변경 같은 "데이터 변화"는 냉장고에도 반영해야 합니다. 메시지 큐는 손님이 결제한 뒤 영수증 이메일을 굳이 그 자리에서 보내지 않고, 나중에 보내도록 "주문서"를 작업 큐에 넣어 두는 식입니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> Redis CLI로 SET, GET, EXPIRE, INCR을 직접 두드려보세요. 5분이면 캐시 감각이 잡힙니다.</div>
+  <h3>한 페이지 요약</h3><ul><li>캐싱 = 응답 속도 + DB 부하 절감</li><li>TTL과 무효화 전략이 캐시 설계의 핵심</li><li>큐 = 비동기 + 부하 분산 + 재시도</li><li>대표 도구: Redis, Memcached, RabbitMQ, Kafka, SQS</li><li>Eventual Consistency를 받아들여야 함</li></ul>
 </div>
-
 <div class="difficulty-content" data-level="medium">
   <span class="difficulty-badge medium">중 · 응용</span>
-  <h3>이론 깊이</h3>
-  <p>캐시는 적중률(hit rate)이 핵심 지표입니다. LRU, LFU, ARC 같은 교체 정책으로 자주 쓰는 데이터를 우선 보관합니다. 캐시 무효화는 어렵습니다. write-through(쓰기 시 즉시 캐시도 갱신), write-back(나중 반영), write-around(캐시 우회) 전략이 있습니다. cache-aside는 가장 흔한 패턴으로 읽을 때 캐시 미스면 DB에서 읽어 캐시에 채웁니다. 분산 캐시(Redis, Memcached)는 일관 해시로 키를 노드에 분배합니다. 메시지 큐 시스템에는 Redis Streams, RabbitMQ, AWS SQS, Kafka가 대표적입니다. RabbitMQ는 AMQP 기반으로 라우팅(direct, topic, fanout, headers)이 풍부합니다. Kafka는 로그 기반 분산 큐로 토픽-파티션 모델을 사용해 높은 처리량과 재처리 능력을 제공합니다. 메시지 전달 보장은 at-most-once, at-least-once, exactly-once 세 단계로 분류됩니다. 멱등성 처리, DLQ(Dead Letter Queue), 백오프 재시도가 안정적인 큐 운영의 필수 요소입니다.</p>
-
-  <h3>코드 패턴</h3>
-  <pre><code>// Cache-aside (Redis)
+  <h3>이론 깊이 들어가기</h3><p>캐시 적용 위치는 브라우저, CDN, 리버스 프록시(Varnish, Nginx), 애플리케이션 메모리, 분산 캐시(Redis), DB 결과 캐시까지 여러 층입니다. 데이터 일관성 측면에서 Cache-aside, Read-through, Write-through, Write-behind 패턴이 있고 각자 트레이드오프가 다릅니다. TTL이 짧으면 데이터 정합성이 좋지만 적중률이 떨어지고, 길면 반대입니다. 캐시 무효화는 정확한 키 삭제, 태그 기반 무효화, 버전 키 회전 등 여러 전략이 있습니다. 메시지 큐는 메시지 순서 보장(FIFO), 정확히 한 번/최소 한 번 처리, DLQ(Dead Letter Queue), 가시성 타임아웃 같은 의미를 정확히 이해해야 합니다.</p>
+  <h3>핵심 코드 패턴</h3>
+  <pre><code>// Cache-aside 패턴
 async function getUser(id) {
-  const cached = await redis.get(`user:${id}`);
+  const k = `user:${id}`;
+  const cached = await redis.get(k);
   if (cached) return JSON.parse(cached);
-  const user = await db.findUser(id);
-  await redis.set(`user:${id}`, JSON.stringify(user), 'EX', 60);
-  return user;
+  const u = await db.users.findById(id);
+  await redis.setex(k, 300, JSON.stringify(u));
+  return u;
 }</code></pre>
-
-  <div class="info-card">
-    <h4>💻 예제 1: BullMQ 작업 큐</h4>
-    <p>queue.add('send-email', { to, subject }) 로 작업을 넣고, worker가 process 콜백으로 꺼내 실행. 실패 시 자동 재시도와 지수 백오프 설정이 가능합니다.</p>
-  </div>
-  <div class="info-card">
-    <h4>💻 예제 2: 캐시 스탬피드 방어</h4>
-    <p>인기 키 만료 시 동시에 여러 요청이 DB로 몰리는 현상을 방지하려고 단일 갱신 락 또는 stale-while-revalidate를 적용합니다.</p>
-  </div>
-
-  <h3>실무 응용</h3>
-  <p>커머스의 상품 상세 페이지는 CDN + 응답 캐시 + 객체 캐시 다중 계층으로 99% 이상 캐시 히트를 만듭니다. 결제 완료 후 재고 차감, 포인트 적립, 알림 발송은 큐로 분리되어 결제 응답 자체는 빠르게 돌려줍니다. 토스의 알림은 카프카로 수억 건 이벤트를 라우팅합니다. 라이브 방송의 채팅은 Redis Pub/Sub로 즉시 전파됩니다.</p>
-
-  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 큐 컨슈머가 멱등하지 않으면 재처리 시 중복 결제 같은 사고가 납니다. 메시지 ID로 중복 처리 여부를 반드시 확인하세요.</div>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>📐 예제 1: Stampede 방어</h4><p>인기 키 TTL 만료 시 한꺼번에 DB로 가는 thundering herd를 막기 위해 분산 락 또는 stale-while-revalidate를 사용합니다.</p></div>
+  <div class="info-card"><h4>📐 예제 2: 비동기 이메일 발송</h4><p>주문 완료 시 메일 전송을 큐로 위임하고, 워커가 실패 시 지수 백오프로 재시도, 최종 실패는 DLQ로 보내 운영자가 검수합니다.</p></div>
+  <h3>응용 사례</h3><p>토스의 송금 알림은 큐 기반으로 SMS·푸시·이메일을 동시 분기 처리합니다. 넷플릭스의 추천 API는 캐시 적중률이 곧 비용입니다. 인기 콘텐츠는 분 단위로 갱신, 비인기 콘텐츠는 시간 단위 TTL로 차등 설계합니다. 카카오톡 메시지 fan-out은 단체방의 수십만 구독자에 메시지를 큐로 분산 푸시합니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 큐 소비자가 처리 도중 실패했을 때 ack를 잘못 보내면 메시지가 사라집니다. ack는 처리 성공 시점, nack/retry는 실패 시점에 명확히 분리하세요.</div>
 </div>
-
 <div class="difficulty-content" data-level="hard">
   <span class="difficulty-badge hard">상 · 심화</span>
-  <h3>전문가 레벨</h3>
-  <p>대규모 분산 캐시는 일관성과 가용성의 균형이 핵심입니다. write-back 캐시는 쓰기 성능이 좋지만 노드 장애 시 데이터 유실 위험이 있어 WAL과 복제로 보완합니다. 캐시 코히런스는 단일 머신의 CPU 캐시뿐 아니라 분산 환경에서도 중요합니다. invalidation broadcast는 비싸지만 정확하고, lazy invalidation은 효율적이지만 짧은 불일치를 허용합니다. Redis Cluster의 슬롯 해시(16384), Consistent Hashing, Rendezvous Hashing이 노드 추가/제거 시 키 재분배를 줄입니다. 캐시 워밍은 콜드 스타트 후 적중률을 빠르게 올리기 위해 미리 인기 키를 채우는 기법입니다. 메시지 큐의 exactly-once는 사실상 컨슈머의 멱등성과 트랜잭션 출력(transactional outbox)으로 달성됩니다. Kafka의 트랜잭션 API는 프로듀서-컨슈머 사이의 정확히 한 번 시맨틱을 제공합니다. 사가(Saga) 패턴은 분산 트랜잭션을 보상 트랜잭션으로 분해해 마이크로서비스 간 일관성을 유지합니다. 백프레셔는 컨슈머 랙(consumer lag)을 모니터링해 자동 스케일링을 트리거하고, 슬로우 컨슈머는 격리해 다른 컨슈머에 영향을 주지 않게 합니다. CDC(Change Data Capture, Debezium)는 DB 변경을 실시간 이벤트로 변환해 캐시 무효화와 검색 색인을 동기화합니다. 이벤트 소싱과 CQRS는 큐와 함께 사용해 읽기/쓰기 모델을 분리하고 시간 여행 디버깅을 가능하게 합니다.</p>
-
-  <h3>고급 패턴</h3>
-  <pre><code>// Outbox 패턴(트랜잭션 일관성)
-await db.tx(async (t) => {
-  await t.orders.insert(order);
-  await t.outbox.insert({ topic: 'order.created', payload: order });
-});
-// 별도 워커가 outbox를 폴링하여 Kafka로 발행</code></pre>
-
-  <h3>최신 동향</h3>
-  <p>Cloudflare KV, D1, R2처럼 글로벌 분산 캐시/DB가 엣지에서 1ms 단위로 데이터를 제공합니다. Redis 7.4의 Vector Search는 임베딩 검색을 캐시 레이어에 통합해 LLM 검색을 가속합니다. Apache Pulsar는 다중 테넌시와 지오 복제를 기본 지원하는 차세대 메시징 시스템입니다. NATS JetStream은 가벼운 분산 큐로 IoT/엣지에 적합합니다. AI 워크로드 큐(Ray Serve, Modal)는 GPU 자원 인지 스케줄링으로 추론 처리량을 최적화합니다.</p>
-
-  <h3>관련 분야</h3>
-  <ul>
-    <li>분산 시스템 일관성 모델</li>
-    <li>이벤트 주도 아키텍처(EDA)</li>
-    <li>CDC와 데이터 통합</li>
-  </ul>
-
-  <h3>추가 자료</h3>
-  <ul>
-    <li>"Designing Data-Intensive Applications" — Martin Kleppmann</li>
-    <li>Kafka 공식 문서(트랜잭션, EOS)</li>
-    <li>Redis University 무료 강의</li>
-  </ul>
-
-  <div class="success-box"><strong>🎓 도전 과제:</strong> 트랜잭션 outbox + Kafka + idempotent consumer + Redis 캐시 무효화로 결제-재고-알림 흐름을 정확히 한 번 처리되도록 구현하세요.</div>
+  <h3>전문가 레벨 이해</h3><p>대규모 시스템의 캐싱은 다층 캐시 일관성 관리가 본질입니다. CDN(엣지) → 리버스 프록시 → 앱 메모리 → Redis → DB까지 각 층의 무효화 신호가 안전하게 전파되어야 합니다. Redis Cluster는 슬롯 기반 샤딩으로 수평 확장하고, Sentinel/Cluster로 고가용성을 확보합니다. 동시성 제어는 Lua 스크립트나 Redis WATCH/MULTI로 원자적으로 수행합니다. 메시지 큐 영역에서 Kafka는 파티션 + 컨슈머 그룹으로 순서 보장과 병렬성을 동시에 제공합니다. Exactly-once는 idempotency key + transactional outbox + idempotent consumer 조합으로 실효적 정확성을 만듭니다. 백프레셔, 카오스 테스트, 큐 깊이 알람이 운영의 핵심입니다.</p>
+  <h3>최신 연구·동향</h3><p>Redis 8/Valkey, KeyDB, Dragonfly 같은 차세대 인메모리 DB가 멀티스레드와 io_uring으로 처리량을 끌어올리고 있습니다. Kafka의 KRaft 모드는 Zookeeper 의존을 제거했고, Tiered Storage로 무한 보존을 저렴하게 합니다. 이벤트 스트리밍 + 머터리얼라이즈드 뷰(Materialize, RisingWave)는 캐시와 큐의 경계를 흐립니다.</p>
+  <h3>관련 분야</h3><ul><li>분산 합의와 복제(Raft, Multi-Paxos)</li><li>스트림 프로세싱(Flink, ksqlDB)</li><li>이벤트 소싱과 CQRS</li></ul>
+  <h3>추가 학습 자료</h3><ul><li>"Designing Data-Intensive Applications" — Martin Kleppmann</li><li>Confluent Kafka Resources</li><li>Redis Labs University(무료)</li></ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 동일 워크로드를 캐시 없음 / 단순 캐시 / stale-while-revalidate 세 가지로 구성해 적중률·p99·DB QPS를 비교하세요.</div>
 </div>
 
 </main>
@@ -154,60 +182,135 @@ await db.tx(async (t) => {
 
 <script>
 (function() {
-  const container = document.getElementById('sim-scene');
+  const container = document.getElementById('cache-scene');
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 4, 10);
+  camera.position.set(0, 7, 14);
+  camera.lookAt(0, 0, 0);
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Server nodes network
-  const nodes = [];
-  for (let i = 0; i < 8; i++) {
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6,0.6,0.6), new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true }));
-    const angle = (i/8)*Math.PI*2;
-    mesh.position.set(Math.cos(angle)*4, (Math.random()-0.5)*2, Math.sin(angle)*4);
-    scene.add(mesh); nodes.push(mesh);
-  }
-  // Central server
-  const central = new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2), new THREE.MeshBasicMaterial({ color: 0x22c55e }));
-  scene.add(central);
-  // Connections
-  nodes.forEach(n => {
-    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), n.position]);
-    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.2 })));
+  // Client
+  const client = new THREE.Mesh(new THREE.SphereGeometry(0.6, 16, 16), new THREE.MeshBasicMaterial({ color: 0x60a5fa }));
+  client.position.set(-7, 0, 0);
+  scene.add(client);
+
+  // Cache (Redis) - hexagonal prism approximation
+  const cache = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 1.2, 6), new THREE.MeshBasicMaterial({ color: 0xef4444 }));
+  cache.position.set(0, 3, 0);
+  scene.add(cache);
+  const cacheWire = new THREE.Mesh(new THREE.CylinderGeometry(1.1, 1.1, 1.4, 6), new THREE.MeshBasicMaterial({ color: 0xef4444, wireframe: true, transparent: true, opacity: 0.3 }));
+  cacheWire.position.copy(cache.position);
+  scene.add(cacheWire);
+
+  // DB
+  const db = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 1.5, 16), new THREE.MeshBasicMaterial({ color: 0xa78bfa }));
+  db.position.set(0, -3, 0);
+  scene.add(db);
+
+  // Server
+  const server = new THREE.Mesh(new THREE.BoxGeometry(1, 1.5, 1), new THREE.MeshBasicMaterial({ color: 0x00ff88 }));
+  server.position.set(7, 0, 0);
+  scene.add(server);
+
+  // Connection lines
+  const lines = [
+    [[-7,0,0],[0,3,0]], [[-7,0,0],[0,-3,0]],
+    [[0,3,0],[7,0,0]], [[0,-3,0],[0,3,0]], [[0,-3,0],[7,0,0]]
+  ];
+  lines.forEach(([a,b]) => {
+    const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a), new THREE.Vector3(...b)]);
+    scene.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.1 })));
   });
 
-  // Data packets
+  const grid = new THREE.GridHelper(20, 20, 0x0a3a0a, 0x0a3a0a);
+  grid.position.y = -5;
+  scene.add(grid);
+
   const packets = [];
-  for (let i = 0; i < 5; i++) {
-    const p = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
-    packets.push({ mesh: p, target: Math.floor(Math.random()*nodes.length), t: Math.random() });
+  const statusLabel = document.getElementById('cache-status');
+
+  function cacheHit() {
+    // Client → Cache → Client (fast, green)
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.18, 10, 10), new THREE.MeshBasicMaterial({ color: 0x10b981 }));
+    p.position.set(-7, 0, 0);
     scene.add(p);
+    packets.push({
+      mesh: p,
+      path: [[-7,0,0],[0,3,0],[-7,0,0]],
+      pathIdx: 0, t: 0, speed: 0.025, label: 'hit'
+    });
+    statusLabel.textContent = '🔍 캐시 조회 중...';
+    statusLabel.style.color = '#10b981';
   }
 
-  let mouseDown = false, prevX = 0;
-  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; });
-  container.addEventListener('mouseup', () => mouseDown = false);
-  container.addEventListener('mousemove', e => { if (mouseDown) { scene.rotation.y += (e.clientX-prevX)*0.005; prevX = e.clientX; } });
-  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; });
-  container.addEventListener('touchmove', e => { scene.rotation.y += (e.touches[0].clientX-prevX)*0.005; prevX = e.touches[0].clientX; });
+  function cacheMiss() {
+    // Client → Cache (miss) → DB → Cache (store) → Client
+    const p = new THREE.Mesh(new THREE.SphereGeometry(0.18, 10, 10), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+    p.position.set(-7, 0, 0);
+    scene.add(p);
+    packets.push({
+      mesh: p,
+      path: [[-7,0,0],[0,3,0],[0,-3,0],[0,3,0],[-7,0,0]],
+      pathIdx: 0, t: 0, speed: 0.018, label: 'miss'
+    });
+    statusLabel.textContent = '🔍 캐시 조회 중...';
+    statusLabel.style.color = '#f59e0b';
+  }
+
+  document.getElementById('cache-hit-btn').addEventListener('click', cacheHit);
+  document.getElementById('cache-miss-btn').addEventListener('click', cacheMiss);
 
   function animate() {
     requestAnimationFrame(animate);
-    central.rotation.y += 0.01;
-    nodes.forEach(n => n.rotation.x += 0.01);
-    packets.forEach(p => {
-      p.t += 0.01;
-      if (p.t > 1) { p.t = 0; p.target = Math.floor(Math.random()*nodes.length); }
-      const target = nodes[p.target].position;
-      p.mesh.position.lerpVectors(new THREE.Vector3(0,0,0), target, p.t);
-    });
+    const t = Date.now() * 0.001;
+    cache.rotation.y = t * 0.5;
+    db.rotation.y = -t * 0.3;
+    server.rotation.y = t * 0.2;
+
+    for (let i = packets.length - 1; i >= 0; i--) {
+      const p = packets[i];
+      p.t += p.speed;
+      if (p.t >= 1) {
+        p.t = 0;
+        p.pathIdx++;
+
+        // Status updates
+        if (p.label === 'hit' && p.pathIdx === 1) {
+          statusLabel.textContent = '✅ Cache HIT — 즉시 응답! (< 1ms)';
+          statusLabel.style.color = '#10b981';
+          p.mesh.material.color.setHex(0x10b981);
+        }
+        if (p.label === 'miss' && p.pathIdx === 1) {
+          statusLabel.textContent = '❌ Cache MISS → DB 조회 중...';
+          statusLabel.style.color = '#ef4444';
+          cache.material.color.setHex(0x555555);
+          setTimeout(() => cache.material.color.setHex(0xef4444), 500);
+        }
+        if (p.label === 'miss' && p.pathIdx === 3) {
+          statusLabel.textContent = '📥 캐시 저장 완료 → 응답 반환 (~50ms)';
+          statusLabel.style.color = '#f59e0b';
+          p.mesh.material.color.setHex(0x10b981);
+        }
+
+        if (p.pathIdx >= p.path.length - 1) {
+          scene.remove(p.mesh);
+          packets.splice(i, 1);
+          continue;
+        }
+      }
+      const from = new THREE.Vector3(...p.path[p.pathIdx]);
+      const to = new THREE.Vector3(...p.path[p.pathIdx + 1]);
+      p.mesh.position.lerpVectors(from, to, p.t);
+    }
+
     renderer.render(scene, camera);
   }
   animate();
+  setTimeout(cacheHit, 1000);
+
   window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
 })();
 </script>

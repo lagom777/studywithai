@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>1. 세포 구조 — aboutBiology</title>
+<title>1. 세포 · 생명의 단위 — aboutBiology</title>
 <link rel="stylesheet" href="../styles.css">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <link rel="stylesheet" href="../../shared/light-theme.css">
-  <script defer src="../../shared/i18n.js"></script>
-  <script defer src="../../shared/difficulty.js"></script>
+<link rel="stylesheet" href="../../shared/light-theme.css">
+<script defer src="../../shared/i18n.js"></script>
+<script defer src="../../shared/difficulty.js"></script>
 </head>
 <body>
 <div class="layout">
@@ -17,32 +17,61 @@
   <h3>전체 목차</h3>
   <ol>
     <li><a href="../index.html">🧬 표지 · 소개</a></li>
-    <li><a href="01-cell.html">1. 세포 구조</a></li>
-    <li><a href="02-dna-genetics.html">2. DNA와 유전학</a></li>
-    <li><a href="03-evolution.html">3. 진화론</a></li>
+    <li><a href="01-cell.html" style="color:var(--accent);font-weight:600;">1. 세포 · 생명의 단위</a></li>
+    <li><a href="02-dna.html">2. DNA와 유전학</a></li>
+    <li><a href="03-evolution.html">3. 진화</a></li>
     <li><a href="04-ecology.html">4. 생태학</a></li>
-    <li><a href="05-human-physiology.html">5. 인체 생리학</a></li>
+    <li><a href="05-physiology.html">5. 인체생리학</a></li>
     <li><a href="06-microbiology.html">6. 미생물학</a></li>
     <li><a href="07-botany.html">7. 식물학</a></li>
     <li><a href="08-zoology.html">8. 동물학</a></li>
-    <li><a href="09-biotechnology.html">9. 생명공학</a></li>
+    <li><a href="09-biotech.html">9. 생명공학</a></li>
   </ol>
 </aside>
 <main>
 <header class="paper-header">
-  <h1><em>세포 구조</em></h1>
-  <p class="authors">Chapter 1 — Cell Structure & Organelles</p>
+  <h1>세포:<br>생명의 <em>단위</em></h1>
+  <p class="authors">Chapter 1 — Cell: The Unit of Life</p>
+  <p class="affiliation">3D 세포 구조 탐험기 포함</p>
 </header>
 
-<div class="scene-3d" id="sim-scene"></div>
-<span class="interact-hint">⟳ 마우스로 드래그하여 회전</span>
-
-<h2>세포 구조 개요</h2>
-<p>이 챕터에서는 세포 구조의 핵심 개념을 3D 시뮬레이션과 함께 학습합니다. 세포, DNA, 생태계를 직접 탐색하세요.</p>
+<h2>세포란 무엇인가?</h2>
+<p>세포(Cell)는 모든 생명체를 구성하는 기본 단위입니다. 지구상의 모든 생물은 하나 이상의 세포로 이루어져 있으며, 세포는 생명 활동의 모든 기능을 수행합니다. 세포는 스스로 에너지를 생산하고, 물질을 합성하며, 자기 복제를 통해 생명을 이어갑니다. 단세포 생물인 세균부터 수십조 개의 세포로 이루어진 인간까지, 세포는 생명의 가장 근본적인 구성 요소입니다.</p>
 
 <div class="info-card">
-  <h4>핵심 개념</h4>
-  <p>Cell Structure & Organelles의 기본 원리와 응용을 다룹니다.</p>
+  <h4>원핵세포 vs 진핵세포</h4>
+  <p><strong>원핵세포</strong>는 핵막이 없어 유전물질이 세포질에 노출되어 있으며, 세균과 고세균이 여기에 속합니다. 크기가 작고(1~10μm) 구조가 단순합니다. <strong>진핵세포</strong>는 핵막으로 둘러싸인 뚜렷한 핵을 가지며, 미토콘드리아, 소포체, 골지체 등 다양한 막성 소기관을 포함합니다. 동물, 식물, 곰팡이, 원생생물이 진핵세포로 구성되어 있습니다.</p>
+</div>
+
+<div class="info-card cell">
+  <h4>세포막 — 선택적 투과성</h4>
+  <p>세포막은 인지질 이중층으로 이루어져 있으며, 세포 안팎의 물질 출입을 조절합니다. 소수성 꼬리가 안쪽을 향하고 친수성 머리가 바깥을 향하는 구조 덕분에, 작은 비극성 분자는 자유롭게 통과하지만 이온이나 큰 분자는 막 단백질의 도움이 필요합니다. 이를 선택적 투과성이라 합니다.</p>
+</div>
+
+<div class="info-card dna">
+  <h4>핵 — 유전정보의 보관소</h4>
+  <p>핵(Nucleus)은 세포의 유전 정보를 담고 있는 가장 중요한 소기관입니다. DNA가 히스톤 단백질에 감겨 염색체 형태로 존재하며, 핵막의 핵공을 통해 mRNA가 세포질로 나가 단백질 합성을 지시합니다. 핵 안의 인(nucleolus)에서는 리보솜 RNA가 만들어집니다.</p>
+</div>
+
+<div class="formula">
+  세포설: 모든 생물은 세포로 구성 | 세포는 생명의 기본 단위 | 새 세포는 기존 세포에서 발생
+</div>
+
+<div class="scene-3d" id="cell-scene" style="position:relative;"></div>
+<div class="scene-controls">
+  <button id="toggle-labels-btn">🏷️ 라벨 표시/숨기기</button>
+</div>
+<span class="interact-hint">🔬 소기관을 클릭하면 설명이 나타납니다</span>
+<div class="tooltip-3d" id="cell-tooltip" style="display:none;position:absolute;background:rgba(0,0,0,0.88);color:#fff;padding:10px 16px;border-radius:8px;font-size:0.88rem;max-width:280px;pointer-events:none;z-index:100;line-height:1.5;box-shadow:0 4px 16px rgba(0,0,0,0.3);"></div>
+
+<h2>주요 세포 소기관</h2>
+<p>진핵세포 내부에는 각각 고유한 기능을 수행하는 다양한 소기관이 존재합니다. <strong>미토콘드리아</strong>는 세포 호흡을 통해 ATP를 생산하는 에너지 공장입니다. <strong>소포체(ER)</strong>는 조면소포체와 활면소포체로 나뉘며, 단백질 합성과 지질 대사를 담당합니다. <strong>골지체</strong>는 단백질을 수정·분류·포장하여 세포 내외로 운반합니다. <strong>리보솜</strong>은 mRNA의 코돈을 읽어 아미노산을 연결하여 단백질을 만드는 분자 기계입니다.</p>
+
+<h3>세포의 에너지 공장 — 미토콘드리아</h3>
+<p>미토콘드리아는 이중막 구조를 가진 소기관으로, 내막의 주름(크리스타)에서 전자전달계가 작동하여 대량의 ATP를 생성합니다. 흥미롭게도 미토콘드리아는 자체 DNA를 가지고 있어, 과거 독립된 원핵생물이 진핵세포에 공생하게 되었다는 내부공생설을 뒷받침합니다. 하나의 세포에는 수백에서 수천 개의 미토콘드리아가 있으며, 에너지 요구량이 높은 근육세포나 간세포에 특히 많습니다.</p>
+
+<div class="formula">
+  C₆H₁₂O₆ + 6O₂ → 6CO₂ + 6H₂O + ATP (세포 호흡)
 </div>
 
 <h2>📚 난이도별 학습</h2>
@@ -54,61 +83,30 @@
 </div>
 <div class="difficulty-content" data-level="easy">
   <span class="difficulty-badge easy">하 · 입문</span>
-  <h3>한 줄로 이해하기</h3>
-  <p>세포는 모든 생명체를 구성하는 가장 작은 살아있는 단위이며, 마치 작은 도시처럼 각 부분이 역할을 분담해 작동합니다.</p>
-  <h3>왜 중요한가?</h3>
-  <p>우리 몸의 상처가 아무는 것은 피부 세포가 분열해 새로 생기기 때문입니다. 또 운동 후 근육이 커지는 것도 근육 세포 안의 단백질 공장이 활발히 일한 결과입니다. 의사가 암을 진단할 때도 세포의 모양 변화를 현미경으로 확인합니다. 이렇게 세포는 건강과 질병의 출발점입니다.</p>
-  <div class="info-card"><h4>🌱 핵심 용어</h4>
-    <ul>
-      <li><strong>세포막</strong>: 세포를 둘러싼 얇은 막으로, 출입을 통제하는 문지기 역할</li>
-      <li><strong>핵</strong>: 세포의 사령부로 DNA가 들어 있는 둥근 부분</li>
-      <li><strong>미토콘드리아</strong>: 에너지를 만드는 발전소 같은 기관</li>
-      <li><strong>리보솜</strong>: 단백질을 만드는 작은 공장</li>
-      <li><strong>세포질</strong>: 세포 안을 채우는 젤리 같은 액체</li>
-    </ul>
-  </div>
-  <h3>핵심 개념 풀어쓰기</h3>
-  <p>세포를 하나의 작은 도시라고 상상해 봅시다. 도시 외곽에는 출입을 관리하는 성벽인 세포막이 있어, 좋은 것은 들이고 해로운 것은 막아냅니다. 도시 한가운데에는 시청 역할을 하는 핵이 있고, 그 안에는 모든 정보가 적힌 도서관(DNA)이 보관되어 있습니다. 도시에는 발전소(미토콘드리아)가 있어 우리가 먹은 음식을 에너지로 바꾸어 줍니다. 곳곳에는 작은 공장(리보솜)이 있어 도시에 필요한 단백질을 끊임없이 만들어 냅니다. 또 물건을 포장해서 보내는 우체국(골지체)과 도시 내부 도로망(소포체)도 있습니다. 모든 것이 정확히 협력해야 도시가 살아있는 것처럼, 세포의 부분들도 함께 움직여야 생명이 유지됩니다.</p>
-  <div class="study-tip"><strong>💡 학습 TIP:</strong> 세포 소기관을 외울 때는 '도시 비유'를 그림으로 그려 보세요. 발전소, 공장, 시청 등 익숙한 장소와 연결하면 훨씬 오래 기억됩니다.</div>
-  <h3>한 페이지 요약</h3>
-  <ul>
-    <li>세포는 생명의 가장 작은 단위이다.</li>
-    <li>세포는 막, 핵, 세포질로 크게 구분된다.</li>
-    <li>각 소기관은 고유한 기능을 분담한다.</li>
-    <li>미토콘드리아는 에너지를, 리보솜은 단백질을 만든다.</li>
-    <li>세포의 협력이 곧 생명 활동이다.</li>
-  </ul>
+  <h3>한 줄로 이해하기</h3><p>세포는 "생명의 가장 작은 단위"입니다. 우리 몸도, 식물도, 박테리아도 모두 세포로 이뤄져 있습니다.</p>
+  <h3>왜 중요한가?</h3><p>병은 대부분 세포의 이상에서 시작합니다. 암은 세포 분열의 통제가 사라진 결과, 당뇨는 인슐린에 반응하는 세포의 문제, 코로나19는 바이러스가 세포를 침입한 결과입니다. 세포를 이해하는 일은 생물학뿐 아니라 의학·약학·생명공학의 출발점입니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul><li><strong>원핵세포</strong>: 핵막이 없는 단순 세포(세균)</li><li><strong>진핵세포</strong>: 핵과 소기관을 가진 복잡한 세포</li><li><strong>세포막</strong>: 세포 안팎을 구분하는 경계</li><li><strong>미토콘드리아</strong>: ATP를 만드는 에너지 발전소</li><li><strong>리보솜</strong>: 단백질을 합성하는 작은 기계</li></ul></div>
+  <h3>핵심 개념 풀어쓰기</h3><p>세포를 작은 도시로 비유해보세요. 핵은 모든 설계도(DNA)가 보관된 시청, 미토콘드리아는 발전소, 소포체와 골지체는 공장과 물류 센터, 리보솜은 책상에서 부품을 조립하는 노동자, 세포막은 시 경계의 보안 검문소입니다. 도시 하나는 작아도, 수십조 개가 모이면 사람이라는 거대한 시스템이 됩니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 세포 그림을 한 번 직접 그려보세요. 위치와 기능을 기억하는 데 글로 외우는 것보다 훨씬 효과적입니다.</div>
+  <h3>한 페이지 요약</h3><ul><li>세포 = 생명의 기본 단위</li><li>원핵 vs 진핵 두 가지 큰 분류</li><li>핵·미토콘드리아·소포체·골지체·리보솜이 주요 부품</li><li>세포 분열로 새로운 세포 탄생</li><li>모든 생명체는 세포 하나에서 시작</li></ul>
 </div>
 <div class="difficulty-content" data-level="medium">
   <span class="difficulty-badge medium">중 · 응용</span>
-  <h3>이론 깊이 들어가기</h3>
-  <p>세포는 크게 원핵세포와 진핵세포로 나뉩니다. 박테리아처럼 핵막이 없는 단순한 세포가 원핵세포이고, 동식물의 세포처럼 핵막에 둘러싸인 핵을 가진 세포가 진핵세포입니다. 진핵세포 안에는 막으로 둘러싸인 다양한 소기관이 있어 기능이 분업화되어 있습니다. 세포막은 인지질 이중층 구조로 이루어져 있으며, 막 단백질이 이온이나 분자의 출입을 조절합니다. 핵 안의 DNA는 RNA로 전사되어 리보솜에서 단백질로 번역됩니다. 미토콘드리아는 자체 DNA를 가진 독립적 진화 흔적이 있어, 과거 박테리아가 다른 세포와 공생하면서 생긴 결과로 추정됩니다. 이러한 분업 구조 덕분에 진핵세포는 매우 복잡한 생명 활동을 수행할 수 있습니다.</p>
-  <h3>메커니즘과 사례</h3>
-  <div class="info-card"><h4>🔬 사례 1 — 적혈구의 특수화</h4><p>적혈구는 핵을 잃고 헤모글로빈으로 가득 차 있어, 산소 운반에 최적화되어 있습니다. 이는 세포가 기능에 따라 구조를 극단적으로 변형할 수 있음을 보여 줍니다.</p></div>
-  <div class="info-card"><h4>🔬 사례 2 — 신경세포의 길이</h4><p>척수에서 발끝까지 뻗는 운동신경 세포는 1m 이상이 되기도 합니다. 핵은 한곳에 있지만 축삭을 따라 신호와 단백질이 끊임없이 운반됩니다.</p></div>
-  <h3>실험과 관찰</h3>
-  <p>광학현미경으로 양파 표피세포를 관찰하면 세포벽과 핵을 쉽게 확인할 수 있습니다. 메틸렌블루로 볼 안쪽 점막을 염색하면 동물 세포의 핵이 푸르게 보입니다. 형광 단백질(GFP)을 이용한 라벨링은 살아있는 세포 안에서 특정 단백질이 어디로 이동하는지 실시간 관찰할 수 있게 해 줍니다.</p>
-  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> '식물 세포에는 미토콘드리아가 없고 엽록체만 있다'는 오해가 흔합니다. 식물 세포에도 미토콘드리아는 반드시 존재하며, 엽록체는 추가로 가지는 소기관입니다.</div>
+  <h3>이론 깊이 들어가기</h3><p>세포 호흡은 해당과정(세포질) → TCA 회로(미토콘드리아 기질) → 전자전달계와 산화적 인산화(내막)의 3단계로 일어나며, 포도당 1분자에서 약 30-32 ATP가 생성됩니다. 세포 분열은 세포 주기(G1·S·G2·M)에 따라 진행되며 체크포인트가 DNA 복제·손상·방추체 부착을 검증합니다. 세포막은 인지질 이중층 + 막단백질의 유동 모자이크 구조이며, 능동 수송·수동 수송·내포·외포 작용으로 물질을 옮깁니다. 세포 신호 전달은 수용체(GPCR, RTK 등) → 2차 전령(cAMP, Ca²⁺) → 전사인자 순으로 일어납니다.</p>
+  <h3>핵심 공식과 원리</h3><div class="formula">총 ATP ≈ 2(해당) + 2(TCA) + 28(산화적 인산화) ≈ 32</div>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>📐 예제 1: 적혈구</h4><p>핵·미토콘드리아 없이 헤모글로빈으로 산소만 운반. 수명 약 120일.</p></div>
+  <div class="info-card"><h4>📐 예제 2: 줄기세포</h4><p>자기 복제 + 분화 능력. 배아·성체·iPS(유도만능)로 분류, 재생의학의 핵심.</p></div>
+  <h3>응용 사례</h3><p>mRNA 백신은 리보솜이 mRNA를 단백질로 번역하는 세포 기본 기능을 활용합니다. 항암제 일부는 세포 분열 체크포인트를 표적합니다. CAR-T는 환자 T세포를 유전자 변형해 암세포를 죽이도록 재프로그래밍합니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 미토콘드리아는 어머니로부터만 유전됩니다. 핵 DNA와 별개로 mtDNA가 따로 있다는 점을 놓치기 쉽습니다.</div>
 </div>
 <div class="difficulty-content" data-level="hard">
   <span class="difficulty-badge hard">상 · 심화</span>
-  <h3>전문가 레벨 이해</h3>
-  <p>세포막의 인지질 이중층은 단순한 장벽이 아니라 동적 모자이크 모델로 설명됩니다. 막 단백질은 측면 확산을 통해 자유롭게 움직이며, 콜레스테롤은 막 유동성을 조절합니다. 이온 채널과 능동수송체는 농도 기울기를 거슬러 분자를 이동시키며, ATP를 소비합니다. 핵공 복합체(Nuclear Pore Complex)는 RNA와 단백질의 양방향 수송을 정밀하게 제어합니다. 소포체–골지체 시스템은 분비 단백질의 접힘, 당화, 분류를 담당하며 잘못 접힌 단백질은 ER 스트레스 반응(UPR)을 통해 분해됩니다. 미토콘드리아는 전자전달계와 ATP 합성효소의 화학삼투 메커니즘으로 ATP를 생산하며, 칼슘 신호와 세포자살(apoptosis) 결정에도 핵심 역할을 합니다. 자가포식(autophagy)은 손상된 소기관을 분해해 재활용하며, 노화·신경퇴행과 직결됩니다. 세포골격(액틴, 미세소관, 중간섬유)은 세포 형태와 분열, 이동의 물리적 토대를 제공합니다.</p>
-  <h3>최신 연구</h3>
-  <p>단일세포 RNA 시퀀싱(scRNA-seq)은 같은 조직 안에서도 세포마다 발현 패턴이 다르다는 사실을 드러내며, Human Cell Atlas 프로젝트가 진행 중입니다. CRISPR-Cas9를 이용한 유전체 편집은 특정 단백질의 기능을 빠르게 검증하게 해 주었고, 크라이오 전자현미경(cryo-EM)은 핵공·리보솜·ATP 합성효소의 원자 구조를 밝혀냈습니다. 또한 AlphaFold가 단백질 3차원 구조를 예측하며 세포 내 분자 상호작용 연구가 가속화되고 있습니다.</p>
-  <h3>관련 분야 연결</h3>
-  <ul>
-    <li><strong>의학</strong>: 암은 세포주기와 세포자살의 통제 실패에서 비롯</li>
-    <li><strong>생물공학</strong>: 미토콘드리아 이식, 인공 소기관 설계</li>
-    <li><strong>인공지능</strong>: 단일세포 데이터의 차원 축소 및 클러스터링</li>
-  </ul>
-  <h3>추가 학습 자료</h3>
-  <ul>
-    <li>📖 Molecular Biology of the Cell — Alberts et al.</li>
-    <li>📺 iBiology의 세포생물학 강의 시리즈</li>
-    <li>🔬 Cell Image Library (cellimagelibrary.org)</li>
-  </ul>
-  <div class="success-box"><strong>🎓 도전 과제:</strong> 미토콘드리아의 내막 면적이 외막보다 훨씬 큰 이유를 화학삼투 이론으로 설명해 보세요.</div>
+  <h3>전문가 레벨 이해</h3><p>현대 세포 생물학은 단일 세포 해상도(single-cell)와 시공간 해상도(spatial transcriptomics)로 옮겨갔습니다. scRNA-seq, scATAC-seq, CITE-seq는 한 세포 안의 전사체·접근성·표면 단백질을 동시 측정합니다. Cryo-EM 혁명으로 단백질 복합체와 막 구조를 원자 수준에서 보게 되었고, AlphaFold·ESMFold는 단백질 구조 예측을 일상화했습니다. 세포골격(액틴·미세소관·중간섬유)과 막없는 소기관(liquid-liquid phase separation)이 신호 전달과 질병의 새 영역으로 부상했습니다. 세포 노화(senescence)와 SASP는 노화·암·만성 염증의 공통 분모로 연구됩니다.</p>
+  <h3>최신 연구·동향</h3><p>2024-2026 세포 지도(Human Cell Atlas)는 인체 모든 세포 타입을 단일 세포 수준에서 카탈로그화하고 있습니다. CRISPR 활용한 in vivo screening이 표적 발굴을 가속하며, base editing·prime editing이 임상 진입을 시작했습니다. 미니 장기(organoid)·assembloid가 약물 테스트와 신경 모델링에 활용됩니다.</p>
+  <h3>관련 분야</h3><ul><li>분자생물학과 유전체학</li><li>생물물리와 구조생물학</li><li>합성생물학과 재생의학</li></ul>
+  <h3>추가 학습 자료</h3><ul><li>Alberts et al., "Molecular Biology of the Cell"</li><li>Nature Cell Biology · Cell · eLife</li><li>HHMI BioInteractive(무료 비디오)</li></ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> 자기 관심 질환(예: 알츠하이머·당뇨)에서 한 세포 타입(microglia·β-cell)을 골라 scRNA-seq 공개 데이터셋으로 클러스터링을 재현하세요.</div>
 </div>
 
 </main>
@@ -116,61 +114,179 @@
 
 <script>
 (function() {
-  const container = document.getElementById('sim-scene');
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 3, 8);
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  var container = document.getElementById('cell-scene');
+  var tooltip = document.getElementById('cell-tooltip');
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 2, 9);
+  var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Cell-like structure
-  const cellMembrane = new THREE.Mesh(
-    new THREE.SphereGeometry(3, 32, 32),
-    new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true, transparent: true, opacity: 0.2 })
-  );
-  scene.add(cellMembrane);
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+  var dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  dirLight.position.set(5, 5, 5);
+  scene.add(dirLight);
 
-  const organelles = [];
-  for (let i = 0; i < 8; i++) {
-    const r = 0.2 + Math.random()*0.5;
-    const color = [0x22c55e, 0x3b82f6, 0xeab308, 0xef4444, 0xa855f7][i%5];
-    const mesh = new THREE.Mesh(new THREE.SphereGeometry(r, 16, 16), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.7 }));
-    const angle = Math.random()*Math.PI*2;
-    const dist = Math.random()*2;
-    mesh.position.set(Math.cos(angle)*dist, (Math.random()-0.5)*2, Math.sin(angle)*dist);
-    scene.add(mesh);
-    organelles.push({ mesh, speed: 0.005 + Math.random()*0.01, angle });
+  var cellGroup = new THREE.Group();
+  scene.add(cellGroup);
+
+  // Cell membrane - semi-transparent green wireframe
+  var membrane = new THREE.Mesh(
+    new THREE.SphereGeometry(3.5, 32, 32),
+    new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true, transparent: true, opacity: 0.15 })
+  );
+  cellGroup.add(membrane);
+
+  // Organelle definitions
+  var orgData = [
+    { name: '핵 (Nucleus)', desc: '세포의 유전 정보(DNA)를 보관하는 중심 소기관입니다. 핵막에 둘러싸여 있으며, 유전자 발현을 제어합니다.', color: 0xec4899, geo: 'sphere', args: [1.0, 32, 32], pos: [0, 0, 0], rot: [0,0,0] },
+    { name: '미토콘드리아 1', desc: '세포 호흡을 통해 ATP를 생산하는 에너지 공장입니다. 이중막 구조를 가집니다.', color: 0xf97316, geo: 'cylinder', args: [0.2, 0.2, 0.7, 12], pos: [2.0, 0.5, 0.8], rot: [0,0,Math.PI/3] },
+    { name: '미토콘드리아 2', desc: '자체 DNA를 보유하며, 내부공생설의 증거입니다. 크리스타에서 전자전달계가 작동합니다.', color: 0xf97316, geo: 'cylinder', args: [0.18, 0.18, 0.65, 12], pos: [-1.6, -0.7, 1.3], rot: [0,0,-Math.PI/4] },
+    { name: '미토콘드리아 3', desc: '에너지 요구량이 높은 세포(근육, 간)에 수천 개씩 존재합니다.', color: 0xea580c, geo: 'cylinder', args: [0.2, 0.2, 0.6, 12], pos: [0.6, 1.3, -1.6], rot: [Math.PI/5,0,Math.PI/6] },
+    { name: '조면소포체 (Rough ER)', desc: '표면에 리보솜이 부착되어 있으며, 분비 단백질과 막 단백질을 합성합니다.', color: 0xa855f7, geo: 'sphere', args: [0.45, 16, 16], pos: [-1.3, 0.9, -0.4], rot: [0,0,0] },
+    { name: '활면소포체 (Smooth ER)', desc: '지질 합성, 칼슘 저장, 해독 작용을 담당합니다. 리보솜이 없습니다.', color: 0x8b5cf6, geo: 'sphere', args: [0.38, 16, 16], pos: [1.6, -0.4, -1.1], rot: [0,0,0] },
+    { name: '골지체 (Golgi)', desc: '단백질을 수정·분류·포장하여 세포 내외의 목적지로 운반합니다.', color: 0x06b6d4, geo: 'cylinder', args: [0.5, 0.5, 0.12, 8], pos: [-0.7, -1.1, 1.6], rot: [Math.PI/3,0,0] },
+    { name: '리보솜', desc: 'mRNA의 코돈을 읽어 아미노산을 연결하여 단백질을 합성하는 분자 기계입니다.', color: 0xeab308, geo: 'sphere', args: [0.12, 10, 10], pos: [2.1, -0.2, -0.4], rot: [0,0,0] },
+    { name: '리보솜', desc: '조면소포체 표면 또는 세포질에서 자유롭게 존재합니다.', color: 0xeab308, geo: 'sphere', args: [0.12, 10, 10], pos: [-2.1, 0.3, 0.2], rot: [0,0,0] },
+    { name: '리보솜', desc: '원핵세포(70S)와 진핵세포(80S)의 리보솜 크기가 다릅니다.', color: 0xfbbf24, geo: 'sphere', args: [0.11, 10, 10], pos: [0.4, -1.9, 0.6], rot: [0,0,0] },
+    { name: '리보솜', desc: '대소 서브유닛이 mRNA 위에서 결합하여 번역을 수행합니다.', color: 0xfbbf24, geo: 'sphere', args: [0.11, 10, 10], pos: [-0.6, 1.6, 1.1], rot: [0,0,0] }
+  ];
+
+  var organelles = [];
+  var labelSprites = [];
+
+  // Create label sprite
+  function makeLabel(text) {
+    var canvas = document.createElement('canvas');
+    canvas.width = 300; canvas.height = 64;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = 'rgba(0,0,0,0.75)';
+    ctx.fillRect(0, 0, 300, 64);
+    ctx.font = 'bold 20px sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(text, 150, 32);
+    var tex = new THREE.CanvasTexture(canvas);
+    var mat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+    var sprite = new THREE.Sprite(mat);
+    sprite.scale.set(1.8, 0.4, 1);
+    sprite.visible = false;
+    return sprite;
   }
 
-  // Nucleus
-  const nucleus = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), new THREE.MeshBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.5 }));
-  scene.add(nucleus);
+  orgData.forEach(function(d, i) {
+    var geo;
+    if (d.geo === 'cylinder') {
+      geo = new THREE.CylinderGeometry(d.args[0], d.args[1], d.args[2], d.args[3]);
+    } else {
+      geo = new THREE.SphereGeometry(d.args[0], d.args[1], d.args[2]);
+    }
+    var mat = new THREE.MeshPhongMaterial({ color: d.color, transparent: true, opacity: 0.85 });
+    var mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(d.pos[0], d.pos[1], d.pos[2]);
+    mesh.rotation.set(d.rot[0], d.rot[1], d.rot[2]);
+    mesh.userData = { name: d.name, desc: d.desc, idx: i };
+    cellGroup.add(mesh);
 
-  let mouseDown = false, prevX = 0, prevY = 0;
-  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; prevY = e.clientY; });
-  container.addEventListener('mouseup', () => mouseDown = false);
-  container.addEventListener('mousemove', e => {
-    if (!mouseDown) return;
-    scene.rotation.y += (e.clientX - prevX)*0.005;
-    scene.rotation.x += (e.clientY - prevY)*0.005;
-    prevX = e.clientX; prevY = e.clientY;
-  });
-  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; prevY = e.touches[0].clientY; });
-  container.addEventListener('touchmove', e => {
-    scene.rotation.y += (e.touches[0].clientX - prevX)*0.005;
-    scene.rotation.x += (e.touches[0].clientY - prevY)*0.005;
-    prevX = e.touches[0].clientX; prevY = e.touches[0].clientY;
+    var label = makeLabel(d.name);
+    label.position.set(d.pos[0], d.pos[1] + 0.55, d.pos[2]);
+    cellGroup.add(label);
+    labelSprites.push(label);
+
+    organelles.push({
+      mesh: mesh, label: label,
+      baseX: d.pos[0], baseY: d.pos[1], baseZ: d.pos[2],
+      angle: Math.random() * Math.PI * 2,
+      speed: i === 0 ? 0 : (0.004 + Math.random() * 0.006),
+      radius: i === 0 ? 0 : (0.2 + Math.random() * 0.15)
+    });
   });
 
+  // Toggle labels
+  var showLabels = false;
+  document.getElementById('toggle-labels-btn').addEventListener('click', function() {
+    showLabels = !showLabels;
+    labelSprites.forEach(function(s) { s.visible = showLabels; });
+  });
+
+  // Mouse drag
+  var isDrag = false, pX = 0, pY = 0;
+  container.addEventListener('mousedown', function(e) { isDrag = true; pX = e.clientX; pY = e.clientY; });
+  window.addEventListener('mouseup', function() { isDrag = false; });
+  container.addEventListener('mousemove', function(e) {
+    if (!isDrag) return;
+    cellGroup.rotation.y += (e.clientX - pX) * 0.005;
+    cellGroup.rotation.x += (e.clientY - pY) * 0.005;
+    pX = e.clientX; pY = e.clientY;
+  });
+  container.addEventListener('touchstart', function(e) { pX = e.touches[0].clientX; pY = e.touches[0].clientY; }, { passive: true });
+  container.addEventListener('touchmove', function(e) {
+    cellGroup.rotation.y += (e.touches[0].clientX - pX) * 0.005;
+    cellGroup.rotation.x += (e.touches[0].clientY - pY) * 0.005;
+    pX = e.touches[0].clientX; pY = e.touches[0].clientY;
+  }, { passive: true });
+
+  // Raycaster
+  var raycaster = new THREE.Raycaster();
+  var mouse = new THREE.Vector2();
+  var meshList = organelles.map(function(o) { return o.mesh; });
+
+  container.addEventListener('click', function(e) {
+    var rect = container.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    var hits = raycaster.intersectObjects(meshList);
+    if (hits.length > 0) {
+      var ud = hits[0].object.userData;
+      tooltip.innerHTML = '<strong>' + ud.name + '</strong><br>' + ud.desc;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX - rect.left + 12) + 'px';
+      tooltip.style.top = (e.clientY - rect.top - 30) + 'px';
+      // Highlight clicked
+      meshList.forEach(function(m) { if (m.material.emissive) m.material.emissive.setHex(0x000000); });
+      var mat = hits[0].object.material;
+      if (mat.emissive) mat.emissive.setHex(0x444444);
+    } else {
+      tooltip.style.display = 'none';
+      meshList.forEach(function(m) { if (m.material.emissive) m.material.emissive.setHex(0x000000); });
+    }
+  });
+
+  container.addEventListener('mousemove', function(e) {
+    if (isDrag) { tooltip.style.display = 'none'; return; }
+    var rect = container.getBoundingClientRect();
+    mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    var hits = raycaster.intersectObjects(meshList);
+    container.style.cursor = hits.length > 0 ? 'pointer' : 'grab';
+  });
+
+  // Animation loop
   function animate() {
     requestAnimationFrame(animate);
-    organelles.forEach(o => { o.angle += o.speed; o.mesh.position.x = Math.cos(o.angle)*1.5; o.mesh.position.z = Math.sin(o.angle)*1.5; });
+    organelles.forEach(function(o) {
+      if (o.speed === 0) return;
+      o.angle += o.speed;
+      o.mesh.position.x = o.baseX + Math.cos(o.angle) * o.radius;
+      o.mesh.position.y = o.baseY + Math.sin(o.angle * 0.7) * o.radius * 0.5;
+      o.mesh.position.z = o.baseZ + Math.sin(o.angle) * o.radius;
+      o.label.position.set(o.mesh.position.x, o.mesh.position.y + 0.55, o.mesh.position.z);
+    });
     renderer.render(scene, camera);
   }
   animate();
-  window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
+
+  window.addEventListener('resize', function() {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 })();
 </script>
 </body>

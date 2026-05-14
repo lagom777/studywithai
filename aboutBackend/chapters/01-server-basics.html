@@ -17,201 +17,282 @@
   <h3>전체 목차</h3>
   <ol>
     <li><a href="../index.html">🖥️ 표지 · 소개</a></li>
-    <li><a href="01-server-basics.html">1. 서버 기초</a></li>
-    <li><a href="02-http-api.html">2. HTTP와 API</a></li>
-    <li><a href="03-nodejs-express.html">3. Node.js/Express</a></li>
+    <li><a href="01-server-basics.html" style="color:var(--accent);font-weight:600;">1. 서버 기초</a></li>
+    <li><a href="02-http-api.html">2. HTTP와 API 설계</a></li>
+    <li><a href="03-nodejs-express.html">3. Node.js와 Express</a></li>
     <li><a href="04-auth-security.html">4. 인증과 보안</a></li>
-    <li><a href="05-middleware-routing.html">5. 미들웨어</a></li>
-    <li><a href="06-file-streaming.html">6. 파일/스트리밍</a></li>
-    <li><a href="07-caching-queue.html">7. 캐싱/메시지큐</a></li>
+    <li><a href="05-middleware-routing.html">5. 미들웨어와 라우팅</a></li>
+    <li><a href="06-file-streaming.html">6. 파일 처리와 스트리밍</a></li>
+    <li><a href="07-caching-queue.html">7. 캐싱과 메시지 큐</a></li>
     <li><a href="08-microservices.html">8. 마이크로서비스</a></li>
-    <li><a href="09-deploy-devops.html">9. 배포/DevOps</a></li>
+    <li><a href="09-deploy-devops.html">9. 배포와 DevOps</a></li>
   </ol>
 </aside>
 <main>
 <header class="paper-header">
-  <h1><em>서버 기초</em></h1>
-  <p class="authors">Chapter 1 — Server Fundamentals & Architecture</p>
+  <h1>서버 기초:<br><em>요청</em>과 응답의 세계</h1>
+  <p class="authors">Chapter 1 — Server Fundamentals & Client-Server Model</p>
+  <p class="affiliation">클라이언트-서버 통신 시뮬레이터 포함</p>
 </header>
 
-<div class="scene-3d" id="sim-scene"></div>
-<span class="interact-hint">⟳ 서버 아키텍처 시각화</span>
-
-<h2>서버 기초 개요</h2>
-<p>이 챕터에서는 서버 기초의 핵심 개념을 3D 시각화와 함께 학습합니다.</p>
+<h2>클라이언트-서버 모델</h2>
+<p>모든 웹 서비스의 근간은 클라이언트-서버 모델입니다. 브라우저(클라이언트)가 서버에 요청을 보내고, 서버가 처리 후 응답을 돌려보냅니다. 이 단순한 원리가 인터넷의 모든 서비스를 작동시킵니다.</p>
 
 <div class="info-card">
-  <h4>핵심 개념</h4>
-  <p>Server Fundamentals & Architecture의 기본 원리와 실전 패턴을 다룹니다.</p>
+  <h4>🖥️ 서버(Server)란?</h4>
+  <p>클라이언트의 요청을 받아 처리하고 응답을 돌려주는 프로그램입니다. 하드웨어가 아니라 소프트웨어 개념이며, 여러분의 노트북에서도 서버를 실행할 수 있습니다.</p>
+</div>
+
+<h2>서버-클라이언트 통신 시뮬레이터</h2>
+<p>아래에서 "요청 보내기" 버튼을 눌러 클라이언트에서 서버로 데이터가 전달되고 응답이 돌아오는 과정을 관찰하세요.</p>
+
+<div class="scene-3d" id="server-scene">
+  <div class="scene-controls">
+    <button id="send-req-btn">📡 요청 보내기</button>
+    <label>동시 요청: <span id="req-count">1</span></label>
+    <input type="range" id="req-slider" min="1" max="5" value="1">
+  </div>
+</div>
+<span class="interact-hint">📡 버튼을 눌러 클라이언트→서버→클라이언트 통신을 시뮬레이션하세요</span>
+
+<h2>TCP/IP 기초</h2>
+<p>인터넷 통신의 기반이 되는 TCP/IP 프로토콜은 데이터를 작은 패킷으로 나누어 전송합니다. TCP는 신뢰성 있는 전송을 보장하고, IP는 패킷의 주소 지정과 라우팅을 담당합니다.</p>
+
+<div class="info-card http">
+  <h4>🤝 TCP 3-Way Handshake</h4>
+  <p>연결 수립 과정: ① 클라이언트가 SYN 전송 → ② 서버가 SYN-ACK 응답 → ③ 클라이언트가 ACK 전송. 이 세 단계를 거쳐야 데이터 전송이 시작됩니다.</p>
+</div>
+
+<div class="info-card">
+  <h4>🔌 포트 번호 체계</h4>
+  <p>한 서버에서 여러 서비스를 구분하는 논리적 번호입니다. HTTP는 80, HTTPS는 443, 개발 서버는 주로 3000, 5000 등을 사용합니다. 0~1023은 잘 알려진 포트, 1024~49151은 등록된 포트입니다.</p>
+</div>
+
+<h2>첫 번째 서버 만들기</h2>
+<p>Node.js로 가장 간단한 HTTP 서버를 만들어봅시다:</p>
+
+<div class="code-block" data-title="server.js — 기본 HTTP 서버">const http = require('http');
+
+const server = http.createServer((req, res) => {
+  console.log(`${req.method} ${req.url}`);
+  res.writeHead(200, { 'Content-Type': 'text/plain' });
+  res.end('Hello, Backend World!');
+});
+
+server.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});</div>
+
+<div class="terminal-block">
+<span class="terminal-prompt">node server.js</span>
+Server listening on port 3000
+<span style="color:#f59e0b;">→</span> GET / 200
+<span style="color:#f59e0b;">→</span> GET /favicon.ico 200
+</div>
+
+<h2>동시성 모델</h2>
+<p>서버는 동시에 수많은 요청을 처리해야 합니다. 대표적인 세 가지 동시성 모델이 있습니다:</p>
+
+<div class="info-card">
+  <h4>🔄 멀티 프로세스 (Apache prefork)</h4>
+  <p>요청마다 새 프로세스를 생성합니다. 안정적이지만 메모리 비용이 큽니다. 각 프로세스가 독립적이므로 하나가 죽어도 전체에 영향이 적습니다.</p>
+</div>
+
+<div class="info-card http">
+  <h4>🧵 멀티 스레드 (Tomcat)</h4>
+  <p>프로세스 내에서 여러 스레드를 사용합니다. 메모리 효율이 좋지만 공유 자원 동기화(lock)가 필요합니다.</p>
+</div>
+
+<div class="info-card queue">
+  <h4>♻️ 이벤트 루프 (Node.js, Nginx)</h4>
+  <p>단일 스레드로 수만 개의 연결을 비동기적으로 처리합니다. I/O 작업이 많은 서비스에 특히 효율적입니다. 챕터 3에서 자세히 다룹니다.</p>
+</div>
+
+<div class="info-card security">
+  <h4>💡 탐구 과제</h4>
+  <p>위 시뮬레이터에서 동시 요청 수를 늘려보세요. 요청이 많아질수록 서버 처리 과정이 어떻게 변하는지 관찰해보세요.</p>
 </div>
 
 <h2>📚 난이도별 학습</h2>
-<p>본인 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어 학습이 가능합니다.</p>
+<p>본인의 수준에 맞춰 탭을 선택하세요. 우측 상단 언어 토글로 영어/일본어/중국어로도 학습할 수 있습니다.</p>
 <div class="difficulty-tabs">
   <button class="difficulty-tab" data-target="easy">🟢 하 · 입문</button>
   <button class="difficulty-tab" data-target="medium">🟡 중 · 응용</button>
   <button class="difficulty-tab" data-target="hard">🔴 상 · 심화</button>
 </div>
-
 <div class="difficulty-content" data-level="easy">
   <span class="difficulty-badge easy">하 · 입문</span>
-  <h3>한 줄로 이해하기</h3>
-  <p>서버는 클라이언트(브라우저, 앱)의 요청을 받아 처리하고 응답을 돌려주는 컴퓨터 프로그램입니다.</p>
-
-  <h3>왜 배워야 하나?</h3>
-  <p>스마트폰으로 쇼핑몰에 접속해 상품을 검색하면, 그 검색어가 서버로 전달되어 데이터베이스에서 결과를 찾아 다시 화면에 보여줍니다. 인스타그램에 사진을 올리면 서버가 받아 저장하고 친구들에게 보여줍니다. 카카오톡 메시지도 서버를 거쳐 상대방에게 전달됩니다. 이처럼 우리가 매일 쓰는 거의 모든 서비스가 서버 위에서 돌아가므로, 서버 동작 원리를 이해하는 것은 백엔드 개발의 출발점입니다.</p>
-
-  <div class="info-card">
-    <h4>🌱 핵심 용어</h4>
-    <ul>
-      <li><strong>클라이언트(Client)</strong>: 서비스를 요청하는 쪽 — 보통 브라우저나 앱.</li>
-      <li><strong>서버(Server)</strong>: 요청을 받아 처리하고 응답을 돌려주는 프로그램.</li>
-      <li><strong>요청(Request)</strong>: 클라이언트가 서버에 보내는 작업 의뢰.</li>
-      <li><strong>응답(Response)</strong>: 서버가 처리 결과로 돌려주는 데이터.</li>
-      <li><strong>포트(Port)</strong>: 한 대의 컴퓨터에서 여러 서비스를 구분해주는 번호.</li>
-    </ul>
-  </div>
-
-  <h3>개념 풀어쓰기</h3>
-  <p>서버를 식당에 비유해보세요. 손님(클라이언트)이 메뉴를 보고 주문을 합니다. 주문(요청)을 받은 점원이 주방으로 가서 음식을 만들어 손님에게 가져다 줍니다. 이때 점원과 주방 시스템이 서버 역할입니다. 한 번에 손님이 한 명만 오는 것이 아니라 동시에 여러 명이 주문하기 때문에, 서버는 동시 요청을 효율적으로 처리할 수 있어야 합니다. 만약 식당이 작아 손님이 너무 많으면 대기 줄이 길어집니다. 서버에서도 마찬가지로 처리 능력이 부족하면 응답이 느려지거나 멈춥니다. 그래서 서버를 여러 대로 늘리거나(스케일 아웃), 한 대의 성능을 높이는(스케일 업) 방법을 씁니다. 또한 손님 주문을 잘못 받으면 클레임이 들어오듯, 서버도 오류 처리를 잘 해야 안정적인 서비스가 됩니다.</p>
-
-  <div class="study-tip"><strong>💡 학습 TIP:</strong> 처음에는 "내 컴퓨터에 작은 서버를 띄워보는" 경험부터 시작하세요. Node.js나 Python 한 줄로 서버를 띄울 수 있습니다.</div>
-
-  <h3>요약</h3>
-  <ul>
-    <li>서버는 요청을 받아 응답을 돌려주는 프로그램이다.</li>
-    <li>클라이언트와 서버는 네트워크로 연결된다.</li>
-    <li>포트 번호로 같은 컴퓨터의 여러 서비스를 구분한다.</li>
-    <li>요청-응답이 백엔드의 가장 기본 흐름이다.</li>
-    <li>스케일 업/아웃으로 처리 능력을 늘린다.</li>
-  </ul>
+  <h3>한 줄로 이해하기</h3><p>서버는 클라이언트(브라우저, 앱)의 요청을 받아 처리하고 결과를 돌려주는 "항상 켜져 있는 프로그램"입니다.</p>
+  <h3>왜 중요한가?</h3><p>인스타그램에 사진을 올리면 서버가 받아 저장하고 친구들에게 보여줍니다. 카카오톡 메시지, 쿠팡 검색, 유튜브 영상 재생 모두 서버를 거칩니다. 우리가 매일 쓰는 거의 모든 서비스가 서버 위에서 돌아가므로, 서버의 동작 원리를 이해하는 것은 백엔드 개발의 출발점입니다.</p>
+  <div class="info-card"><h4>🌱 핵심 용어</h4><ul><li><strong>클라이언트</strong>: 요청을 보내는 쪽 — 브라우저, 모바일 앱</li><li><strong>서버</strong>: 요청을 받아 처리하는 프로그램</li><li><strong>요청(Request)</strong>: 클라이언트가 보내는 작업 의뢰</li><li><strong>응답(Response)</strong>: 서버가 돌려주는 처리 결과</li><li><strong>포트(Port)</strong>: 한 컴퓨터의 여러 서비스를 구분하는 번호</li></ul></div>
+  <h3>핵심 개념 풀어쓰기</h3><p>서버를 식당에 비유해보세요. 손님(클라이언트)이 주문(요청)을 하면 점원과 주방(서버)이 음식을 만들어 가져다 줍니다(응답). 한 명만 오는 게 아니라 동시에 여러 명이 주문하므로, 서버는 동시 요청을 효율적으로 처리할 줄 알아야 합니다. 손님이 너무 많으면 대기 줄이 길어지듯, 서버 처리 능력이 부족하면 응답이 느려집니다. 그래서 서버를 여러 대로 늘리거나(스케일 아웃) 한 대의 성능을 높이는(스케일 업) 방법을 씁니다.</p>
+  <div class="study-tip"><strong>💡 학습 TIP:</strong> 처음에는 "내 컴퓨터에 작은 서버 띄워보기"부터 시작하세요. Node.js나 Python 한 줄로 가능합니다.</div>
+  <h3>한 페이지 요약</h3><ul><li>서버는 요청을 받아 응답을 돌려주는 프로그램</li><li>클라이언트와 서버는 네트워크로 연결</li><li>포트로 같은 컴퓨터의 여러 서비스 구분</li><li>요청-응답이 백엔드의 가장 기본 흐름</li><li>스케일 업/아웃으로 처리 능력 확장</li></ul>
 </div>
-
 <div class="difficulty-content" data-level="medium">
   <span class="difficulty-badge medium">중 · 응용</span>
-  <h3>이론 깊이</h3>
-  <p>서버는 OSI 7계층 위에서 동작합니다. 일반적인 웹 서버는 TCP/IP 4계층 모델 기준으로 응용 계층(HTTP)에서 요청을 처리합니다. 운영체제는 listen 시스템 콜로 특정 포트를 열어 두고, accept로 연결을 받아들입니다. 한 번에 여러 클라이언트가 연결되므로 동시성 모델이 중요합니다. 멀티 프로세스(아파치 prefork), 멀티 스레드(Tomcat), 이벤트 루프(Node.js, Nginx) 세 가지가 대표적입니다. 멀티 프로세스는 안정적이지만 메모리 비용이 큽니다. 멀티 스레드는 메모리 효율은 좋지만 공유 자원 동기화가 필요합니다. 이벤트 루프는 단일 스레드로 수만 개의 연결을 비동기로 처리할 수 있어 I/O가 많은 서비스에 유리합니다. 또한 리버스 프록시(Nginx)를 앞에 두고 뒤에 애플리케이션 서버를 두는 구조가 일반적입니다. 로드 밸런서는 여러 서버에 트래픽을 골고루 분배해 가용성을 높입니다.</p>
-
-  <h3>코드 패턴</h3>
+  <h3>이론 깊이 들어가기</h3><p>서버는 TCP/IP 4계층 모델 기준으로 응용 계층(HTTP)에서 요청을 처리합니다. OS는 listen 시스템 콜로 포트를 열어 두고 accept로 연결을 받아들입니다. 동시에 여러 클라이언트를 처리하기 위해 동시성 모델이 필요합니다. 멀티 프로세스(Apache prefork), 멀티 스레드(Tomcat), 이벤트 루프(Node.js, Nginx) 세 가지가 대표적입니다. 멀티 프로세스는 안정적이지만 메모리 비용이 큽니다. 멀티 스레드는 효율적이지만 동기화 이슈가 있습니다. 이벤트 루프는 단일 스레드로 수만 연결을 비동기 처리해 I/O 위주 서비스에 유리합니다. 실무에서는 Nginx 같은 리버스 프록시 뒤에 애플리케이션 서버를 두는 구조가 일반적입니다.</p>
+  <h3>핵심 코드 패턴</h3>
   <pre><code>// Node.js 기본 HTTP 서버
 const http = require('http');
-const server = http.createServer((req, res) => {
-  res.writeHead(200, { 'Content-Type': 'application/json' });
-  res.end(JSON.stringify({ message: 'Hello, server!' }));
-});
-server.listen(3000, () => console.log('Listening on :3000'));</code></pre>
-
-  <div class="info-card">
-    <h4>💻 예제 1: 동시 접속 처리</h4>
-    <p>이벤트 루프 기반 서버는 한 요청이 DB 응답을 기다리는 동안 다른 요청을 받아 처리합니다. 콜백, Promise, async/await로 비동기 흐름을 작성합니다.</p>
-  </div>
-  <div class="info-card">
-    <h4>💻 예제 2: 리버스 프록시</h4>
-    <p>Nginx가 80/443 포트로 외부 요청을 받고 내부 3000번 포트로 띄워진 Node 앱에 전달합니다. SSL 종단 처리와 정적 파일 서빙을 분리합니다.</p>
-  </div>
-
-  <h3>실무 응용</h3>
-  <p>대형 커머스 사이트는 트래픽이 폭증하는 행사 시간을 위해 오토스케일링을 설정합니다. CPU 사용률 70%를 넘으면 인스턴스를 자동으로 추가하고 트래픽이 줄면 줄이는 식입니다. 또한 글로벌 서비스에서는 지역별 엣지 로케이션에 서버를 분산 배치해 응답 속도를 줄입니다. 게임 서버는 매치메이킹 서버, 게임 로직 서버, 채팅 서버를 분리해 부하를 나눕니다.</p>
-
-  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 동기 블로킹 코드를 이벤트 루프에서 사용해 전체 서버가 멈추는 경우가 흔합니다. CPU 집약 작업은 워커 스레드로 분리하세요.</div>
+http.createServer((req, res) =&gt; {
+  res.writeHead(200, {'Content-Type':'application/json'});
+  res.end(JSON.stringify({ok:true}));
+}).listen(3000);</code></pre>
+  <h3>대표 예제</h3>
+  <div class="info-card"><h4>💻 예제 1: 동시 접속 처리</h4><p>이벤트 루프 서버는 한 요청이 DB 응답을 기다리는 동안 다른 요청을 받아 처리합니다. 콜백 → Promise → async/await 순으로 비동기를 표현합니다.</p></div>
+  <div class="info-card"><h4>💻 예제 2: 리버스 프록시 구성</h4><p>Nginx가 80/443에서 외부 요청을 받아 내부 3000번 Node 앱으로 전달합니다. SSL 종단, 정적 파일 서빙, gzip 압축을 프록시 계층에서 분리합니다.</p></div>
+  <h3>응용 사례</h3><p>대형 커머스는 트래픽 폭증 시간을 대비해 오토스케일링을 씁니다. CPU 70%를 넘으면 인스턴스를 자동으로 추가하고 트래픽이 줄면 줄입니다. 글로벌 서비스는 지역별 엣지 로케이션에 서버를 분산해 응답 속도를 줄입니다.</p>
+  <div class="warning-box"><strong>⚠️ 자주 하는 실수:</strong> 이벤트 루프에서 동기 블로킹 코드를 호출해 전체 서버가 멈추는 경우가 흔합니다. CPU 집약 작업은 워커 스레드로 분리하세요.</div>
 </div>
-
 <div class="difficulty-content" data-level="hard">
   <span class="difficulty-badge hard">상 · 심화</span>
-  <h3>전문가 레벨</h3>
-  <p>대규모 분산 서버 시스템에서는 단일 노드 성능보다 노드 간 일관성과 가용성이 더 큰 도전입니다. CAP 정리에 따르면 네트워크 분할이 일어났을 때 일관성과 가용성 중 하나만 선택할 수 있습니다. 실무에서는 강한 일관성이 필요한 결제 시스템과 최종 일관성으로 충분한 피드 시스템을 분리 설계합니다. C10K, C10M 문제를 해결하기 위해 epoll, kqueue 같은 OS 수준 이벤트 알림과 io_uring 같은 비동기 I/O 인터페이스를 활용합니다. TCP 백로그 큐 크기, SO_REUSEPORT, TCP_NODELAY 같은 소켓 옵션 튜닝이 처리량에 큰 영향을 줍니다. NUMA 아키텍처에서는 CPU 친화도 설정으로 캐시 미스를 줄입니다. 커넥션 풀링, HTTP/2 멀티플렉싱, gRPC의 스트리밍 등으로 연결 비용을 분산합니다. 컨센서스 알고리즘(Raft, Paxos)으로 리더 선출과 상태 복제를 안전하게 수행하고, 벡터 클럭이나 CRDT로 분산 상태 충돌을 해소합니다. 모니터링은 USE 모델(사용률, 포화도, 오류)과 RED 모델(요청률, 오류율, 지속시간)을 결합해 추적합니다.</p>
-
-  <h3>고급 패턴</h3>
-  <pre><code>// 이벤트 루프 + 워커 풀 (Node.js)
-const { Worker } = require('worker_threads');
-function runHeavyTask(payload) {
-  return new Promise((resolve, reject) => {
-    const w = new Worker('./cpu-task.js', { workerData: payload });
-    w.on('message', resolve);
-    w.on('error', reject);
-  });
-}</code></pre>
-
-  <h3>최신 동향</h3>
-  <p>Kubernetes는 사실상의 컨테이너 오케스트레이션 표준이 되어 서버 배포 패러다임을 바꿨습니다. eBPF는 커널 영역에서 안전하게 코드를 실행할 수 있게 해주어 Cilium 같은 네트워크 솔루션이 사이드카 없이 L7 정책을 구현하게 했습니다. 서버리스(AWS Lambda, Cloudflare Workers)는 콜드 스타트를 줄이고 V8 isolate를 활용해 ms 단위 시작 시간을 달성합니다. 엣지 컴퓨팅은 사용자에게 가장 가까운 PoP에서 동적 코드를 실행해 글로벌 레이턴시를 줄입니다.</p>
-
-  <h3>관련 분야</h3>
-  <ul>
-    <li>분산 시스템 이론(Consensus, Replication)</li>
-    <li>네트워크 프로그래밍(소켓, RDMA)</li>
-    <li>SRE/관측 가능성(Observability, OpenTelemetry)</li>
-  </ul>
-
-  <h3>추가 자료</h3>
-  <ul>
-    <li>"Designing Data-Intensive Applications" — Martin Kleppmann</li>
-    <li>"The Linux Programming Interface" — Michael Kerrisk</li>
-    <li>Google SRE Book(무료 공개)</li>
-  </ul>
-
-  <div class="success-box"><strong>🎓 도전 과제:</strong> Raw TCP 소켓으로 동시 1만 연결을 처리하는 에코 서버를 작성하고 wrk로 부하 테스트해 보세요.</div>
+  <h3>전문가 레벨 이해</h3><p>대규모 분산 서버에서는 단일 노드 성능보다 노드 간 일관성·가용성이 더 큰 도전입니다. CAP 정리에 따라 네트워크 분할 시 일관성과 가용성 중 하나만 선택해야 합니다. 결제 시스템은 강한 일관성을, 피드 시스템은 최종 일관성으로 분리 설계합니다. C10K, C10M 문제는 epoll, kqueue, io_uring 같은 OS 수준 비동기 I/O로 풉니다. TCP backlog, SO_REUSEPORT, TCP_NODELAY 같은 소켓 옵션 튜닝이 처리량에 직접적 영향을 줍니다. 컨센서스 알고리즘(Raft, Paxos)으로 리더 선출과 상태 복제를 안전하게 수행하고, 벡터 클럭이나 CRDT로 분산 상태 충돌을 해소합니다.</p>
+  <h3>최신 연구·동향</h3><p>Kubernetes가 컨테이너 오케스트레이션 표준이 되었고, eBPF는 커널에서 안전하게 코드를 실행해 Cilium 같은 사이드카리스 L7 네트워킹을 가능하게 했습니다. 서버리스(AWS Lambda, Cloudflare Workers)는 V8 isolate를 활용해 ms 단위 콜드 스타트를 달성합니다. 엣지 컴퓨팅은 사용자 가장 가까운 PoP에서 동적 코드를 실행해 글로벌 레이턴시를 줄입니다.</p>
+  <h3>관련 분야</h3><ul><li>분산 시스템(Consensus, Replication)</li><li>네트워크 프로그래밍(소켓, RDMA, QUIC)</li><li>SRE/Observability(OpenTelemetry, eBPF)</li></ul>
+  <h3>추가 학습 자료</h3><ul><li>"Designing Data-Intensive Applications" — Martin Kleppmann</li><li>"The Linux Programming Interface" — Michael Kerrisk</li><li>Google SRE Book(무료 공개)</li></ul>
+  <div class="success-box"><strong>🎓 도전 과제:</strong> Raw TCP 소켓으로 동시 1만 연결을 처리하는 에코 서버를 작성하고 wrk로 부하 테스트하세요.</div>
 </div>
 
 </main>
 </div>
 
 <script>
+// Client-Server Communication 3D Simulator
 (function() {
-  const container = document.getElementById('sim-scene');
+  const container = document.getElementById('server-scene');
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(50, container.clientWidth/container.clientHeight, 0.1, 1000);
-  camera.position.set(0, 4, 10);
+  const camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+  camera.position.set(0, 6, 14);
+  camera.lookAt(0, 0, 0);
+
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
   renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   container.appendChild(renderer.domElement);
 
-  // Server nodes network
-  const nodes = [];
-  for (let i = 0; i < 8; i++) {
-    const mesh = new THREE.Mesh(new THREE.BoxGeometry(0.6,0.6,0.6), new THREE.MeshBasicMaterial({ color: 0x22c55e, wireframe: true }));
-    const angle = (i/8)*Math.PI*2;
-    mesh.position.set(Math.cos(angle)*4, (Math.random()-0.5)*2, Math.sin(angle)*4);
-    scene.add(mesh); nodes.push(mesh);
-  }
-  // Central server
-  const central = new THREE.Mesh(new THREE.BoxGeometry(1.2,1.2,1.2), new THREE.MeshBasicMaterial({ color: 0x22c55e }));
-  scene.add(central);
-  // Connections
-  nodes.forEach(n => {
-    const geo = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), n.position]);
-    scene.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0x22c55e, transparent: true, opacity: 0.2 })));
+  // Server (center)
+  const serverGeo = new THREE.BoxGeometry(1.5, 2, 1);
+  const serverMat = new THREE.MeshBasicMaterial({ color: 0x00ff88 });
+  const serverMesh = new THREE.Mesh(serverGeo, serverMat);
+  scene.add(serverMesh);
+
+  const serverWire = new THREE.Mesh(new THREE.BoxGeometry(1.7, 2.2, 1.2), new THREE.MeshBasicMaterial({ color: 0x00ff88, wireframe: true, transparent: true, opacity: 0.3 }));
+  scene.add(serverWire);
+
+  // Clients
+  const clientPositions = [
+    new THREE.Vector3(-6, 2, 3), new THREE.Vector3(-6, 0, 0),
+    new THREE.Vector3(-6, -2, -3), new THREE.Vector3(-6, 1, -1),
+    new THREE.Vector3(-6, -1, 2)
+  ];
+  const clientMeshes = [];
+  clientPositions.forEach((pos, i) => {
+    const geo = new THREE.SphereGeometry(0.4, 16, 16);
+    const mat = new THREE.MeshBasicMaterial({ color: 0x60a5fa });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.copy(pos);
+    scene.add(mesh);
+    clientMeshes.push(mesh);
+    // Connection line
+    const lineGeo = new THREE.BufferGeometry().setFromPoints([pos, new THREE.Vector3(0, 0, 0)]);
+    scene.add(new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color: 0x00ff88, transparent: true, opacity: 0.1 })));
   });
 
-  // Data packets
-  const packets = [];
-  for (let i = 0; i < 5; i++) {
-    const p = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), new THREE.MeshBasicMaterial({ color: 0xfbbf24 }));
-    packets.push({ mesh: p, target: Math.floor(Math.random()*nodes.length), t: Math.random() });
-    scene.add(p);
+  // DB (right side)
+  const dbGeo = new THREE.CylinderGeometry(0.8, 0.8, 1.5, 16);
+  const dbMat = new THREE.MeshBasicMaterial({ color: 0xa78bfa });
+  const dbMesh = new THREE.Mesh(dbGeo, dbMat);
+  dbMesh.position.set(6, 0, 0);
+  scene.add(dbMesh);
+  const dbLine = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(6, 0, 0)]);
+  scene.add(new THREE.Line(dbLine, new THREE.LineBasicMaterial({ color: 0xa78bfa, transparent: true, opacity: 0.15 })));
+
+  // Grid
+  const grid = new THREE.GridHelper(24, 24, 0x0a3a0a, 0x0a3a0a);
+  grid.position.y = -4;
+  scene.add(grid);
+
+  // Packet animation system
+  const activePackets = [];
+
+  function sendRequest(count) {
+    for (let i = 0; i < count; i++) {
+      const cIdx = Math.floor(Math.random() * clientMeshes.length);
+      const packet = new THREE.Mesh(
+        new THREE.SphereGeometry(0.15, 8, 8),
+        new THREE.MeshBasicMaterial({ color: 0xfbbf24 })
+      );
+      scene.add(packet);
+      activePackets.push({
+        mesh: packet, phase: 0, t: 0,
+        from: clientPositions[cIdx].clone(),
+        speed: 0.012 + Math.random() * 0.008
+      });
+    }
   }
 
-  let mouseDown = false, prevX = 0;
-  container.addEventListener('mousedown', e => { mouseDown = true; prevX = e.clientX; });
-  container.addEventListener('mouseup', () => mouseDown = false);
-  container.addEventListener('mousemove', e => { if (mouseDown) { scene.rotation.y += (e.clientX-prevX)*0.005; prevX = e.clientX; } });
-  container.addEventListener('touchstart', e => { prevX = e.touches[0].clientX; });
-  container.addEventListener('touchmove', e => { scene.rotation.y += (e.touches[0].clientX-prevX)*0.005; prevX = e.touches[0].clientX; });
+  // Controls
+  const sendBtn = document.getElementById('send-req-btn');
+  const reqSlider = document.getElementById('req-slider');
+  const reqCount = document.getElementById('req-count');
+  reqSlider.addEventListener('input', () => reqCount.textContent = reqSlider.value);
+  sendBtn.addEventListener('click', () => sendRequest(parseInt(reqSlider.value)));
+
+  // Mouse rotation
+  let dragX = 0, dragging = false, prevMX = 0;
+  container.addEventListener('mousedown', e => { dragging = true; prevMX = e.clientX; });
+  window.addEventListener('mouseup', () => dragging = false);
+  container.addEventListener('mousemove', e => {
+    if (dragging) { dragX += (e.clientX - prevMX) * 0.005; prevMX = e.clientX; }
+  });
 
   function animate() {
     requestAnimationFrame(animate);
-    central.rotation.y += 0.01;
-    nodes.forEach(n => n.rotation.x += 0.01);
-    packets.forEach(p => {
-      p.t += 0.01;
-      if (p.t > 1) { p.t = 0; p.target = Math.floor(Math.random()*nodes.length); }
-      const target = nodes[p.target].position;
-      p.mesh.position.lerpVectors(new THREE.Vector3(0,0,0), target, p.t);
-    });
+    const t = Date.now() * 0.001;
+    serverMesh.rotation.y = t * 0.2;
+    serverWire.rotation.y = t * 0.15;
+    dbMesh.rotation.y = -t * 0.3;
+
+    // Animate packets: phase 0=to server, 1=to db, 2=back to db, 3=back to client
+    for (let i = activePackets.length - 1; i >= 0; i--) {
+      const p = activePackets[i];
+      p.t += p.speed;
+      if (p.t >= 1) {
+        p.t = 0;
+        p.phase++;
+        if (p.phase > 3) {
+          scene.remove(p.mesh);
+          activePackets.splice(i, 1);
+          continue;
+        }
+      }
+      const serverPos = new THREE.Vector3(0, 0, 0);
+      const dbPos = new THREE.Vector3(6, 0, 0);
+      let from, to;
+      switch (p.phase) {
+        case 0: from = p.from; to = serverPos; p.mesh.material.color.setHex(0xfbbf24); break;
+        case 1: from = serverPos; to = dbPos; p.mesh.material.color.setHex(0xa78bfa); break;
+        case 2: from = dbPos; to = serverPos; p.mesh.material.color.setHex(0xa78bfa); break;
+        case 3: from = serverPos; to = p.from; p.mesh.material.color.setHex(0x00ff88); break;
+      }
+      p.mesh.position.lerpVectors(from, to, p.t);
+      p.mesh.position.y += Math.sin(p.t * Math.PI) * 0.8;
+    }
+
+    scene.rotation.y += (dragX - scene.rotation.y) * 0.05;
     renderer.render(scene, camera);
   }
   animate();
-  window.addEventListener('resize', () => { camera.aspect = container.clientWidth/container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
+
+  // Auto-send initial demo
+  setTimeout(() => sendRequest(2), 1000);
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
 })();
 </script>
 </body>
